@@ -7,4 +7,5 @@ search: false
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
+// 项目自定义首页样式。放在主题之后导入，便于覆盖默认视觉细节。
 @import "home-profile";

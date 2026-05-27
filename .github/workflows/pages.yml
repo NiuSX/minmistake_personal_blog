@@ -7,6 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  # gh-pages 分支由工作流写入，因此需要 contents: write。
   contents: write
 
 concurrency:
@@ -30,6 +31,8 @@ jobs:
         id: pages-path
         shell: bash
         run: |
+          # 用户/组织主页仓库形如 NiuSX/NiuSX.github.io，发布路径是根路径。
+          # 普通项目仓库形如 NiuSX/minmistake_personal_blog，发布路径需要带仓库名前缀。
           if [[ "${GITHUB_REPOSITORY}" == "${GITHUB_REPOSITORY_OWNER}/${GITHUB_REPOSITORY_OWNER}.github.io" ]]; then
             echo "baseurl=" >> "$GITHUB_OUTPUT"
           else
@@ -38,13 +41,16 @@ jobs:
 
       - name: Build with Jekyll
         env:
+          # production 会启用站点生产环境行为，例如评论、统计等生产环境开关。
           JEKYLL_ENV: production
         run: bundle exec jekyll build --trace --baseurl "${{ steps.pages-path.outputs.baseurl }}"
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
+          # 使用 GitHub 自动生成的 token 把 _site 目录提交到 gh-pages 分支。
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./_site
+          # 每次发布生成一个干净的 gh-pages 分支历史，避免旧构建产物残留。
           force_orphan: true

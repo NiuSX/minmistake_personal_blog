@@ -5,6 +5,7 @@ permalink: /
 ---
 
 <main class="home-profile" aria-label="个人主页">
+  <!-- 个人主页首屏：负责展示站点主人、博客定位和最重要的跳转入口。 -->
   <section class="home-hero">
     <div class="home-hero__content">
       <p class="home-hero__eyebrow">Personal Blog</p>
@@ -31,6 +32,7 @@ permalink: /
     </aside>
   </section>
 
+  <!-- 近期关注：把博客内容方向显式展示出来，帮助访客快速理解站点主题。 -->
   <section class="home-section" aria-labelledby="focus-title">
     <div class="home-section__header">
       <p class="home-section__label">Focus</p>
@@ -55,6 +57,7 @@ permalink: /
     </div>
   </section>
 
+  <!-- 最新文章：从 Jekyll 的 site.posts 集合自动读取最近文章，不需要手动维护列表。 -->
   <section class="home-section" aria-labelledby="posts-title">
     <div class="home-section__header home-section__header--split">
       <div>
@@ -65,6 +68,7 @@ permalink: /
     </div>
 
     <div class="home-post-list">
+      <!-- limit 控制首页最多展示的文章数量；文章详情仍然由 _posts 目录生成。 -->
       {% for post in site.posts limit: 5 %}
         <article class="home-post-card">
           <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>

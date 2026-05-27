@@ -1,3 +1,5 @@
+// 首页自定义样式入口。
+// 这些样式只服务 index.html 的个人主页博客布局，不直接修改 Minimal Mistakes 主题源码。
 .home-profile {
   max-width: 1120px;
   margin: 0 auto;
@@ -5,6 +7,7 @@
 }
 
 .home-hero {
+  // 首屏使用双栏布局：左侧介绍，右侧个人信息卡片。
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
   gap: 2rem;
@@ -13,6 +16,7 @@
 }
 
 .home-hero__content {
+  // 使用浅色层次和轻微阴影，让首页比默认文章列表更像个人主页。
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -59,6 +63,7 @@
 }
 
 .home-button {
+  // 首页按钮保持固定最小高度，避免中英文内容切换时发生布局跳动。
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -163,6 +168,7 @@
 }
 
 .home-focus-grid {
+  // 三个方向卡片对应首页的内容主题，窄屏下会折叠为单列。
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
@@ -191,6 +197,7 @@
 }
 
 .home-post-list {
+  // 最新文章由 Liquid 自动渲染，这里只负责列表视觉间距。
   display: grid;
   gap: 1rem;
 }
@@ -245,6 +252,7 @@
 }
 
 body.layout--default {
+  // 仅对 default 布局使用浅灰背景，避免影响文章页正文阅读体验。
   background: #f7f9fb;
 }
 
@@ -254,6 +262,7 @@ body.layout--default {
 }
 
 @media (max-width: 900px) {
+  // 平板和手机视口下，首页从双栏改为单栏，保证头像和按钮不拥挤。
   .home-profile {
     padding-top: 2rem;
   }
@@ -273,6 +282,7 @@ body.layout--default {
 }
 
 @media (max-width: 520px) {
+  // 小屏进一步收紧内边距，防止中文长句挤压卡片宽度。
   .home-profile {
     padding-inline: 1rem;
   }

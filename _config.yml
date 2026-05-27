@@ -183,6 +183,7 @@ exclude:
   - node_modules
   - package.json
   - package-lock.json
+  - PROJECT_STRUCTURE_ANALYSIS.md
   - Rakefile
   - README
   - tmp
@@ -226,8 +227,10 @@ permalink: /:title/
 timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 # 分页设置 (使用 jekyll-paginate)
-paginate: 15  # amount of posts to show
-paginate_path: /page:num/
+# 当前首页已经改为自定义个人主页，不再让 jekyll-paginate 接管根路径，
+# 避免分页插件和 index.html 同时写入 _site/index.html。
+# paginate: 15  # amount of posts to show
+# paginate_path: /page:num/
 
 # 分页设置 (使用 jekyll-paginate-v2)
 # See https://github.com/sverrirs/jekyll-paginate-v2/blob/master/README-GENERATOR.md#site-configuration
@@ -323,4 +326,3 @@ defaults:
       toc_label: "文章目录"
       toc_icon: "file-alt"
       toc_sticky: true
-

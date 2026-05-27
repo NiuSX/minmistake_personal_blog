@@ -6,3 +6,5 @@ main:
     url: /about/
   - title: "归档"
     url: /year-archive/
+  - title: "相册"
+    url: /about

@@ -1,0 +1,1067 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="zh-CN" class="no-js" dir="ltr">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>Gradle构建工具 - 一只捡星星的熊的博客</title>
+<meta name="description" content="技术学习博客">
+
+
+  <meta name="author" content="一只捡星星的熊">
+  
+  <meta property="article:author" content="一只捡星星的熊">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="一只捡星星的熊的博客">
+<meta property="og:title" content="Gradle构建工具">
+<meta property="og:url" content="https://niusx.github.io/minmistake_personal_blog/gradle%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/">
+
+
+  <meta property="og:description" content="技术学习博客">
+
+
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-03-15T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://niusx.github.io/minmistake_personal_blog/gradle%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/minmistake_personal_blog/feed.xml" type="application/atom+xml" rel="alternate" title="一只捡星星的熊的博客 Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/minmistake_personal_blog/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">转到内容</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">转到底部</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/minmistake_personal_blog/">
+          一只捡星星的熊的博客
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/minmistake_personal_blog/"
+                
+                
+              >首页</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/minmistake_personal_blog/about/"
+                
+                
+              >关于</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/minmistake_personal_blog/year-archive/"
+                
+                
+              >归档</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">切换搜索</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://niusx.github.io/minmistake_personal_blog/">
+        <img src="/minmistake_personal_blog/assets/images/wukong-photo.jpg" alt="一只捡星星的熊" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://niusx.github.io/minmistake_personal_blog/" itemprop="url">一只捡星星的熊</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>什么也没写</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">关注</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-location-dot" aria-hidden="true"></i> <span itemprop="name" class="p-locality">中国</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/NiuSX/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://space.bilibili.com/347549684/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-bilibili" aria-hidden="true"></i><span class="label">Bilibili</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Gradle构建工具">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2026-03-15T00:00:00+08:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://niusx.github.io/minmistake_personal_blog/gradle%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7/" itemprop="url">Gradle构建工具
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc" aria-label="Table of contents">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 文章目录</h4></header>
+              <ul class="toc__menu"><li><a href="#gradle基础">gradle基础</a><ul><li><a href="#介绍">介绍</a></li><li><a href="#核心概念">核心概念</a></li><li><a href="#gradle-项目文件">gradle 项目文件</a></li><li><a href="#gradle-包装器wrapper">gradle 包装器（wrapper）</a></li></ul></li><li><a href="#gradle-操作">gradle 操作</a><ul><li><a href="#常用操作">常用操作</a></li><li><a href="#android">android</a></li><li><a href="#build">build</a></li><li><a href="#help">help</a></li><li><a href="#install">install</a></li><li><a href="#verification">verification</a></li></ul></li></ul>
+            </nav>
+          </aside>
+        
+        <h1 id="gradle基础">gradle基础</h1>
+
+<h2 id="介绍">介绍</h2>
+
+<p>Gradle 是一个基于 Apache  Ant 和 Apache Maven 概念的项目自动化构建工具。它使用一种基于 Groovy 或 Kotlin 的特定领域语言(DSL)来声明项目配置，而不是传统的 XML。</p>
+
+<p>Gradle 构建工具是一款快速、可靠且适应性的开源构建自动化工具，采用优雅且可扩展的声明式构建语言 <br />
+Gradle 支持 Android、Java、Kotlin 多平台、Groovy、Scala、Javascript 和 C/C++。</p>
+
+<p>主要特点：</p>
+<ul>
+  <li>
+    <p>灵活且高性能的构建工具</p>
+  </li>
+  <li>
+    <p>支持多项目构建</p>
+  </li>
+  <li>
+    <p>强大的依赖管理</p>
+  </li>
+  <li>
+    <p>支持增量构建</p>
+  </li>
+  <li>
+    <p>丰富的插件生态系统</p>
+  </li>
+  <li>
+    <p>与 Maven 和 Ivy 仓库兼容</p>
+  </li>
+</ul>
+
+<h2 id="核心概念">核心概念</h2>
+<p>Gradle 通过构建脚本中的信息自动化软件的构建、测试和部署。</p>
+
+<p>Gradle 构建以项目和任务为定义，使用用 Groovy 或 Kotlin 编写的构建脚本进行配置。
+<strong>概念</strong></p>
+<ul>
+  <li>建造： 产出过程和环境。构建包含一个或多个项目及其构建脚本。</li>
+  <li>项目：一个可以构建的软件，比如应用程序或库。一个构建可以包含单个根项目或多个子项目。</li>
+  <li>任务：一个基本的工作单元，比如编译代码或运行测试。任务可以在构建脚本中声明，或由插件添加。</li>
+  <li>构建脚本：一个配置文件（），定义任务、依赖以及其他指示Gradle如何构建项目的指令。build.gradle(.kts)</li>
+  <li>插件：用来扩展 Gradle 的功能（比如插件）。插件通常会为项目添加任务和约定。Java</li>
+  <li>依赖性：项目所需的外部或内部资源。Gradle在构建过程中会自动解决这些问题。</li>
+</ul>
+
+<h2 id="gradle-项目文件">gradle 项目文件</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre></td><td class="rouge-code"><pre>tutorial
+├── .gradle                 
+│   └── ⋮
+├── gradle                      
+│   ├── libs.versions.toml  
+│   ├── wrapper
+|       ├── gradle-wrapper.jar
+|       └── gralde-wrapper.properties
+├── gradlew                     
+├── gradlew.bat             
+├── settings.gradle.kts  
+├── build.gradle.kts
+├── gradle.properties
+├── local.properties
+├── app                     
+│   ├── build.gradle.kts
+│   └── src
+└── ⋮             
+</pre></td></tr></tbody></table></code></pre></div></div>
+<ol>
+  <li>.gradle：由 Gradle 生成的项目专用缓存目录。</li>
+  <li>libs.versions.toml：版本目录定义了中心位置依赖的一组版本。</li>
+  <li>gradle-wrapper.jar：gradle-wrapper.jar：这是一个包含Gradle Wrapper代码的小型JAR文件。如果 Gradle 尚未安装，它负责下载并安装正确的项目版本</li>
+  <li>gralde-wrapper.properties：包含Gradle包装器的配置属性，如分发网址（下载Gradle的来源）和分发类型（ZIP或TARBALL）</li>
+  <li>gradlew：用于使用 Gradle Wrapper 执行构建的macOS 和 Linux 脚本。</li>
+  <li>gradlew.bat：用于使用 Gradle 包装器执行构建的 Windows 脚本。</li>
+  <li>settings.gradle.kts：项目的设置文件，定义了子项目列表。</li>
+  <li>build.gradle.kts：项目构建脚本</li>
+  <li>gradle.properties：构建过程的行为控制</li>
+  <li>local.properties：个人电脑环境强相关的本地配置</li>
+  <li>app：应用的源代码和构建配置。</li>
+</ol>
+
+<h2 id="gradle-包装器wrapper">gradle 包装器（wrapper）</h2>
+
+<p>包装具有以下好处：</p>
+
+<ol>
+  <li><strong>自动下载</strong>并使用特定的<strong>Gradle</strong>版本。</li>
+  <li>在<strong>某个</strong><strong>Gradle版本</strong><strong>上标准化</strong>项目。</li>
+  <li>为不同用户和环境（IDE、CI服务器等）<strong>提供相同的Gradle版本</strong>。</li>
+  <li>这样运行 <strong>Gradle 构建就很简单，无需手动安装。</strong></li>
+</ol>
+
+<p>Gradle的两种运行方式：</p>
+<ol>
+  <li>使用系统安装的 Gradle 发行版——通过运行命令。<code class="language-plaintext highlighter-rouge">gradle build</code></li>
+  <li>使用 Gradle 包装器——通过运行 Gradle 项目中包含的 or 脚本。
+    <ul>
+      <li>Linux 或 OSX 机器上的封装调用：<code class="language-plaintext highlighter-rouge">$ ./gradlew build</code></li>
+      <li>Windows PowerShell 上的 Wrapper 调用：<code class="language-plaintext highlighter-rouge">$ gradlew.bat build</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p>##</p>
+
+<h1 id="gradle-操作">gradle 操作</h1>
+<h2 id="常用操作">常用操作</h2>
+<p><strong>编译安装</strong>
+assembleDebug		编译 Debug APK，不自动安装
+installDebug		编译并安装到设备/模拟器
+clean	            清理构建缓存，解决奇怪问题时必用</p>
+
+<p><strong>测试相关</strong>
+testDebugUnitTest		        运行本地单元测试（快速）
+connectedDebugAndroidTest		运行设备测试（UI 测试）
+lintDebug		                代码质量检查</p>
+
+<p><strong>诊断和调试</strong>
+dependencies		查看依赖树，排查依赖冲突
+signingReport		获取签名指纹（配置地图/推送时用）
+tasks		        查看所有可用任务
+properties		    查看项目属性</p>
+
+<p><strong>最常用</strong>
+运行 App	./gradlew installDebug
+清理项目	./gradlew clean
+跑单元测试	./gradlew testDebugUnitTest
+看依赖树	./gradlew dependencies
+获取签名	./gradlew signingReport
+代码检查	./gradlew lintDebug
+查看所有任务	./gradlew tasks
+打 Release 包	./gradlew assembleRelease</p>
+
+<h2 id="android">android</h2>
+<p>androiddependencies： 查看 Android 项目的依赖关系</p>
+
+<ul>
+  <li>
+    <p>显示项目所有的 Android 相关依赖（包括直接依赖和传递依赖）</p>
+  </li>
+  <li>
+    <p>输出格式清晰，会列出每个依赖的配置名称（如 implementation、api）及其对应的库</p>
+  </li>
+  <li>
+    <p>常用于排查依赖冲突、确认某个库是否被正确引入</p>
+  </li>
+</ul>
+
+<p>signingReport: 查看签名信息</p>
+
+<ul>
+  <li>
+    <p>显示所有构建变体（debug/release 等）的签名配置信息</p>
+  </li>
+  <li>
+    <p>输出内容包括：MD5、SHA-1、SHA-256 指纹、密钥别名、密钥位置等</p>
+  </li>
+  <li>
+    <p>常用于获取调试签名指纹（如配置 Google Maps API、Firebase 时需要）</p>
+  </li>
+</ul>
+
+<p>sourceSets:查看源码集配置</p>
+
+<ul>
+  <li>
+    <p>显示项目中每个构建变体的源码目录结构</p>
+  </li>
+  <li>
+    <p>输出包括：java 源码目录、res 资源目录、manifest 文件位置、assets 目录等</p>
+  </li>
+  <li>
+    <p>常用于确认不同构建类型/产品风味使用的源码文件是否正确</p>
+  </li>
+</ul>
+
+<h2 id="build">build</h2>
+<p>assemble： 编译并打包所有构建变体的 APK/AAB</p>
+<ul>
+  <li>变体：会根据项目配置生成 assembleDebug、assembleRelease 等具体任务</li>
+  <li>输出：生成最终的安装包文件</li>
+</ul>
+
+<p>assembleAndroidTest：编译 Android 测试（Instrumentation Tests）的 APK</p>
+<ul>
+  <li>输出：生成测试 APK，用于在设备或模拟器上运行 UI 测试</li>
+</ul>
+
+<p>assembleUnitTest：编译单元测试（JUnit tests）的代码</p>
+<ul>
+  <li>输出：生成测试类文件，用于在本地 JVM 上运行</li>
+</ul>
+
+<p>build: 完整的构建流程 = assemble + check</p>
+<ul>
+  <li>包含：编译代码、运行所有测试、打包、生成报告等</li>
+  <li>常用：构建完整项目时使用</li>
+</ul>
+
+<p>buildDependents: 构建当前项目及其依赖该项目的其他项目</p>
+<ul>
+  <li>场景：在多模块项目中，修改了底层模块后，确保依赖它的上层模块也重新构建</li>
+</ul>
+
+<p>buildKotlinToolingMetadata: 生成 Kotlin 工具元数据</p>
+<ul>
+  <li>说明：Kotlin Gradle 插件的内部任务，用于管理 Kotlin 版本兼容性</li>
+  <li>通常：不需要手动执行，由 Kotlin 插件自动管理</li>
+</ul>
+
+<p>buildNeeded: 构建当前项目及其所依赖的所有项目</p>
+<ul>
+  <li>场景：确保所有依赖模块都更新到最新状态</li>
+</ul>
+
+<p>bundle: 打包所有构建变体的 Android App Bundle（.aab）文件</p>
+<ul>
+  <li>输出：生成 AAB 格式，用于上传 Google Play</li>
+  <li>变体：bundleDebug、bundleRelease 等</li>
+</ul>
+
+<p>clean: 删除所有构建产物</p>
+<ul>
+  <li>删除内容：build/ 目录、生成的 APK/AAB、中间文件等</li>
+  <li>常用：遇到构建缓存问题时，先执行 clean 再重新构建</li>
+</ul>
+
+<p>compileDebugAndroidTestSources: 编译 Android 测试（Instrumentation Tests）的源代码</p>
+<ul>
+  <li>构建变体：Debug</li>
+  <li>测试类型：AndroidTest（运行在设备/模拟器上的测试）</li>
+  <li>编译内容：src/androidTest/java/ 目录下的测试代码</li>
+  <li>输出：生成 .class 文件，用于后续打包成测试 APK</li>
+</ul>
+
+<p>compileDebugSources</p>
+<ul>
+  <li>作用：编译主应用程序的源代码（Debug 变体）</li>
+  <li>构建变体：Debug</li>
+  <li>测试类型：无（主代码）</li>
+  <li>编译内容：src/main/java/ + src/debug/java/ 目录下的代码</li>
+  <li>输出：生成 Debug 版本的字节码</li>
+</ul>
+
+<p>compileDebugUnitTestSources：编译单元测试（JUnit Tests）的源代码</p>
+<ul>
+  <li>构建变体：Debug</li>
+  <li>测试类型：UnitTest（运行在本地 JVM 上的测试）</li>
+  <li>编译内容：src/test/java/ 目录下的测试代码</li>
+  <li>输出：生成测试类的 .class 文件</li>
+</ul>
+
+<p>compileReleaseSources： 编译主应用程序的源代码（Release 变体）</p>
+<ul>
+  <li>构建变体：Release</li>
+  <li>测试类型：无（主代码）</li>
+  <li>编译内容：src/main/java/ + src/release/java/ 目录下的代码</li>
+  <li>输出：生成 Release 版本的字节码</li>
+</ul>
+
+<p>compileReleaseUnitTestSources：编译单元测试的源代码（针对 Release 变体）</p>
+<ul>
+  <li>构建变体：Release</li>
+  <li>测试类型：UnitTest</li>
+  <li>编译内容：src/test/java/ 目录下的测试代码</li>
+  <li>场景：测试 Release 版本的代码逻辑</li>
+</ul>
+
+<h2 id="help">help</h2>
+<p><strong>项目信息类</strong>:</p>
+
+<p>projects: 列出项目中所有的子项目（模块）</p>
+<ul>
+  <li>输出：显示项目树状结构</li>
+  <li>用途：了解多模块项目的组织结构</li>
+</ul>
+
+<p>tasks:列出当前项目所有可执行的任务</p>
+<ul>
+  <li>输出：按任务组分类显示（build、help、verification等）</li>
+  <li>用途：查看有哪些任务可用，支持搜索过滤</li>
+</ul>
+
+<p>properties：显示项目的所有 Gradle 属性</p>
+<ul>
+  <li>输出：包括项目属性、系统属性、环境变量等</li>
+  <li>用途：调试属性配置，查看当前所有可用属性</li>
+</ul>
+
+<p><strong>依赖和配置类</strong>:
+dependencies：显示项目的依赖关系树</p>
+<ul>
+  <li>输出：列出所有配置（implementation、api、testImplementation等）的依赖</li>
+  <li>用途：排查依赖冲突、查看传递依赖</li>
+</ul>
+
+<p>dependencyInsight：深入分析特定依赖的详情</p>
+<ul>
+  <li>输出：显示为什么引入该依赖、从哪里引入、版本冲突等信息</li>
+  <li>用途：排查依赖版本问题</li>
+</ul>
+
+<p>resolvableConfigurations：显示所有可解析的配置（resolvable configurations）</p>
+<ul>
+  <li>输出：列出可以被解析的依赖配置</li>
+  <li>用途：高级依赖分析，了解配置的解析状态</li>
+</ul>
+
+<p><strong>环境和工具类</strong>:
+buildEnvironment：显示构建脚本的依赖和环境信息</p>
+<ul>
+  <li>输出：包括 Gradle 版本、Groovy/Kotlin 版本、buildSrc 依赖等</li>
+  <li>用途：排查构建脚本自身的问题</li>
+</ul>
+
+<p>javaToolchains：显示可用的 Java 工具链（JDK）</p>
+<ul>
+  <li>输出：列出系统中检测到的 JDK 及其位置、版本</li>
+  <li>用途：确认项目使用的 JDK 是否正确</li>
+</ul>
+
+<p>outgoingVariants：显示模块输出的变体信息（Variants）</p>
+<ul>
+  <li>输出：列出当前模块对外暴露的构建变体及其属性</li>
+  <li>用途：高级功能，用于调试变体选择和依赖匹配</li>
+</ul>
+
+<p><strong>辅助类</strong></p>
+
+<p>help：显示 Gradle 帮助信息</p>
+<ul>
+  <li>输出：基本命令用法和常用任务</li>
+  <li>用途：快速查看 Gradle 命令帮助</li>
+</ul>
+
+<p>kotlinDslAccessorsReport：生成 Kotlin DSL 访问器报告</p>
+<ul>
+  <li>输出：列出所有可用的 DSL 扩展和访问器</li>
+  <li>用途：Kotlin DSL 开发调试，了解可用的扩展方法</li>
+</ul>
+
+<h2 id="install">install</h2>
+<p>installDebug：安装 Debug 版本的 APK 到连接的设备/模拟器</p>
+<ul>
+  <li>特性：如果设备上已安装相同包名的应用，会先卸载再安装；支持多设备时需指定设备</li>
+  <li>用途：快速将调试版应用安装到设备进行手动测试</li>
+</ul>
+
+<p>installDebugAndroidTest：安装 Android 测试 APK 到设备/模拟器</p>
+<ul>
+  <li>前置条件：需要先安装主应用 APK</li>
+  <li>用途：在设备上安装测试 APK，用于运行 Instrumentation Tests</li>
+</ul>
+
+<p>uninstallAll：卸载所有构建变体的应用</p>
+<ul>
+  <li>特性：根据包名卸载，会移除所有已安装的变体版本</li>
+  <li>用途：清理设备上的所有测试版本应用</li>
+</ul>
+
+<p>uninstallDebug：卸载 Debug 版本的应用</p>
+<ul>
+  <li>场景： 清理设备上的调试版本 遇到签名冲突时先卸载旧版本 准备安装新版本前清理环境</li>
+</ul>
+
+<p>uninstallDebugAndroidTest ：卸载 Android 测试 APK</p>
+<ul>
+  <li>场景： 清理测试残留 重新安装测试 APK 前清理 避免测试缓存导致的异常</li>
+</ul>
+
+<p>uninstallRelease：卸载 Release 版本的应用</p>
+<ul>
+  <li>场景： 清理生产版本 准备安装新正式版本 切换不同签名版本时</li>
+</ul>
+
+<h2 id="verification">verification</h2>
+<p>check ：运行所有验证任务（包括测试、代码检查等）</p>
+<ul>
+  <li>用途：完整的项目验证，通常在提交代码或 CI 流程中运行</li>
+</ul>
+
+<p>connectedCheck ：运行所有需要在设备/模拟器上执行的测试</p>
+<ul>
+  <li>用途：验证应用在真实设备上的行为</li>
+</ul>
+
+<p>deviceCheck ：运行所有需要在设备上执行的测试（与 connectedCheck 类似）</p>
+<ul>
+  <li>用途：用于设备测试的通用任务</li>
+</ul>
+
+<p>connectedAndroidTest：在所有连接的设备上运行 Android 测试（Instrumentation Tests）</p>
+<ul>
+  <li>输出：生成测试报告在 build/reports/androidTests/</li>
+  <li>场景：运行 UI 测试、集成测试</li>
+</ul>
+
+<p>connectedDebugAndroidTest：仅针对 Debug 变体运行 Android 测试</p>
+<ul>
+  <li>用途：专门测试 Debug 版本的功能</li>
+</ul>
+
+<p>checkJetifier：检查 Jetifier 迁移状态</p>
+<ul>
+  <li>输出：显示哪些依赖需要迁移，迁移状态如何</li>
+  <li>用途：确认 AndroidX 迁移是否完整</li>
+</ul>
+
+<p>checkKotlinGradlePluginConfigurationErrors: 检查 Kotlin Gradle 插件配置错误</p>
+<ul>
+  <li>检查内容： Kotlin 版本兼容性 插件配置是否正确 依赖是否冲突</li>
+  <li>用途：在构建前发现 Kotlin 配置问题</li>
+</ul>
+
+<p>deviceAndroidTest 设备测试的通用任务（与 connectedAndroidTest 类似）</p>
+<ul>
+  <li>用途：在设备上运行测试的另一种入口</li>
+</ul>
+
+<p>deviceCheck：运行所有需要在设备上执行的检查任务</p>
+<ul>
+  <li>这是一个聚合任务，会触发 connectedAndroidTest 等设备测试</li>
+</ul>
+
+<p>lint 对所有构建变体运行 Lint 检查</p>
+<ul>
+  <li>输出：生成完整的 Lint 报告</li>
+  <li>检查内容： 性能问题（如过度绘制、内存泄漏） 安全性问题（如未加密的网络请求） 正确性问题（如缺少权限检查） 国际化问题（如硬编码字符串） API 兼容性（如使用高版本 API 未做版本判断）</li>
+</ul>
+
+<p>lintDebug：仅对 Debug 变体运行 Lint 检查</p>
+<ul>
+  <li>用途：开发阶段快速检查，避免运行所有变体节省时间</li>
+  <li>场景：日常开发中的代码质量检查</li>
+</ul>
+
+<p>lintRelease：仅对 Release 变体运行 Lint 检查</p>
+<ul>
+  <li>用途：发布前对正式版本进行完整检查</li>
+  <li>场景：CI/CD 流程中，确保 Release 版本质量</li>
+</ul>
+
+<p>lintFix：自动修复 Lint 发现的部分问题</p>
+<ul>
+  <li>添加缺失的 @NonNull/@Nullable 注解</li>
+  <li>移除未使用的资源</li>
+  <li>修复简单的代码风格问题</li>
+  <li>添加缺失的权限检查
+<strong>注意</strong>：不是所有问题都能自动修复</li>
+</ul>
+
+<p>lintVitalRelease：对 Release 版本运行关键（Vital）Lint 检查
+<strong>特点</strong></p>
+<ul>
+  <li>更严格：只检查严重影响应用质量的严重问题 更快：跳过非关键检查项</li>
+  <li>集成：在生成 Release APK/AAB 时会自动运行</li>
+  <li>触发时机：执行 assembleRelease 时自动触发</li>
+  <li>失败策略：如果发现严重问题，构建会失败</li>
+</ul>
+
+<p>test 运行所有构建变体的单元测试</p>
+<ul>
+  <li>用途：一次性运行所有本地 JVM 测试</li>
+</ul>
+
+<p>testDebugUnitTest：运行 Debug 变体的单元测试</p>
+<ul>
+  <li>运行环境：本地 JVM（不需要设备或模拟器）</li>
+  <li>特点： 速度快 适合纯逻辑测试</li>
+  <li>用途：日常开发中的快速测试验证</li>
+</ul>
+
+<p>testReleaseUnitTest ：运行 Release 变体的单元测试
+场景：</p>
+<ul>
+  <li>验证 Release 版本的代码逻辑</li>
+  <li>检查 ProGuard/R8 混淆后的行为</li>
+  <li>CI/CD 流程中的完整测试</li>
+</ul>
+
+<p>updateLintBaseline：更新 Lint 基线文件（lint-baseline.xml）
+<strong>功能</strong>：</p>
+<ul>
+  <li>将当前所有 Lint 问题记录为”已接受”状态</li>
+  <li>生成基线文件后，后续 Lint 检查只报告新增的问题</li>
+  <li>帮助团队逐步改进代码质量</li>
+</ul>
+
+<p><strong>场景</strong>：</p>
+<ul>
+  <li>接手遗留项目，想逐步修复问题</li>
+  <li>暂时接受现有问题，只关注新增问题</li>
+  <li>团队约定代码质量改进计划</li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+
+  
+    
+
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 分类: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/minmistake_personal_blog/categories/#%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7" class="page__taxonomy-item p-category" rel="tag">构建工具</a>
+    
+    </span>
+  </p>
+
+
+  
+
+
+        
+
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time class="dt-published" datetime="2026-03-15T00:00:00+08:00">March 15, 2026</time></p>
+
+
+      </footer>
+
+      
+
+      
+
+  <nav class="pagination" aria-label="Post pagination">
+    
+      <a href="/minmistake_personal_blog/Android%E5%AD%A6%E4%B9%A0/" class="pagination--pager" title="Android 学习">上一页</a>
+    
+    
+      <a href="/minmistake_personal_blog/RestFulAPI/" class="pagination--pager" title="RestFulAPI">下一页</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+
+<div class="page__related">
+  
+  <h2 class="page__related-title">猜您还喜欢</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/Spec-Kit%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" rel="permalink">Spec-kit使用教程
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/AI%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F%E4%BA%86%E8%A7%A3/" rel="permalink">AI编程范式浅了解
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" rel="permalink">AI 编程工具使用
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/AI%E5%AD%A6%E4%B9%A05-Harness/" rel="permalink">AI学习(五）- HarnessEngineering(未完待续)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        
+<div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      输入您要搜索的关键词...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>关注:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.bilibili.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-bilibili" aria-hidden="true"></i> Bilibili</a></li>
+        
+      
+    
+
+    
+      <li><a href="/minmistake_personal_blog/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2025-2026 - 2026 <a href="https://NiuSX.github.io">一只捡星星的熊的博客</a>. 技术来自于 <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/minmistake_personal_blog/assets/js/main.min.js"></script>
+
+
+
+
+
+<script src="/minmistake_personal_blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/minmistake_personal_blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/minmistake_personal_blog/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

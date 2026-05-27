@@ -1,0 +1,605 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.0 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="zh-CN" class="no-js" dir="ltr">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>ollama安装 - 一只捡星星的熊的博客</title>
+<meta name="description" content="技术学习博客">
+
+
+  <meta name="author" content="一只捡星星的熊">
+  
+  <meta property="article:author" content="一只捡星星的熊">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:site_name" content="一只捡星星的熊的博客">
+<meta property="og:title" content="ollama安装">
+<meta property="og:url" content="https://niusx.github.io/minmistake_personal_blog/ollama%E5%AE%89%E8%A3%85/">
+
+
+  <meta property="og:description" content="技术学习博客">
+
+
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-03-05T00:00:00+08:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="https://niusx.github.io/minmistake_personal_blog/ollama%E5%AE%89%E8%A3%85/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/minmistake_personal_blog/feed.xml" type="application/atom+xml" rel="alternate" title="一只捡星星的熊的博客 Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/minmistake_personal_blog/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">转到主导航栏</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">转到内容</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">转到底部</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/minmistake_personal_blog/">
+          一只捡星星的熊的博客
+          
+        </a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a
+                href="/minmistake_personal_blog/"
+                
+                
+              >首页</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/minmistake_personal_blog/about/"
+                
+                
+              >关于</a>
+            </li><li class="masthead__menu-item">
+              <a
+                href="/minmistake_personal_blog/year-archive/"
+                
+                
+              >归档</a>
+            </li></ul>
+        
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">切换搜索</span>
+          <i class="fas fa-search"></i>
+        </button>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="https://niusx.github.io/minmistake_personal_blog/">
+        <img src="/minmistake_personal_blog/assets/images/wukong-photo.jpg" alt="一只捡星星的熊" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="https://niusx.github.io/minmistake_personal_blog/" itemprop="url">一只捡星星的熊</a>
+    </h3>
+    
+      <div class="author__bio p-note" itemprop="description">
+        <p>什么也没写</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">关注</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-location-dot" aria-hidden="true"></i> <span itemprop="name" class="p-locality">中国</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/NiuSX/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://space.bilibili.com/347549684/" rel="nofollow noopener noreferrer me" itemprop="sameAs"><i class="fab fa-fw fa-bilibili" aria-hidden="true"></i><span class="label">Bilibili</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="ollama安装">
+    <meta itemprop="description" content="">
+    <meta itemprop="datePublished" content="2026-03-05T00:00:00+08:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="https://niusx.github.io/minmistake_personal_blog/ollama%E5%AE%89%E8%A3%85/" itemprop="url">ollama安装
+</a>
+          </h1>
+          
+
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+          <aside class="sidebar__right sticky">
+            <nav class="toc" aria-label="Table of contents">
+              <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> 文章目录</h4></header>
+              <ul class="toc__menu"><li><a href="#安装">安装</a></li><li><a href="#设置环境变量">设置环境变量</a></li><li><a href="#启动">启动</a></li><li><a href="#下载模型">下载模型</a></li><li><a href="#ollama更多用法">ollama更多用法</a></li></ul>
+            </nav>
+          </aside>
+        
+        <h1 id="安装">安装</h1>
+<p>1.下载：访问 Ollama官网(https://ollama.com/)，点击 Download，选择Windows版本下载 .exe 安装包</p>
+
+<p>2.安装：不建议双击安装(会默认安装在C盘) <br />
+    在CMD里使用下面命令进行安装 <br />
+    <code class="language-plaintext highlighter-rouge">cmd   
+    ./OllamaSetup.exe /DIR="D:\Your\Ollama\Path"      
+   </code> <br />
+3.模型安装：在设置中选择模型安装路径更改模型安装路径</p>
+
+<h1 id="设置环境变量">设置环境变量</h1>
+<p>设置环境变量(windows)打开系统设置里的环境变量</p>
+
+<p>方法一： <br />
+1.点击编辑用户环境变量 <br />
+2.编辑或为你的用户账户创建一个新的变量名 <code class="language-plaintext highlighter-rouge">OLLAMA_MODELS</code>，变量值为 <code class="language-plaintext highlighter-rouge">D:\你的模型目录</code> <br />
+3.新建用户变量<code class="language-plaintext highlighter-rouge">OLLAMA_HOST</code> 值为本地监听地址：<code class="language-plaintext highlighter-rouge">http://127.0.0.1:11434</code> <br />
+4.点击确定/应用保存</p>
+
+<p>方法二： <br />
+临时设置 <code class="language-plaintext highlighter-rouge">set OLLAMA_MODELS=D:\ollama_models</code><br />
+永久写入注册表 <code class="language-plaintext highlighter-rouge">setx OLLAMA_MODELS D:\ollama_models</code> <br />
+<strong>注意：</strong> <code class="language-plaintext highlighter-rouge">set</code> 指令是临时设置，只在当前命令窗口下有用,但<code class="language-plaintext highlighter-rouge">setx</code>是永久设置保存到注册表中，和方法一是一样的
+路径名中不要包含空格</p>
+
+<h1 id="启动">启动</h1>
+<p>从Windows开始菜单启动Ollama应用程序</p>
+<blockquote>
+  <p>若是服务未启动，使用 <code class="language-plaintext highlighter-rouge">ollama serve</code> 启动服务 <br />
+使用 <code class="language-plaintext highlighter-rouge">ollama list</code>不报错，证明服务启动成功</p>
+
+  <p>在浏览器里输入 <code class="language-plaintext highlighter-rouge">localhost:11434</code> 若是显示<code class="language-plaintext highlighter-rouge">Ollama is running</code> 则表示启动成功</p>
+</blockquote>
+
+<h1 id="下载模型">下载模型</h1>
+<p>使用<code class="language-plaintext highlighter-rouge">ollama pull qwen3:8b</code> 拉取模型</p>
+
+<p>若是连接报错，需要使用镜像源或者代理拉取</p>
+<pre><code class="language-CMD">set OLLAMA_REGISTRY=https://mirrors.tuna.tsinghua.edu.cn/ollama
+ollama run qwen3:8b
+</code></pre>
+
+<h1 id="ollama更多用法">ollama更多用法</h1>
+<p>查看所有可用模型：<code class="language-plaintext highlighter-rouge">ollama list</code> <br />
+停止模型：<code class="language-plaintext highlighter-rouge">ollama stop &lt;model_name&gt;</code> <br />
+删除模型：<code class="language-plaintext highlighter-rouge">ollama rm &lt;model_names&gt;</code></p>
+
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+
+  
+    
+
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> 分类: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/minmistake_personal_blog/categories/#ai" class="page__taxonomy-item p-category" rel="tag">AI</a><span class="sep">, </span>
+    
+      <a href="/minmistake_personal_blog/categories/#ollama" class="page__taxonomy-item p-category" rel="tag">ollama</a>
+    
+    </span>
+  </p>
+
+
+  
+
+
+        
+
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> 更新时间:</strong> <time class="dt-published" datetime="2026-03-05T00:00:00+08:00">March 5, 2026</time></p>
+
+
+      </footer>
+
+      
+
+      
+
+  <nav class="pagination" aria-label="Post pagination">
+    
+      <a href="/minmistake_personal_blog/AI%E5%AD%A6%E4%B9%A02-MCP/" class="pagination--pager" title="AI学习(二）- MCP">上一页</a>
+    
+    
+      <a href="/minmistake_personal_blog/AI%E5%AD%A6%E4%B9%A03-RAG/" class="pagination--pager" title="AI学习(三）- RAG">下一页</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+
+<div class="page__related">
+  
+  <h2 class="page__related-title">猜您还喜欢</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/Spec-Kit%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B/" rel="permalink">Spec-kit使用教程
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/AI%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F%E4%BA%86%E8%A7%A3/" rel="permalink">AI编程范式浅了解
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7%E4%BD%BF%E7%94%A8/" rel="permalink">AI 编程工具使用
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/minmistake_personal_blog/AI%E5%AD%A6%E4%B9%A05-Harness/" rel="permalink">AI学习(五）- HarnessEngineering(未完待续)
+</a>
+      
+    </h2>
+    
+
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">
+</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+      <div class="search-content">
+        
+<div class="search-content__inner-wrap"><form class="search-content__form" onkeydown="return event.key != 'Enter';" role="search">
+    <label class="sr-only" for="search">
+      输入您要搜索的关键词...
+    </label>
+    <input type="search" id="search" class="search-input" tabindex="-1" placeholder="输入您要搜索的关键词..." />
+  </form>
+  <div id="results" class="results"></div></div>
+
+      </div>
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>关注:</strong></li>
+    
+
+    
+      
+        
+          <li><a href="https://github.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i> GitHub</a></li>
+        
+      
+        
+          <li><a href="https://www.bilibili.com/" rel="nofollow noopener noreferrer"><i class="fab fa-fw fa-bilibili" aria-hidden="true"></i> Bilibili</a></li>
+        
+      
+    
+
+    
+      <li><a href="/minmistake_personal_blog/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">&copy; 2025-2026 - 2026 <a href="https://NiuSX.github.io">一只捡星星的熊的博客</a>. 技术来自于 <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/minmistake_personal_blog/assets/js/main.min.js"></script>
+
+
+
+
+
+<script src="/minmistake_personal_blog/assets/js/lunr/lunr.min.js"></script>
+<script src="/minmistake_personal_blog/assets/js/lunr/lunr-store.js"></script>
+<script src="/minmistake_personal_blog/assets/js/lunr/lunr-en.js"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

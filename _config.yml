@@ -23,7 +23,7 @@ title                    : "一只捡星星的熊"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "一只捡星星的熊"
-description              : "技术学习博客"
+description              : "记录一些自己的学习笔记"
 url                      : "https://NiuSX.github.io"
 baseurl                  : "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"

@@ -34,14 +34,14 @@
 
 | 文件 | 作用 |
 | --- | --- |
-| `.github/workflows/pages.yml` | 自动部署工作流。推送 `master` 后安装 Ruby 依赖、使用 `/blog` 作为 `baseurl` 执行 Jekyll 构建，并把 `_site/` 推送到发布分支。已添加中文注释。 |
+| `.github/workflows/pages.yml` | 自动部署工作流。推送 `master` 后安装 Ruby 依赖、使用 `/blog` 作为 `baseurl` 执行 Jekyll 构建，并通过 `BLOG_DEPLOY_TOKEN` 把 `_site/` 同步到 `NiuSX.github.io` 仓库的 `blog/` 目录。已添加中文注释。 |
 
 关键点：
 
 - 当前项目使用 `/blog` 作为站点子路径，目标访问地址为 `https://NiuSX.github.io/blog/`。
 - 源码保留在 `master` 分支。
-- GitHub 仓库设置里 Pages Source 应选择 `Deploy from a branch`，分支选择 `gh-pages`，目录选择 `/root`。
-- 若要使用 `https://NiuSX.github.io/blog/`，构建产物需要放在 `NiuSX.github.io` 仓库的 `blog/` 目录下。
+- 发布产物会被工作流写入 `NiuSX.github.io/main` 的 `blog/` 目录。
+- 需要在源码仓库配置 `BLOG_DEPLOY_TOKEN`，并授予它写入 `NiuSX/NiuSX.github.io` 仓库内容的权限。
 
 ## 4. Jekyll 数据文件
 

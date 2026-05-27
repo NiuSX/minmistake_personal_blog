@@ -21,6 +21,13 @@ bundle exec jekyll build
 
 站点配置使用 `url: https://NiuSX.github.io` 和 `baseurl: /blog`，因此页面链接和静态资源路径都会生成到 `/blog/` 前缀下。
 
-要让访问地址变成 `https://NiuSX.github.io/blog/`，需要把构建产物发布到 `NiuSX.github.io` 仓库的 `blog/` 目录下。
+推送源码到 `master` 后，`.github/workflows/pages.yml` 会自动构建站点，并把 `_site/` 内容同步到 `NiuSX.github.io` 仓库的 `blog/` 目录下。
 
-当前仓库的工作流仍会把构建产物发布到本仓库 `gh-pages` 分支；如果需要自动同步到 `NiuSX.github.io/blog/`，需要在 GitHub Actions 中配置目标仓库写入权限。
+跨仓库发布需要在当前源码仓库配置一个 Action Secret：
+
+1. 创建 GitHub fine-grained personal access token。
+2. Token 只授予 `NiuSX/NiuSX.github.io` 仓库的 `Contents: Read and write` 权限。
+3. 在 `minmistake_personal_blog` 仓库进入 `Settings -> Secrets and variables -> Actions`。
+4. 新增 secret：`BLOG_DEPLOY_TOKEN`，值填入上面创建的 token。
+
+之后只需要提交并推送源码仓库，工作流会自动发布到 `https://NiuSX.github.io/blog/`。

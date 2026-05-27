@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  # 工作流需要写入发布分支，因此需要 contents: write。
-  contents: write
+  # 只需要读取当前源码仓库；跨仓库写入依赖下面的 BLOG_DEPLOY_TOKEN。
+  contents: read
 
 concurrency:
   group: blog-pages
@@ -18,7 +18,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout source
         uses: actions/checkout@v4
 
       - name: Setup Ruby
@@ -33,12 +33,34 @@ jobs:
           JEKYLL_ENV: production
         run: bundle exec jekyll build --trace --baseurl "/blog"
 
-      - name: Publish to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Checkout GitHub Pages repository
+        uses: actions/checkout@v4
         with:
-          # 使用 GitHub 自动生成的 token 把 _site 目录提交到当前仓库的 gh-pages 分支。
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./_site
-          # 每次发布生成一个干净的 gh-pages 分支历史，避免旧构建产物残留。
-          force_orphan: true
+          # 目标发布仓库。GitHub Pages 会从这个仓库的 main 分支发布根站点。
+          repository: NiuSX/NiuSX.github.io
+          ref: main
+          path: github-pages
+          # 需要在当前源码仓库 Settings -> Secrets and variables -> Actions 中配置。
+          token: ${{ secrets.BLOG_DEPLOY_TOKEN }}
+
+      - name: Copy site into /blog
+        shell: bash
+        run: |
+          rm -rf github-pages/blog
+          mkdir -p github-pages/blog
+          cp -a _site/. github-pages/blog/
+          touch github-pages/blog/.nojekyll
+
+      - name: Commit and push published site
+        shell: bash
+        working-directory: github-pages
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blog
+          if git diff --cached --quiet; then
+            echo "No blog changes to publish."
+            exit 0
+          fi
+          git commit -m "Publish blog from minmistake_personal_blog"
+          git push origin main

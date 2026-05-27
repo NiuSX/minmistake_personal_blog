@@ -304,50 +304,69 @@ body.layout--default {
   }
 }
 
-// 全站阅读密度覆盖：缩小归档页和笔记正文的默认字号，避免主题默认排版显得过大。
-.layout--single,
-.layout--posts,
-.layout--archive {
+// 笔记正文阅读密度覆盖：文章详情页进一步缩小字号，适合长笔记阅读。
+.layout--single {
   .page__title {
-    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    font-size: clamp(1.25rem, 2.1vw, 1.7rem);
     line-height: 1.25;
   }
 
   .page__content {
-    font-size: 0.9rem;
-    line-height: 1.72;
+    font-size: 0.82rem;
+    line-height: 1.68;
 
     h1 {
-      font-size: 1.55rem;
+      font-size: 1.35rem;
     }
 
     h2 {
-      font-size: 1.28rem;
+      font-size: 1.12rem;
     }
 
     h3 {
-      font-size: 1.1rem;
+      font-size: 1rem;
     }
 
     h4 {
-      font-size: 1rem;
+      font-size: 0.92rem;
     }
 
     p,
     li,
     td,
     th {
-      font-size: 0.9rem;
+      font-size: 0.82rem;
     }
 
     code {
-      font-size: 0.78em;
+      font-size: 0.76em;
     }
 
     pre {
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       line-height: 1.55;
     }
+  }
+
+  .page__meta,
+  .page__taxonomy,
+  .page__date {
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  .sidebar,
+  .toc {
+    font-size: 0.78rem;
+  }
+}
+
+// 归档页保持比正文略大的可扫读字号，只压缩列表密度。
+.layout--posts,
+.layout--archive {
+  .page__title {
+    font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+    line-height: 1.25;
   }
 
   .archive__subtitle {
@@ -368,8 +387,7 @@ body.layout--default {
 
   .archive__item-excerpt,
   .page__meta,
-  .page__taxonomy,
-  .page__date {
+  .page__taxonomy {
     font-size: 0.78rem;
     line-height: 1.5;
   }
@@ -381,17 +399,15 @@ body.layout--default {
 }
 
 @media (max-width: 768px) {
-  .layout--single,
-  .layout--posts,
-  .layout--archive {
+  .layout--single {
     .page__content {
-      font-size: 0.88rem;
+      font-size: 0.8rem;
 
       p,
       li,
       td,
       th {
-        font-size: 0.88rem;
+        font-size: 0.8rem;
       }
     }
   }

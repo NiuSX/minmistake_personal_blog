@@ -1,4 +1,4 @@
-name: Build and publish to gh-pages
+name: Build and publish blog
 
 on:
   push:
@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  # gh-pages 分支由工作流写入，因此需要 contents: write。
+  # 工作流需要写入发布分支，因此需要 contents: write。
   contents: write
 
 concurrency:
-  group: gh-pages
+  group: blog-pages
   cancel-in-progress: true
 
 jobs:
@@ -27,28 +27,16 @@ jobs:
           ruby-version: "3.2"
           bundler-cache: true
 
-      - name: Resolve GitHub Pages baseurl
-        id: pages-path
-        shell: bash
-        run: |
-          # 用户/组织主页仓库形如 NiuSX/NiuSX.github.io，发布路径是根路径。
-          # 普通项目仓库形如 NiuSX/minmistake_personal_blog，发布路径需要带仓库名前缀。
-          if [[ "${GITHUB_REPOSITORY}" == "${GITHUB_REPOSITORY_OWNER}/${GITHUB_REPOSITORY_OWNER}.github.io" ]]; then
-            echo "baseurl=" >> "$GITHUB_OUTPUT"
-          else
-            echo "baseurl=/${GITHUB_REPOSITORY#*/}" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Build with Jekyll
         env:
           # production 会启用站点生产环境行为，例如评论、统计等生产环境开关。
           JEKYLL_ENV: production
-        run: bundle exec jekyll build --trace --baseurl "${{ steps.pages-path.outputs.baseurl }}"
+        run: bundle exec jekyll build --trace --baseurl "/blog"
 
       - name: Publish to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
-          # 使用 GitHub 自动生成的 token 把 _site 目录提交到 gh-pages 分支。
+          # 使用 GitHub 自动生成的 token 把 _site 目录提交到当前仓库的 gh-pages 分支。
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: ./_site

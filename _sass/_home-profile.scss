@@ -1,18 +1,18 @@
 // 首页自定义样式入口。
 // 这些样式只服务 index.html 的个人主页博客布局，不直接修改 Minimal Mistakes 主题源码。
 .home-profile {
-  max-width: 1120px;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 3.5rem 1.25rem 4rem;
+  padding: 1.4rem 1.25rem 2rem;
 }
 
 .home-hero {
   // 首屏使用双栏布局：左侧介绍，右侧个人信息卡片。
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1.45fr) minmax(240px, 0.75fr);
+  gap: 1rem;
   align-items: stretch;
-  min-height: 440px;
+  min-height: 300px;
 }
 
 .home-hero__content {
@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 3rem;
+  padding: 1.8rem 2rem;
   border: 1px solid rgba(26, 35, 55, 0.08);
   border-radius: 8px;
   background:
@@ -33,7 +33,7 @@
 .home-section__label {
   margin: 0 0 0.75rem;
   color: #31708f;
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0;
   text-transform: uppercase;
@@ -42,24 +42,24 @@
 .home-hero h1 {
   margin: 0;
   color: #172033;
-  font-size: clamp(2.35rem, 5vw, 4.6rem);
+  font-size: clamp(1.85rem, 4vw, 3rem);
   line-height: 1.05;
   letter-spacing: 0;
 }
 
 .home-hero__intro {
-  max-width: 680px;
-  margin: 1.25rem 0 0;
+  max-width: 620px;
+  margin: 0.85rem 0 0;
   color: #4d596c;
-  font-size: 1.08rem;
-  line-height: 1.85;
+  font-size: 0.92rem;
+  line-height: 1.65;
 }
 
 .home-hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.85rem;
-  margin-top: 2rem;
+  gap: 0.65rem;
+  margin-top: 1.2rem;
 }
 
 .home-button {
@@ -67,11 +67,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
-  padding: 0.72rem 1.15rem;
+  min-height: 36px;
+  padding: 0.48rem 0.85rem;
   border: 1px solid rgba(49, 112, 143, 0.22);
   border-radius: 6px;
   color: #1d5f7a;
+  font-size: 0.86rem;
   font-weight: 700;
   text-decoration: none;
   background: #fff;
@@ -106,53 +107,55 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2rem;
+  padding: 1.25rem;
 }
 
 .home-card__avatar {
-  width: 104px;
-  height: 104px;
+  width: 72px;
+  height: 72px;
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid #f0f5f8;
 }
 
 .home-card--profile h2 {
-  margin: 1.5rem 0 0.6rem;
+  margin: 0.9rem 0 0.4rem;
   color: #172033;
-  font-size: 1.4rem;
+  font-size: 1.06rem;
 }
 
 .home-card--profile p {
   margin: 0;
   color: #5d6878;
-  line-height: 1.7;
+  font-size: 0.84rem;
+  line-height: 1.55;
 }
 
 .home-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
 }
 
 .home-links a {
   color: #1f6f8b;
+  font-size: 0.84rem;
   font-weight: 700;
 }
 
 .home-section {
-  margin-top: 3.5rem;
+  margin-top: 1.35rem;
 }
 
 .home-section__header {
-  margin-bottom: 1.25rem;
+  margin-bottom: 0.75rem;
 }
 
 .home-section__header h2 {
   margin: 0;
   color: #172033;
-  font-size: 1.7rem;
+  font-size: 1.18rem;
 }
 
 .home-section__header--split {
@@ -171,39 +174,40 @@
   // 三个方向卡片对应首页的内容主题，窄屏下会折叠为单列。
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .home-focus-grid .home-card {
-  padding: 1.35rem;
+  padding: 0.85rem;
 }
 
 .home-focus-grid span {
   color: #7a8b9a;
-  font-size: 0.78rem;
+  font-size: 0.66rem;
   font-weight: 800;
 }
 
 .home-focus-grid h3 {
-  margin: 0.65rem 0 0.45rem;
+  margin: 0.4rem 0 0.25rem;
   color: #172033;
-  font-size: 1.1rem;
+  font-size: 0.92rem;
 }
 
 .home-focus-grid p {
   margin: 0;
   color: #5d6878;
-  line-height: 1.7;
+  font-size: 0.82rem;
+  line-height: 1.5;
 }
 
 .home-post-list {
   // 最新文章由 Liquid 自动渲染，这里只负责列表视觉间距。
   display: grid;
-  gap: 1rem;
+  gap: 0.65rem;
 }
 
 .home-post-card {
-  padding: 1.35rem 1.45rem;
+  padding: 0.75rem 0.9rem;
   border: 1px solid rgba(26, 35, 55, 0.08);
   border-radius: 8px;
   background: #fff;
@@ -211,13 +215,13 @@
 
 .home-post-card time {
   color: #7a8b9a;
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   font-weight: 700;
 }
 
 .home-post-card h3 {
-  margin: 0.45rem 0 0.45rem;
-  font-size: 1.25rem;
+  margin: 0.25rem 0 0.25rem;
+  font-size: 0.98rem;
 }
 
 .home-post-card h3 a {
@@ -232,21 +236,22 @@
 .home-post-card p {
   margin: 0;
   color: #5d6878;
-  line-height: 1.7;
+  font-size: 0.82rem;
+  line-height: 1.45;
 }
 
 .home-post-card__tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: 0.85rem;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
 }
 
 .home-post-card__tags span {
-  padding: 0.2rem 0.55rem;
+  padding: 0.14rem 0.45rem;
   border-radius: 999px;
   color: #275d72;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 700;
   background: #eef6f8;
 }
@@ -264,7 +269,7 @@ body.layout--default {
 @media (max-width: 900px) {
   // 平板和手机视口下，首页从双栏改为单栏，保证头像和按钮不拥挤。
   .home-profile {
-    padding-top: 2rem;
+    padding-top: 1.2rem;
   }
 
   .home-hero,
@@ -277,7 +282,7 @@ body.layout--default {
   }
 
   .home-hero__content {
-    padding: 2rem;
+    padding: 1.35rem;
   }
 }
 

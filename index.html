@@ -22,7 +22,7 @@ permalink: /
     <aside class="home-card home-card--profile" aria-label="个人信息">
       <img src="{{ '/assets/images/wukong-photo.jpg' | relative_url }}" alt="NiuSX 的头像" class="home-card__avatar">
       <div>
-        <h2>一只摘星星的熊</h2>
+        <h2>一只捡星星的熊</h2>
         <p>学习、记录、复盘，把零散经验整理成可回看的知识库。</p>
       </div>
       <div class="home-links">
@@ -69,12 +69,12 @@ permalink: /
 
     <div class="home-post-list">
       <!-- limit 控制首页最多展示的文章数量；文章详情仍然由 _posts 目录生成。 -->
-      {% for post in site.posts limit: 5 %}
+      {% for post in site.posts limit: 3 %}
         <article class="home-post-card">
           <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
           <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
           {% if post.excerpt %}
-            <p>{{ post.excerpt | strip_html | truncate: 110 }}</p>
+            <p>{{ post.excerpt | strip_html | truncate: 72 }}</p>
           {% endif %}
           {% if post.tags.size > 0 %}
             <div class="home-post-card__tags">

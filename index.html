@@ -1,4 +1,86 @@
 ---
-layout: home
-author_profile: true
+layout: default
+title: "首页"
+permalink: /
 ---
+
+<main class="home-profile" aria-label="个人主页">
+  <section class="home-hero">
+    <div class="home-hero__content">
+      <p class="home-hero__eyebrow">Personal Blog</p>
+      <h1>你好，我是 NiuSX</h1>
+      <p class="home-hero__intro">
+        这里记录技术学习、项目实践和阶段性总结。关注工程实践、AI 工具、机器人与软件开发中的具体问题。
+      </p>
+      <div class="home-hero__actions">
+        <a class="home-button home-button--primary" href="{{ '/year-archive/' | relative_url }}">阅读文章</a>
+        <a class="home-button" href="{{ '/about/' | relative_url }}">关于我</a>
+      </div>
+    </div>
+
+    <aside class="home-card home-card--profile" aria-label="个人信息">
+      <img src="{{ '/assets/images/wukong-photo.jpg' | relative_url }}" alt="NiuSX 的头像" class="home-card__avatar">
+      <div>
+        <h2>一只摘星星的熊</h2>
+        <p>学习、记录、复盘，把零散经验整理成可回看的知识库。</p>
+      </div>
+      <div class="home-links">
+        <a href="https://github.com/NiuSX/">GitHub</a>
+        <a href="https://space.bilibili.com/347549684/">Bilibili</a>
+      </div>
+    </aside>
+  </section>
+
+  <section class="home-section" aria-labelledby="focus-title">
+    <div class="home-section__header">
+      <p class="home-section__label">Focus</p>
+      <h2 id="focus-title">近期关注</h2>
+    </div>
+    <div class="home-focus-grid">
+      <article class="home-card">
+        <span>01</span>
+        <h3>技术笔记</h3>
+        <p>沉淀语言、框架、工具链和工程化实践，偏向可复用的知识整理。</p>
+      </article>
+      <article class="home-card">
+        <span>02</span>
+        <h3>项目实践</h3>
+        <p>记录项目配置、架构选择、调试过程和阶段性复盘。</p>
+      </article>
+      <article class="home-card">
+        <span>03</span>
+        <h3>AI 与自动化</h3>
+        <p>关注 AI 工具、Agent、RAG、MCP 等方向在开发流程中的应用。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="posts-title">
+    <div class="home-section__header home-section__header--split">
+      <div>
+        <p class="home-section__label">Latest</p>
+        <h2 id="posts-title">最新文章</h2>
+      </div>
+      <a class="home-section__link" href="{{ '/year-archive/' | relative_url }}">查看归档</a>
+    </div>
+
+    <div class="home-post-list">
+      {% for post in site.posts limit: 5 %}
+        <article class="home-post-card">
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
+          <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+          {% if post.excerpt %}
+            <p>{{ post.excerpt | strip_html | truncate: 110 }}</p>
+          {% endif %}
+          {% if post.tags.size > 0 %}
+            <div class="home-post-card__tags">
+              {% for tag in post.tags limit: 3 %}
+                <span>{{ tag }}</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+</main>

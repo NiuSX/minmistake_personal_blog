@@ -17,10 +17,10 @@ bundle exec jekyll build
 
 构建产物会生成到 `_site/`，该目录不需要提交。
 
-## 部署到 GitHub Pages
+## 部署到当前仓库的 gh-pages 分支
 
-推荐方式是提交源码到 GitHub，由 `.github/workflows/pages.yml` 自动构建并发布 `_site/` 产物，不需要手动把 `_site/` 提交到仓库。
+推荐方式是提交源码到 `master` 分支，由 `.github/workflows/pages.yml` 自动构建并把 `_site/` 发布到当前仓库的 `gh-pages` 分支，不需要手动提交 `_site/`。
 
-如果要访问 `https://NiuSX.github.io/`，仓库名应为 `NiuSX.github.io`。如果继续使用当前仓库 `minmistake_personal_blog`，访问地址会是 `https://NiuSX.github.io/minmistake_personal_blog/`。
+如果继续使用当前仓库 `minmistake_personal_blog`，访问地址会是 `https://NiuSX.github.io/minmistake_personal_blog/`。
 
-在 GitHub 仓库页面进入 `Settings -> Pages`，把 `Build and deployment` 的 `Source` 设置为 `GitHub Actions`。之后推送到 `master` 分支即可自动部署。
+在 GitHub 仓库页面进入 `Settings -> Pages`，把 `Build and deployment` 的 `Source` 设置为 `Deploy from a branch`，分支选择 `gh-pages`，目录选择 `/root`。之后推送到 `master` 分支即可自动部署。

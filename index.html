@@ -32,31 +32,6 @@ permalink: /
     </aside>
   </section>
 
-  <!-- 近期关注：把博客内容方向显式展示出来，帮助访客快速理解站点主题。 -->
-  <section class="home-section" aria-labelledby="focus-title">
-    <div class="home-section__header">
-      <p class="home-section__label">Focus</p>
-      <h2 id="focus-title">近期关注</h2>
-    </div>
-    <div class="home-focus-grid">
-      <article class="home-card">
-        <span>01</span>
-        <h3>技术笔记</h3>
-        <p>沉淀语言、框架、工具链和工程化实践，偏向可复用的知识整理。</p>
-      </article>
-      <article class="home-card">
-        <span>02</span>
-        <h3>项目实践</h3>
-        <p>记录项目配置、架构选择、调试过程和阶段性复盘。</p>
-      </article>
-      <article class="home-card">
-        <span>03</span>
-        <h3>AI 与自动化</h3>
-        <p>关注 AI 工具、Agent、RAG、MCP 等方向在开发流程中的应用。</p>
-      </article>
-    </div>
-  </section>
-
   <!-- 最新文章：从 Jekyll 的 site.posts 集合自动读取最近文章，不需要手动维护列表。 -->
   <section class="home-section" aria-labelledby="posts-title">
     <div class="home-section__header home-section__header--split">
@@ -69,7 +44,7 @@ permalink: /
 
     <div class="home-post-list">
       <!-- limit 控制首页最多展示的文章数量；文章详情仍然由 _posts 目录生成。 -->
-      {% for post in site.posts limit: 3 %}
+      {% for post in site.posts limit: 5 %}
         <article class="home-post-card">
           <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y-%m-%d" }}</time>
           <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>

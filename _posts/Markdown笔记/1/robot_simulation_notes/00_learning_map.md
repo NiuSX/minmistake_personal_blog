@@ -4,6 +4,15 @@
 
 更稳的学习方式是：先理解一个最小机器人从文件到仿真的完整链路，再逐步增加复杂度。
 
+## 本篇学习目标
+
+学完本篇后，你应该能回答：
+
+- 一个机器人模型从 URDF/Xacro 到 Gazebo 运行，中间经历哪些步骤；
+- RViz、Gazebo Sim、robot_state_publisher、ros2_control 各自负责什么；
+- 为什么学习顺序应该先模型和 TF，再物理，再控制，再传感器；
+- 遇到问题时应该按什么层次排查。
+
 ## 一条完整链路
 
 一个机器人从建模到仿真的链路通常是：
@@ -18,6 +27,25 @@
 8. 配置控制接口：ros2_control、Gazebo 插件或桥接话题。
 9. 配置传感器：雷达、IMU、相机、深度相机、接触传感器。
 10. 验证算法：导航、SLAM、定位、路径规划、机械臂运动规划等。
+
+对应到工具链可以这样理解：
+
+```mermaid
+flowchart TD
+  A[URDF/Xacro 文件] --> B[xacro 展开为 robot_description]
+  B --> C[robot_state_publisher]
+  C --> D[TF 树]
+  B --> E[RViz 显示模型]
+  B --> F[Gazebo Sim 加载模型]
+  F --> G[物理引擎计算重力、接触、关节]
+  F --> H[传感器插件产生 Gazebo topic]
+  H --> I[ros_gz_bridge]
+  I --> J[ROS 2 topic]
+  F --> K[ros2_control / Gazebo 插件]
+  K --> L[控制器和 /cmd_vel]
+```
+
+这张图的关键点是：RViz 只帮助你看模型和 TF；Gazebo 才负责物理；ROS 2 算法通常只看 ROS topic 和 TF，不直接理解 Gazebo 内部状态。
 
 ## 建议学习阶段
 
@@ -175,4 +203,23 @@ my_robot_description/
 - Gazebo 中模型不会飞走、抖动或陷进地面；
 - 轮子能被控制器驱动；
 - 传感器数据能被 ROS 2 节点读取。
+
+## 阶段验收表
+
+| 阶段 | 最小产物 | 验收命令或现象 | 常见失败原因 |
+| --- | --- | --- | --- |
+| 坐标系 | `base_link`、`laser_link` | `ros2 run tf2_tools view_frames` 能看到连通 TF | parent/child 拼错、fixed frame 选错 |
+| URDF | 一个可显示小车 | `check_urdf /tmp/robot.urdf` 通过 | XML 标签、mesh 路径、joint limit |
+| Xacro | 参数化模型 | `ros2 run xacro xacro ...` 能展开 | property 未定义、宏参数缺失 |
+| 物理 | collision + inertial | Gazebo 中不飞、不抖、不穿地 | 惯性为 0、质量极端、碰撞重叠 |
+| 控制 | 轮子可响应速度 | `/cmd_vel` 后小车按预期移动 | 控制器未 active、joint 名称不匹配 |
+| 传感器 | `/scan`、`/imu` 等话题 | `ros2 topic hz /scan` 有频率 | bridge 未配、frame 不连通、Gazebo 暂停 |
+
+## 复习问题
+
+1. 为什么一个模型在 RViz 正常显示，不代表它能在 Gazebo 稳定仿真？
+2. `robot_state_publisher` 根据什么发布 TF？
+3. `visual`、`collision`、`inertial` 分别服务于谁？
+4. 为什么传感器数据从 Gazebo 到 ROS 2 往往需要桥接？
+5. 如果小车不动，你会按什么顺序检查？
 

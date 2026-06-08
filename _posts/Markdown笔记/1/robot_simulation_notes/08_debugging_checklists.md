@@ -2,6 +2,15 @@
 
 本篇用于排错。机器人仿真错误很容易互相影响，所以排查时要分层，不要一次改很多东西。
 
+## 本篇学习目标
+
+学完本篇后，你应该能：
+
+- 按 Xacro/URDF、TF、Gazebo、控制器、传感器、时间六层排查问题；
+- 为每个问题保留可复现记录；
+- 用最小实验隔离变量，而不是在多个文件里同时试错；
+- 把错误归档成自己的调试知识库。
+
 ## 总体排查原则
 
 1. 先看日志第一处错误。
@@ -11,6 +20,24 @@
 5. 再验证控制器。
 6. 再验证传感器和桥接。
 7. 每次只改一个变量。
+
+推荐总流程：
+
+```mermaid
+flowchart TD
+  A[启动失败或现象异常] --> B[看第一处错误日志]
+  B --> C[Xacro 能否展开?]
+  C -->|否| D[修 XML / macro / include]
+  C -->|是| E[URDF 是否通过 check_urdf?]
+  E -->|否| F[修 link/joint/tree/limit]
+  E -->|是| G[TF 是否连通?]
+  G -->|否| H[查 robot_state_publisher / joint_states / frame_id]
+  G -->|是| I[Gazebo 物理是否稳定?]
+  I -->|否| J[查 inertial / collision / contact / step size]
+  I -->|是| K[控制器是否 active?]
+  K -->|否| L[查 ros2_control / YAML / plugin]
+  K -->|是| M[传感器和 bridge 是否正常?]
+```
 
 ## Xacro/URDF 无法解析
 
@@ -177,6 +204,14 @@ ros2 topic echo /imu
 - 相机没有渲染插件或 GUI/headless 配置问题；
 - frame_id 和 RViz fixed frame 不连通。
 
+传感器问题要分成“三个有无”：
+
+| 检查 | 命令 | 如果没有 |
+| --- | --- | --- |
+| Gazebo 是否有 topic | `gz topic -l` | 查 SDF/插件/update_rate |
+| ROS 2 是否有 topic | `ros2 topic list` | 查 bridge 配置和消息类型 |
+| TF 是否能连通 | `tf2_echo fixed_frame sensor_frame` | 查 URDF fixed joint 和 frame_id |
+
 ## 仿真时间问题
 
 症状：
@@ -328,4 +363,13 @@ ros2 topic echo /odom
 
 下次如何避免。
 ```
+
+## 复盘方式
+
+每解决一个问题后，建议补充两行：
+
+- **可提前发现的信号**：下次在什么命令或日志中能更早看到它。
+- **最小验证命令**：以后如何用一条命令确认问题已经解决。
+
+长期看，这比只记录“改了某个参数”更有价值，因为机器人仿真中的错误经常换一种形式再次出现。
 

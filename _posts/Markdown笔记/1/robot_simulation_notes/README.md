@@ -4,6 +4,8 @@
 
 写作日期：2026-06-08。
 
+最后资料核对：2026-06-08。主要依据 ROS 2 Jazzy、Gazebo Harmonic、SDFormat 和 ros2_control 官方文档。
+
 ## 推荐技术主线
 
 如果你刚开始学习，建议采用：
@@ -26,6 +28,7 @@
 7. [06_gazebo_sim_sdf_world.md](06_gazebo_sim_sdf_world.md)：Gazebo Sim、SDF 世界、模型加载和仿真配置。
 8. [07_ros2_control_and_sensors.md](07_ros2_control_and_sensors.md)：ros2_control、控制器、差速底盘和常用传感器。
 9. [08_debugging_checklists.md](08_debugging_checklists.md)：排错清单、验证命令和练习项目。
+10. [09_visual_architecture_and_review.md](09_visual_architecture_and_review.md)：总架构流程图、关键链路复盘、复习题和学习检查表。
 
 示例文件：
 
@@ -44,6 +47,12 @@
 7. 加入激光雷达、IMU、相机等传感器。
 8. 记录每次异常：模型飞走、抖动、穿模、TF 错误、关节方向反了、质量不合理等。
 
+建议每学完一篇都做三件事：
+
+- 用自己的话复述“这一篇解决什么问题”；
+- 跑一条最小验证命令，例如 `check_urdf`、`view_frames`、`gz topic -l`；
+- 把遇到的错误按 [08 调试清单](08_debugging_checklists.md) 的模板记录下来。
+
 ## 核心判断标准
 
 一个机器人模型是否适合仿真，不是看它在 RViz 里好不好看，而是看：
@@ -55,6 +64,25 @@
 - 控制接口是否和真实机器人一致；
 - 传感器坐标系、频率、噪声和话题是否符合算法需要。
 
+## 学习路线总图
+
+```mermaid
+flowchart LR
+  A[机器人结构设计] --> B[URDF/Xacro]
+  B --> C[robot_description]
+  C --> D[robot_state_publisher]
+  D --> E[RViz 检查 TF 和外观]
+  B --> F[Gazebo Sim / SDF world]
+  F --> G[物理、碰撞、惯性]
+  G --> H[ros2_control 或 Gazebo 插件]
+  H --> I[控制命令 /cmd_vel 或 trajectory]
+  F --> J[传感器模拟]
+  J --> K[ros_gz_bridge]
+  K --> L[ROS 2 算法：SLAM、导航、规划]
+```
+
+先用这张图定位自己当前学的是哪一层。排错时也按这张图从左到右检查，不要一上来同时改模型、控制器和传感器。
+
 ## 参考入口
 
 - ROS 2 Jazzy URDF 教程：https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html
@@ -62,5 +90,6 @@
 - Gazebo Harmonic 文档：https://gazebosim.org/docs/harmonic/
 - Gazebo + ROS 安装建议：https://gazebosim.org/docs/harmonic/ros_installation/
 - SDFormat 规范：https://sdformat.org/spec/
+- gz_ros2_control Jazzy 文档：https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html
 - Gazebo Classic 页面：https://classic.gazebosim.org/
 

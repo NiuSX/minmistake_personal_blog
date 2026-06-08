@@ -2,6 +2,15 @@
 
 机器人仿真不仅要把模型放进世界，还要让它能被控制，并产生接近真实机器人的传感器数据。
 
+## 本篇学习目标
+
+学完本篇后，你应该能：
+
+- 解释 `/cmd_vel` 到轮子关节再到里程计的控制链路；
+- 区分 controller、controller manager、hardware interface、command/state interface；
+- 写出差速控制器 YAML 的关键参数；
+- 按层次排查小车不动、传感器没数据、TF 冲突和仿真时间问题。
+
 ## 控制链路
 
 典型移动机器人控制链路：
@@ -13,6 +22,21 @@
   -> Gazebo physics
   -> odometry / joint_states / TF
 ```
+
+更完整的仿真控制架构：
+
+```mermaid
+flowchart LR
+  A[/cmd_vel] --> B[diff_drive_controller]
+  B --> C[command interface: wheel velocity]
+  C --> D[Gazebo Sim hardware/plugin layer]
+  D --> E[left/right wheel joints]
+  E --> F[Gazebo physics]
+  F --> G[joint_states / odom]
+  G --> H[robot_state_publisher / TF]
+```
+
+如果小车不动，按这条链路从左到右查；如果 TF 或 odom 不对，按这条链路从右往左查。
 
 典型机械臂控制链路：
 
@@ -62,6 +86,16 @@ trajectory command
 
 具体插件名称会随 Gazebo/ROS 版本和安装包变化，写项目时要以对应发行版文档为准。
 
+注意两类配置不要混淆：
+
+| 配置 | 位置 | 作用 |
+| --- | --- | --- |
+| `<ros2_control>` | URDF/Xacro | 声明 joint 暴露哪些 command/state interface |
+| Gazebo/`gz_ros2_control` 插件 | URDF/SDF/Gazebo 配置 | 把 Gazebo 仿真系统接入 ros2_control |
+| `controllers.yaml` | config | 配置具体控制器，例如差速、关节轨迹、joint state broadcaster |
+
+不同发行版的插件类名、库名和安装包可能变化。Jazzy + Gazebo Harmonic 项目应优先查 `gz_ros2_control` Jazzy 文档，而不是照搬 Gazebo Classic 的 `gazebo_ros2_control` 示例。
+
 ## controllers.yaml
 
 差速控制器示例结构：
@@ -98,6 +132,8 @@ diff_drive_controller:
 - `base_frame_id`：底盘坐标系；
 - `odom_frame_id`：里程计坐标系；
 - `enable_odom_tf`：是否由控制器发布 odom 到 base 的 TF。
+
+差速底盘最容易错的是三个参数：`left_wheel_names`、`right_wheel_names`、`wheel_separation`。它们必须和模型真实结构一致，否则小车可能不动、转向反、里程计尺度错误。
 
 ## 控制器加载
 
@@ -177,6 +213,20 @@ robot_state_publisher 根据 `/joint_states` 和 URDF 发布动态 TF。
 - 分辨率；
 - 量程；
 - 是否和真实硬件一致。
+
+传感器数据链路：
+
+```mermaid
+flowchart LR
+  A[Gazebo sensor plugin] --> B[Gazebo topic]
+  B --> C[ros_gz_bridge]
+  C --> D[ROS 2 topic]
+  D --> E[RViz / SLAM / Navigation]
+  F[URDF fixed joint] --> G[TF frame]
+  G --> E
+```
+
+一个传感器能被算法使用，至少要同时满足：有数据、有正确 frame、有时间戳、有合理频率和噪声。
 
 ## 激光雷达
 
@@ -297,4 +347,19 @@ map -> odom -> base_footprint -> base_link
 7. 加 bridge，确认 ROS 2 topic。
 8. RViz 显示传感器数据。
 9. 再接入导航、SLAM 或运动规划。
+
+## 复习问题
+
+1. controller active 但小车不动，至少列出 5 个可能原因。
+2. `command_interface` 和 `state_interface` 分别表示什么？
+3. 为什么不要让两个节点同时发布同一段 `odom -> base_link` TF？
+4. Gazebo 能看到传感器 topic，但 ROS 2 看不到，应该先查什么？
+5. 为什么 IMU 和相机的 frame 方向比“有话题”更重要？
+
+## 参考资料
+
+- ros2_control Jazzy 文档：https://control.ros.org/jazzy/
+- gz_ros2_control Jazzy 文档：https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html
+- diff_drive_controller 文档：https://control.ros.org/jazzy/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html
+- ros_gz 文档入口：https://gazebosim.org/docs/harmonic/ros2_overview/
 

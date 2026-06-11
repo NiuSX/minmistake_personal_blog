@@ -1,0 +1,407 @@
+# 05. 编译、链接与加载
+
+最后调研时间：2026-06-11
+
+## 1. 从源代码到运行程序
+
+一个 C 程序从源码到运行，通常经历：
+
+```text
+源代码 .c
+  -> 预处理
+  -> 编译
+  -> 汇编
+  -> 目标文件 .o
+  -> 链接
+  -> 可执行文件
+  -> 加载
+  -> 进程
+```
+
+对应命令：
+
+```bash
+gcc -E main.c -o main.i      # 预处理
+gcc -S main.i -o main.s      # 编译成汇编
+gcc -c main.s -o main.o      # 汇编成目标文件
+gcc main.o -o main           # 链接
+./main                       # 运行
+```
+
+平时一条 `gcc main.c -o main` 把这些阶段都做了。
+
+## 2. 预处理
+
+预处理处理：
+
+- `#include`
+- `#define`
+- 条件编译
+- 宏展开
+- 删除注释
+
+示例：
+
+```c
+#include <stdio.h>
+#define PI 3.14
+
+int main() {
+    printf("%f\n", PI);
+}
+```
+
+预处理后，头文件内容会被展开，宏会被替换。
+
+常见问题：
+
+- 宏没有类型检查。
+- 宏参数可能被多次求值。
+- 头文件重复包含。
+- 条件编译导致不同平台行为不同。
+
+防止头文件重复包含：
+
+```c
+#ifndef FOO_H
+#define FOO_H
+
+// declarations
+
+#endif
+```
+
+或：
+
+```c
+#pragma once
+```
+
+## 3. 编译
+
+编译器把预处理后的高级语言翻译成汇编或中间表示再生成机器相关代码。
+
+编译器做：
+
+- 词法分析。
+- 语法分析。
+- 类型检查。
+- 中间表示生成。
+- 优化。
+- 代码生成。
+
+优化级别：
+
+| 选项 | 含义 |
+|---|---|
+| `-O0` | 不优化，适合调试 |
+| `-O1` | 基础优化 |
+| `-O2` | 常用优化 |
+| `-O3` | 更激进优化 |
+| `-Os` | 优化体积 |
+| `-Og` | 兼顾调试和优化 |
+
+注意：优化会改变代码结构，调试时变量可能被优化掉，函数可能被内联。
+
+## 4. 汇编
+
+汇编器把汇编代码转换成目标文件。
+
+目标文件包含：
+
+- 机器指令。
+- 数据。
+- 符号表。
+- 重定位信息。
+- 调试信息。
+
+查看目标文件：
+
+```bash
+file main.o
+readelf -h main.o
+objdump -d main.o
+nm main.o
+```
+
+## 5. 目标文件
+
+目标文件不是完整程序，因为它可能还依赖其他符号。
+
+示例：
+
+```c
+extern int add(int, int);
+
+int main() {
+    return add(1, 2);
+}
+```
+
+`main.o` 中知道自己需要 `add`，但不知道 `add` 的最终地址。链接器负责解析。
+
+## 6. 符号
+
+符号可以是：
+
+- 函数名。
+- 全局变量名。
+- 静态变量。
+- 外部引用。
+
+查看符号：
+
+```bash
+nm main.o
+```
+
+常见符号类型：
+
+| 类型 | 含义 |
+|---|---|
+| `T` | text 段中定义的全局函数 |
+| `t` | text 段中定义的局部函数 |
+| `D` | 已初始化全局数据 |
+| `B` | 未初始化全局数据 |
+| `U` | 未定义符号，等待链接 |
+
+## 7. 链接
+
+链接器负责：
+
+- 符号解析。
+- 重定位。
+- 合并目标文件。
+- 处理库依赖。
+- 生成可执行文件或共享库。
+
+### 7.1 静态链接
+
+静态库通常是 `.a` 文件，本质是多个 `.o` 的归档。
+
+```bash
+gcc -c add.c -o add.o
+ar rcs libadd.a add.o
+gcc main.o -L. -ladd -o main
+```
+
+优点：
+
+- 部署简单。
+- 不依赖运行时动态库版本。
+
+缺点：
+
+- 可执行文件变大。
+- 多个程序会重复包含库代码。
+- 库更新需要重新链接。
+
+### 7.2 动态链接
+
+动态库通常是 `.so` 文件。
+
+```bash
+gcc -fPIC -shared add.c -o libadd.so
+gcc main.o -L. -ladd -o main
+```
+
+运行时需要找到动态库：
+
+```bash
+LD_LIBRARY_PATH=. ./main
+```
+
+查看依赖：
+
+```bash
+ldd ./main
+```
+
+优点：
+
+- 多个进程共享库代码页。
+- 库可独立更新。
+- 插件机制灵活。
+
+缺点：
+
+- 部署和版本管理复杂。
+- 启动时需要动态加载。
+- 符号冲突和 ABI 兼容问题更复杂。
+
+## 8. ELF 文件
+
+Linux 常用 ELF 格式表示：
+
+- 目标文件。
+- 可执行文件。
+- 共享库。
+- core dump。
+
+查看 ELF：
+
+```bash
+readelf -h a.out
+readelf -S a.out
+readelf -l a.out
+readelf -s a.out
+```
+
+常见段 / 节：
+
+| 名称 | 含义 |
+|---|---|
+| `.text` | 代码 |
+| `.rodata` | 只读数据 |
+| `.data` | 已初始化全局变量 |
+| `.bss` | 未初始化全局变量 |
+| `.symtab` | 符号表 |
+| `.strtab` | 字符串表 |
+| `.dynamic` | 动态链接信息 |
+| `.debug_*` | 调试信息 |
+
+## 9. 重定位
+
+编译单个 `.o` 时，很多地址还不知道。
+
+例如：
+
+- 外部函数地址。
+- 全局变量地址。
+- 跳转目标地址。
+
+重定位就是在链接时或加载时把这些占位地址修正为最终地址。
+
+## 10. 加载
+
+运行程序时，内核和动态加载器会：
+
+1. 读取 ELF 文件。
+2. 建立进程地址空间。
+3. 映射代码段、数据段。
+4. 映射动态库。
+5. 建立栈。
+6. 设置环境变量和参数。
+7. 跳转到入口点。
+
+进程地址空间大致：
+
+```text
+高地址
+  栈
+  mmap 区域 / 动态库
+  堆
+  .bss
+  .data
+  .rodata
+  .text
+低地址
+```
+
+## 11. 动态加载器
+
+Linux 上动态链接程序通常由动态加载器处理，例如：
+
+```text
+/lib64/ld-linux-x86-64.so.2
+```
+
+它负责：
+
+- 加载共享库。
+- 解析动态符号。
+- 处理重定位。
+- 调用初始化函数。
+- 跳转到程序入口。
+
+查看解释器：
+
+```bash
+readelf -l ./main | grep interpreter
+```
+
+## 12. 常见链接错误
+
+### 12.1 undefined reference
+
+```text
+undefined reference to `foo`
+```
+
+原因：
+
+- 没有链接提供 `foo` 的目标文件或库。
+- 库顺序错误。
+- C/C++ 名字修饰不匹配。
+
+### 12.2 multiple definition
+
+```text
+multiple definition of `x`
+```
+
+原因：
+
+- 在头文件中定义了全局变量。
+- 多个 `.c` 文件重复定义同名符号。
+
+头文件应声明：
+
+```c
+extern int x;
+```
+
+某个 `.c` 文件中定义：
+
+```c
+int x = 0;
+```
+
+### 12.3 cannot open shared object file
+
+原因：
+
+- 动态库不在搜索路径。
+- `LD_LIBRARY_PATH` 未设置。
+- rpath 配置错误。
+- 系统没有安装对应库。
+
+## 13. 调试命令速查
+
+```bash
+gcc -v main.c
+gcc -Wall -Wextra -g main.c -o main
+
+file main
+readelf -h main
+readelf -S main
+readelf -l main
+readelf -s main
+
+objdump -d main
+nm main
+ldd main
+
+strace ./main
+```
+
+## 14. 参考资料
+
+- CSAPP 官方资源  
+  https://csapp.cs.cmu.edu/
+
+- GNU Binutils Documentation  
+  https://sourceware.org/binutils/docs/
+
+- GCC Documentation  
+  https://gcc.gnu.org/onlinedocs/
+
+- ELF Specification 入口  
+  https://refspecs.linuxfoundation.org/elf/elf.pdf
+
+- Linux man-pages: ld.so  
+  https://man7.org/linux/man-pages/man8/ld.so.8.html
+
+- Linux man-pages: execve  
+  https://man7.org/linux/man-pages/man2/execve.2.html
+

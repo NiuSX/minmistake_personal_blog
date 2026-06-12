@@ -2160,3 +2160,62 @@ Package 管组织
 8. 再进入 Nav2 或 MoveIt 2。
 
 不要一开始直接冲 Nav2 或机械臂复杂项目。先把节点、话题、参数、Launch、TF 和工具链学稳，后面的机器人系统才不会变成一团难排查的问题。
+
+## 46. 2026-06 深化补充：ROS 2 工程化心智模型
+
+ROS 2 不是“会敲 `ros2 topic echo` 就算会用”的框架。实际项目中更重要的是通信语义、QoS、时间、坐标、生命周期、参数和构建系统之间的关系。一个稳定的 ROS 2 系统，通常不是单个节点写得多复杂，而是每个节点的输入、输出、时序和责任边界清楚。
+
+### 46.1 Topic、Service、Action 的选择规则
+
+| 通信方式 | 适合场景 | 不适合场景 | 例子 |
+| --- | --- | --- | --- |
+| Topic | 连续数据流、状态广播、多订阅者 | 需要明确请求结果的任务 | `/scan`、`/odom`、`/cmd_vel` |
+| Service | 快速请求-响应 | 长时间执行、需要反馈进度 | 保存地图、重置状态 |
+| Action | 长任务、可反馈、可取消 | 高频实时控制 | 导航到目标点、机械臂执行轨迹 |
+| Parameter | 配置项 | 高频变化数据 | 控制频率、frame 名称、阈值 |
+
+如果一个接口“需要持续反馈并且可能取消”，优先考虑 Action；如果只是读取传感器数据，不要用 Service；如果是持续控制命令，一般用 Topic。
+
+### 46.2 QoS 常见选择
+
+| 数据类型 | 常见 QoS 倾向 | 原因 |
+| --- | --- | --- |
+| 激光雷达、相机 | best effort、较小队列 | 新数据比旧数据重要，丢一帧可接受 |
+| 里程计、TF | keep last、低延迟 | 控制和定位需要及时数据 |
+| 地图、静态信息 | transient local、reliable | 新订阅者需要拿到最后一次数据 |
+| 任务状态 | reliable | 不能轻易丢状态 |
+
+QoS 不匹配会导致“明明 topic 存在但收不到数据”。排查时先用 `ros2 topic info -v /topic` 看发布者和订阅者 QoS。
+
+### 46.3 ROS 2 调试优先级
+
+1. `ros2 node list`：节点是否存在。
+2. `ros2 topic list` / `ros2 service list` / `ros2 action list`：接口是否存在。
+3. `ros2 topic info -v`：类型、QoS、发布订阅数量是否匹配。
+4. `ros2 interface show`：消息字段是否理解正确。
+5. `ros2 param list/get`：参数是否生效。
+6. `ros2 run tf2_tools view_frames`：坐标树是否连通。
+7. `ros2 bag record`：录制最小复现数据。
+
+### 46.4 包结构建议
+
+```text
+robot_ws/src
+├── robot_description     # URDF/Xacro、mesh、rviz
+├── robot_bringup         # launch、参数、组合启动
+├── robot_control         # 控制节点、ros2_control 配置
+├── robot_navigation      # Nav2 参数和地图
+├── robot_perception      # 传感器驱动、感知处理
+└── robot_interfaces      # 自定义 msg/srv/action
+```
+
+接口包应尽量稳定，避免频繁修改消息定义导致大量包重新构建。bringup 包负责“怎么启动系统”，不要把复杂业务逻辑写在 launch 文件里。
+
+## 47. 补充参考资料
+
+- ROS 2 Documentation：https://docs.ros.org/
+- ROS 2 Jazzy Documentation：https://docs.ros.org/en/jazzy/
+- ROS 2 Basic Concepts：https://docs.ros.org/en/jazzy/Concepts/Basic.html
+- ROS 2 QoS：https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Quality-of-Service-Settings.html
+- ROS 2 Launch Tutorials：https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-Main.html
+- colcon Documentation：https://colcon.readthedocs.io/

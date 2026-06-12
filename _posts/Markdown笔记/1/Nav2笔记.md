@@ -1841,3 +1841,56 @@ Nav2 的本质可以浓缩成这条链路：
 7. 怎么落地真实机器人？cmd_vel、odom、scan、TF、footprint、安全。
 
 学习 Nav2 的关键不是背参数，而是建立数据流和责任边界。只要你能解释每个输入从哪里来、每个 server 做什么、失败时该查哪个模块，就不只是“会用 Nav2”，而是开始真正理解 Nav2。
+
+## 45. 2026-06 深化补充：真实机器人落地检查
+
+Nav2 在仿真中能跑，不代表真实机器人可以稳定导航。真实环境的问题通常来自传感器时间戳、TF、底盘控制、里程计漂移、footprint、代价地图参数和恢复行为，而不是单纯“规划器不好”。
+
+### 45.1 上车前最小验收
+
+| 检查项 | 目标 | 常用命令 |
+| --- | --- | --- |
+| TF 树 | `map -> odom -> base_link -> sensor` 连通且方向正确 | `ros2 run tf2_tools view_frames` |
+| 时间戳 | `/scan`、`/odom`、`/tf` 时间接近当前时间 | `ros2 topic echo --field header.stamp /scan` |
+| 里程计 | 推车或低速运动时轨迹连续 | `ros2 topic echo /odom` |
+| 速度控制 | `/cmd_vel` 正负方向和底盘响应一致 | `ros2 topic pub /cmd_vel geometry_msgs/msg/Twist ...` |
+| footprint | RViz 中轮廓覆盖真实外形 | 查看 local/global costmap |
+| 急停 | 软件和硬件都能停止机器人 | 实机低速测试 |
+
+### 45.2 调参顺序
+
+1. 先保证 TF、odom、scan、cmd_vel 正确。
+2. 再调 footprint 或 robot_radius，确保机器人不会贴障碍。
+3. 再调 global/local costmap 的分辨率、膨胀半径、障碍层。
+4. 再选 planner 和 controller。
+5. 最后调 behavior tree、恢复行为和任务层逻辑。
+
+不要一开始就替换规划器。大多数导航失败来自输入数据质量和约束建模错误。
+
+### 45.3 典型故障定位
+
+| 现象 | 优先怀疑 | 排查方向 |
+| --- | --- | --- |
+| 机器人原地转圈 | 初始位姿、AMCL、TF yaw、scan 方向 | 检查 `/initialpose`、`map->base_link` |
+| 规划路径穿墙 | 地图、global costmap、膨胀层 | 检查 map yaml、occupied/free 阈值 |
+| 局部避障突然停住 | obstacle layer、raytrace、传感器噪声 | 查看 local costmap 障碍残留 |
+| 路径可见但不走 | controller、速度限制、底盘接口 | 检查 `/cmd_vel` 是否输出 |
+| RViz 里机器人跳变 | odom 漂移、时间不同步、TF 发布冲突 | 查 `/tf` 发布者和频率 |
+| 目标偶发失败 | BT 超时、恢复行为、controller patience | 查看 BT navigator 日志 |
+
+### 45.4 参数文件维护建议
+
+- 按模块分块注释：AMCL、costmap、planner、controller、behavior、BT。
+- 每次只调一个变量，并记录测试场景和结果。
+- 仿真参数和实机参数分文件，不要用同一套数值硬套。
+- 对传感器高度、安装角、底盘尺寸、最大速度建立单独的硬件说明。
+- 上车测试时限制最大线速度和角速度，先验证停止能力。
+
+## 46. 补充参考资料
+
+- Nav2 官方文档：https://docs.nav2.org/
+- Nav2 Concepts：https://docs.nav2.org/concepts/index.html
+- Nav2 Configuration Guide：https://docs.nav2.org/configuration/index.html
+- Nav2 Costmap 2D：https://docs.nav2.org/configuration/packages/configuring-costmaps.html
+- Nav2 First-Time Robot Setup Guide：https://docs.nav2.org/setup_guides/index.html
+- ros2_control：https://control.ros.org/

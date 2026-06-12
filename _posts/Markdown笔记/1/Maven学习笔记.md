@@ -2296,3 +2296,59 @@ settings 管本地和企业环境
 8. install 或 deploy 到仓库。
 
 当你能解释一条命令 `mvn clean package` 背后发生了什么，并能用 `dependency:tree`、`effective-pom`、`settings.xml`、`dependencyManagement` 排查问题时，就已经真正入门 Maven。
+
+## 46. 2026-06 深化补充：企业项目中的 Maven 判断力
+
+截至 2026-06-13，Apache Maven 下载页显示 Maven 3.9.16 是推荐稳定版本，Maven 4.0.0-rc-5 仍属于预览版本；Maven 3.9+ 运行 Maven 本身要求 JDK 8+，Maven 4.0+ 运行 Maven 本身要求 JDK 17+。生产项目升级 Maven 大版本前，应先在 CI 中验证插件、私服、父 POM、Wrapper 和多模块构建。
+
+### 46.1 依赖治理的优先级
+
+| 问题 | 首选手段 | 说明 |
+| --- | --- | --- |
+| 版本散落 | `dependencyManagement` 或 BOM | 子模块只声明依赖，不重复写版本 |
+| 插件版本不稳定 | `pluginManagement` | 避免 Maven 默认插件版本随环境变化 |
+| 传递依赖冲突 | `mvn dependency:tree -Dverbose` | 先看谁引入，再决定排除或统一版本 |
+| 构建环境不一致 | Maven Wrapper + CI 固定 JDK | 不依赖开发者本机 Maven |
+| 安全漏洞 | SBOM + 依赖扫描 | 关注直接依赖和传递依赖 |
+| 私服污染 | 统一 mirror 和仓库策略 | 不在业务 POM 到处写第三方仓库 |
+
+### 46.2 多模块项目推荐结构
+
+```text
+root
+├── pom.xml                  # 聚合 + 统一版本
+├── app                      # 启动入口
+├── domain                   # 领域模型和业务接口
+├── application              # 用例服务
+├── infrastructure           # 数据库、消息、外部服务适配
+└── interfaces               # REST/RPC/CLI 入口
+```
+
+父 POM 负责“统一约束”，不应该塞业务代码。聚合 POM 负责“把模块一起构建”，不一定承担继承职责。大型项目中可以把继承父 POM 和聚合根 POM 分开，避免所有模块被迫继承同一套业务配置。
+
+### 46.3 排查 Maven 构建问题的固定顺序
+
+1. `mvn -version`：确认 Maven、JDK、系统编码和运行目录。
+2. `mvn help:effective-pom`：确认最终 POM 是否符合预期。
+3. `mvn help:effective-settings`：确认 mirror、profile、server 是否生效。
+4. `mvn dependency:tree`：确认依赖版本和冲突路径。
+5. `mvn -X`：只在前面看不出来时打开 debug 日志。
+6. CI 失败但本地成功时，优先比较 JDK、环境变量、settings、私服权限和缓存。
+
+### 46.4 常见反模式
+
+- 在子模块到处写相同依赖版本，导致升级成本失控。
+- 为了解决冲突随手 `exclusion`，但没有记录为什么排除。
+- 在业务 POM 中配置多个外部仓库，导致构建不可复现。
+- 滥用 `system` scope 引入本地 jar，破坏团队和 CI 构建。
+- 只运行 `mvn package -DskipTests`，长期不运行 `verify`。
+- 父 POM 过度复杂，导致新模块无法判断配置从哪里来。
+
+## 47. 补充参考资料
+
+- Apache Maven Download：https://maven.apache.org/download.cgi
+- Maven POM Reference：https://maven.apache.org/pom.html
+- Maven Build Lifecycle：https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+- Maven Dependency Mechanism：https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html
+- Maven Settings Reference：https://maven.apache.org/settings.html
+- Maven Wrapper：https://maven.apache.org/wrapper/

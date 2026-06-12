@@ -6,7 +6,17 @@ CSS 是 Cascading Style Sheets，层叠样式表。它用于描述 HTML 或 XML 
 
 如果你只会写 `color`、`margin` 和 `display: flex`，还不算真正理解 CSS。真正掌握 CSS，需要理解：层叠规则、继承、优先级、盒模型、格式化上下文、布局模型、Flexbox、Grid、定位、堆叠上下文、响应式、媒体查询、容器查询、自定义属性、现代选择器、动画、可访问性和工程化组织方式。
 
-版本说明：截至 2026-06-07，CSS 不是一个单一版本号标准，而是由多个模块组成。W3C CSS Snapshot 2026 汇总了 CSS 当前稳定状态，MDN CSS Reference 适合作为日常开发参考。学习时不要只停留在“CSS3”这个笼统说法，应按模块理解：Selectors、Cascade、Box Model、Flexbox、Grid、Color、Fonts、Transforms、Animations、Container Queries 等。
+最后调研：2026-06-13。
+
+版本说明：截至 2026-06-13，CSS 不是一个单一版本号标准，而是由多个模块组成。W3C CSS Snapshot 2026 汇总了 CSS 当前稳定状态，MDN CSS Reference 适合作为日常开发参考。学习时不要只停留在“CSS3”这个笼统说法，应按模块理解：Selectors、Cascade、Box Model、Flexbox、Grid、Color、Fonts、Transforms、Animations、Container Queries 等。
+
+学习目标：
+
+- 能解释层叠、继承、优先级、盒模型和格式化上下文。
+- 能用 Flexbox、Grid、Subgrid 和 Container Queries 构建响应式布局。
+- 能写出可维护的组件样式、主题变量和基础设计 token。
+- 能处理可访问性、暗色模式、动效降级和性能问题。
+- 能用浏览器 DevTools 定位样式不生效、布局溢出、层级异常等问题。
 
 ## 目录
 
@@ -51,7 +61,7 @@ CSS 是 Cascading Style Sheets，层叠样式表。它用于描述 HTML 或 XML 
 39. 常见错误和反模式
 40. 常用属性速查
 41. 学习路线
-42. 官方参考资料
+42. 参考资料与扩展阅读
 
 ## 1. CSS 是什么
 
@@ -2191,6 +2201,29 @@ body {
 
 这只是临时止血，不应替代真正查出哪个元素超宽。
 
+### 38.6 样式不生效排查流程
+
+1. 在 Elements 面板确认目标元素是否选对。
+2. 在 Styles 面板确认规则是否被划线、覆盖或未命中。
+3. 在 Computed 面板确认最终计算值和来源规则。
+4. 检查选择器优先级、`@layer` 顺序、媒体查询、容器查询是否符合预期。
+5. 检查属性和值是否被浏览器支持，必要时用 MDN 和 Can I use 核对。
+6. 临时关闭相关规则，确认是否有布局、滚动、层叠上下文或继承影响。
+
+常见定位技巧：
+
+```css
+/* 查超宽元素 */
+* {
+  outline: 1px solid rgb(255 0 0 / 0.15);
+}
+
+/* 查元素是否命中选择器 */
+.suspect {
+  background: rgb(255 255 0 / 0.3);
+}
+```
+
 ## 39. 常见错误和反模式
 
 ### 39.1 全局滥用 !important
@@ -2257,6 +2290,63 @@ left: 43px;
 ```
 
 如果不是明确设计值，容易难维护。
+
+### 39.8 只按屏幕宽度做响应式
+
+很多组件真正关心的是自身容器宽度，而不是整个 viewport。组件级响应式优先考虑 Container Queries：
+
+```css
+.card-list {
+  container-type: inline-size;
+}
+
+@container (min-width: 480px) {
+  .card {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+  }
+}
+```
+
+### 39.9 物理方向属性写死
+
+在多语言、RTL、竖排或国际化界面中，优先考虑逻辑属性：
+
+```css
+.box {
+  margin-inline: auto;
+  padding-block: 1rem;
+  border-inline-start: 4px solid currentColor;
+}
+```
+
+### 39.10 忽略用户偏好
+
+暗色模式、减少动画、输入设备类型都可能影响体验：
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    scroll-behavior: auto;
+  }
+}
+```
+
+### 39.11 现代 CSS 实战清单
+
+新组件样式可以按这个顺序检查：
+
+1. 语义结构是否来自 HTML，而不是靠 CSS 假装语义。
+2. 布局用 Flex 还是 Grid，是否需要 container query。
+3. 尺寸是否避免固定高度，是否能容纳动态内容。
+4. 文本是否考虑换行、溢出、省略、最小宽度。
+5. 颜色是否来自 token，是否支持暗色模式。
+6. 交互状态是否覆盖 hover、focus-visible、active、disabled。
+7. 动效是否尊重 `prefers-reduced-motion`。
+8. 是否避免过高优先级、全局污染和长期 `!important`。
+9. 是否能在 DevTools 中快速定位来源和覆盖关系。
 
 ## 40. 常用属性速查
 
@@ -2440,9 +2530,11 @@ calc()
 - 性能优化
 - DevTools 调试
 
-## 42. 官方参考资料
+## 42. 参考资料与扩展阅读
 
-建议优先阅读：
+建议优先阅读官方标准和 MDN，再用兼容性数据决定生产环境写法。
+
+官方资料：
 
 - W3C CSS Snapshot 2026：https://www.w3.org/TR/css-2026/
 - W3C CSS Current Work：https://www.w3.org/Style/CSS/current-work.en
@@ -2454,7 +2546,18 @@ calc()
 - MDN Grid：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout
 - MDN Container Queries：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries
 - MDN CSS Custom Properties：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables
+- MDN CSS Nesting：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting
+- MDN Cascade Layers：https://developer.mozilla.org/en-US/docs/Web/CSS/@layer
+- web.dev Learn CSS：https://web.dev/learn/css
 - Can I use：https://caniuse.com/
+
+实践检索关键词：
+
+- `CSS container queries 组件响应式`
+- `CSS cascade layers 架构`
+- `CSS z-index stacking context 排查`
+- `CSS overflow-x 页面横向滚动`
+- `CSS prefers-reduced-motion 可访问性`
 
 ## 最后总结
 

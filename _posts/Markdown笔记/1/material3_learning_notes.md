@@ -631,3 +631,61 @@ Material 3 的自适应设计很重要。手机布局拉伸到平板通常会显
 - Material Web：https://github.com/material-components/material-web
 - Material Components for Android：https://github.com/material-components/material-components-android
 
+## 23. 2026-06 深化补充：从“会用组件”到“会做设计系统”
+
+Material 3 的学习重点不应该停在 `Button`、`Card`、`Scaffold` 的 API。真正落地时，需要把视觉规范、组件封装、状态设计和响应式布局串成一套可维护的设计系统。
+
+### 23.1 建议的工程分层
+
+```text
+Design tokens
+  -> AppTheme
+    -> 基础组件封装
+      -> 页面级模式
+        -> 业务页面
+```
+
+| 层级 | 主要内容 | 不建议做什么 |
+| --- | --- | --- |
+| Design tokens | 颜色、字体、圆角、间距、动效、阴影策略 | 在业务页面里散落硬编码颜色 |
+| AppTheme | `MaterialTheme`、动态颜色、深色模式、品牌色兜底 | 每个页面单独创建主题 |
+| 基础组件封装 | 主按钮、危险按钮、表单项、空状态、错误状态 | 直接到处复制同一套 `Button` 参数 |
+| 页面级模式 | list-detail、settings、form、dashboard、wizard | 每个页面重新发明导航和状态布局 |
+| 业务页面 | 组合已有模式表达业务 | 把业务规则塞进通用 UI 组件 |
+
+### 23.2 Compose Material3 落地检查
+
+- `colorScheme` 要覆盖浅色和深色，不要只调浅色模式。
+- Android 12+ 动态颜色要有开关策略：品牌强的应用可以默认关闭或只在个人化场景开启。
+- `Typography` 不要只改 `fontFamily`，还要检查字重、行高和中文显示效果。
+- `contentDescription` 不应机械填写图标名称，而要描述用户动作，例如“删除任务”“返回上一页”。
+- 表单错误要同时提供颜色、错误文字和语义信息，不能只把边框变红。
+- `Scaffold` 负责页面骨架，不要把所有页面区域都做成卡片。
+- 大屏适配优先考虑导航形态变化和内容分栏，而不是简单拉伸手机布局。
+
+### 23.3 常见页面模式
+
+| 页面类型 | 推荐结构 | 关键注意点 |
+| --- | --- | --- |
+| 列表页 | `Scaffold` + `LazyColumn` + 搜索/筛选 + 空状态 | 列表项高度、分隔、点击区域要稳定 |
+| 详情页 | 顶部栏 + 内容区 + 底部主操作 | 主操作不要淹没在多个同级按钮中 |
+| 表单页 | 分组字段 + 校验提示 + 提交状态 | 错误信息要靠近字段 |
+| 设置页 | 分组列表 + switch/slider/menu | 设置项文案要表达结果，不要只写技术名 |
+| 主从页 | 列表 + 详情双栏 | 中屏/大屏使用 `NavigationRail` 或分栏 |
+
+### 23.4 调试 UI 的实用方法
+
+1. 先关掉动态颜色，看品牌基础主题是否成立。
+2. 切换深色模式，检查 `onSurface`、`outline`、`surfaceContainer` 是否可读。
+3. 把系统字体调大，检查按钮、列表项、输入框是否溢出。
+4. 用 TalkBack 或语义树检查图标按钮和表单错误。
+5. 在 compact、medium、expanded 三类窗口宽度下截图对比。
+6. 检查加载、空数据、错误、离线、禁用、提交中等非理想状态。
+
+## 24. 补充参考资料
+
+- Material Design 3 Color system：https://m3.material.io/styles/color/system/overview
+- Material Design 3 Adaptive layout：https://m3.material.io/foundations/layout/applying-layout/window-size-classes
+- Android Developers - Material Design 3 in Compose：https://developer.android.com/develop/ui/compose/designsystems/material3
+- Compose Material3 release notes：https://developer.android.com/jetpack/androidx/releases/compose-material3
+- Material Theme Builder：https://material-foundation.github.io/material-theme-builder/

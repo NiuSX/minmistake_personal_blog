@@ -1203,3 +1203,80 @@ Convert 处理结构化数据
 ```
 
 PowerShell 比 CMD 更适合现代自动化，因为它处理的是对象，不需要大量脆弱的文本解析。当你能解释 `Get-Process | Where-Object CPU -gt 10` 为什么比 `tasklist | find` 更强、`Format-Table` 为什么不该放在管道中间、`$env:PATH` 和普通变量的区别、`-WhatIf` 和 `-LiteralPath` 的用途时，就已经真正入门 PowerShell。
+
+## 34. 2026-06 深化补充：把 PowerShell 当对象自动化平台
+
+Microsoft 文档将 PowerShell 定义为跨平台任务自动化方案，由命令行 shell、脚本语言和配置管理框架组成；它的关键差异是管道传递 .NET 对象，而不是普通文本。因此学习 PowerShell 时，要优先学习“对象、属性、方法、类型、参数绑定”，而不是只背命令别名。
+
+### 34.1 日常排查固定套路
+
+```powershell
+Get-Command <name>
+Get-Help <name> -Full
+Get-Help <name> -Examples
+<command> | Get-Member
+<command> | Select-Object -First 5 *
+```
+
+解释一个陌生命令时，先问四件事：
+
+1. 它输出什么对象类型？
+2. 关键属性有哪些？
+3. 参数是否支持管道输入？
+4. 失败时抛出终止错误还是非终止错误？
+
+### 34.2 脚本模板
+
+```powershell
+[CmdletBinding(SupportsShouldProcess)]
+param(
+    [Parameter(Mandatory)]
+    [string]$Path,
+
+    [switch]$Force
+)
+
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
+try {
+    $resolved = Resolve-Path -LiteralPath $Path
+    if ($PSCmdlet.ShouldProcess($resolved, 'Process target')) {
+        # 执行实际操作
+    }
+}
+catch {
+    Write-Error -ErrorRecord $_
+    exit 1
+}
+```
+
+这个模板适合文件批处理、运维脚本和 CI 脚本。`SupportsShouldProcess` 可以配合 `-WhatIf`，在破坏性操作前预演。
+
+### 34.3 Windows PowerShell 5.1 与 PowerShell 7 的实践差异
+
+| 维度 | Windows PowerShell 5.1 | PowerShell 7+ |
+| --- | --- | --- |
+| 命令 | `powershell.exe` | `pwsh.exe` |
+| 平台 | Windows 内置 | Windows/Linux/macOS |
+| 运行时 | .NET Framework | .NET |
+| 默认场景 | 传统 Windows 管理、老模块 | 新脚本、跨平台、CI |
+| 注意点 | 编码和 TLS 默认值较旧 | 少数 Windows 专用模块需兼容验证 |
+
+团队脚本应在文件头或 README 中写清楚目标运行时，例如“需要 PowerShell 7.4+”或“兼容 Windows PowerShell 5.1”。
+
+### 34.4 安全操作文件的原则
+
+- 用 `-LiteralPath` 处理用户输入路径，避免通配符被意外展开。
+- 删除前先 `Resolve-Path` 并检查目标是否在预期目录下。
+- 批量操作前支持 `-WhatIf`。
+- 不把路径拼接成字符串再交给另一个 shell 执行。
+- 解析 JSON/CSV/XML 时用 `ConvertFrom-*`，不要手写字符串切割。
+
+## 35. 补充参考资料
+
+- Microsoft Learn - What is PowerShell：https://learn.microsoft.com/en-us/powershell/scripting/overview
+- about_Pipelines：https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines
+- about_Functions_Advanced：https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced
+- about_CommonParameters：https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_commonparameters
+- PowerShell GitHub Releases：https://github.com/PowerShell/PowerShell/releases

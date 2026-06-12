@@ -2178,3 +2178,78 @@ Shell 的核心可以浓缩为：
 7. 用 ShellCheck 检查脚本。
 
 当你能解释 `"$@"` 和 `$*` 的区别、为什么变量要加引号、管道退出状态为什么要 `pipefail`、`[ ]` 和 `[[ ]]` 的区别、`find -print0 | xargs -0` 解决什么问题时，就已经真正入门 Shell。
+
+## 44. 2026-06 深化补充：可维护 Shell 脚本写法
+
+Shell 最适合做命令编排、文件批处理、环境初始化和轻量自动化。它不适合承载复杂业务逻辑、复杂数据结构和大型跨平台程序。判断是否继续写 Shell 的标准很简单：如果脚本开始大量处理嵌套数据、复杂状态机、精细错误恢复，就应该考虑 Python、Go 或专用工具。
+
+### 44.1 推荐脚本骨架
+
+```bash
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+usage() {
+  cat <<'USAGE'
+Usage: script.sh <target-dir>
+USAGE
+}
+
+main() {
+  if [[ $# -ne 1 ]]; then
+    usage >&2
+    exit 2
+  fi
+
+  local target=$1
+  if [[ ! -d "$target" ]]; then
+    printf 'error: not a directory: %s\n' "$target" >&2
+    exit 1
+  fi
+
+  # real work here
+}
+
+main "$@"
+```
+
+这个骨架强调四件事：明确解释器、开启严格模式、所有变量加引号、用 `main "$@"` 保留参数边界。
+
+### 44.2 `set -euo pipefail` 的边界
+
+| 选项 | 作用 | 注意 |
+| --- | --- | --- |
+| `set -e` | 命令失败时退出 | 在 `if`、`while`、`||`、`&&` 等上下文中行为需要理解 |
+| `set -u` | 使用未定义变量时报错 | 可选变量用 `${name:-default}` |
+| `pipefail` | 管道中任一命令失败则整体失败 | Bash 支持，POSIX `sh` 不保证支持 |
+| `set -E` | ERR trap 在函数中继承 | 适合统一错误处理 |
+
+严格模式不是免死金牌。关键命令仍要写清楚错误信息，尤其是删除、覆盖、发布、部署类脚本。
+
+### 44.3 安全处理文件名
+
+```bash
+find "$root" -type f -name '*.log' -print0 |
+while IFS= read -r -d '' file; do
+  printf 'processing: %s\n' "$file"
+done
+```
+
+要默认文件名可能包含空格、制表符、换行、通配符字符。批量处理文件时优先使用 `-print0`、`read -r -d ''`、`xargs -0`。
+
+### 44.4 常见反模式
+
+- `for f in $(ls)`：会被空格和换行破坏。
+- 未加引号的 `$var`：会触发单词分割和通配符展开。
+- 用 `rm -rf "$dir/"*` 前没有校验 `$dir` 是否为空或是否在预期目录。
+- 把 JSON/YAML 当普通文本用 `grep`/`sed` 硬切。
+- 脚本同时依赖 Bash 特性，却写 `#!/bin/sh`。
+- 在管道中间使用会吞掉错误的命令，却没有检查退出状态。
+
+## 45. 补充参考资料
+
+- GNU Bash Manual：https://www.gnu.org/software/bash/manual/
+- POSIX Shell Command Language：https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
+- ShellCheck Wiki：https://www.shellcheck.net/wiki/Home
+- Google Shell Style Guide：https://google.github.io/styleguide/shellguide.html
+- GNU Coreutils Manual：https://www.gnu.org/software/coreutils/manual/

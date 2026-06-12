@@ -2567,3 +2567,61 @@ uv build/publish 构建和发布包
 3. 运行命令优先用 `uv run`，这样不需要关心当前 shell 激活的是哪个虚拟环境。
 
 当你能解释 `uv run` 为什么会自动 sync、`--locked` 和 `--frozen` 的区别、dependency groups 和 extras 的区别、`uv tool` 和项目 dev 依赖的区别、`uv pip sync` 与 `uv sync` 的区别时，就已经真正入门 uv。
+
+## 42. 2026-06 深化补充：uv 在团队项目中的用法
+
+uv 的核心价值不是“比 pip 快”这么简单，而是把 Python 解释器管理、虚拟环境、依赖解析、锁文件、工具运行、构建发布整合到一条一致工作流里。团队项目中，应尽量围绕 `pyproject.toml` 和 `uv.lock` 建立规范。
+
+### 42.1 推荐工作流
+
+```bash
+uv init
+uv add fastapi
+uv add --dev pytest ruff
+uv lock
+uv sync --locked
+uv run pytest
+uv run ruff check .
+```
+
+| 场景 | 推荐命令 | 说明 |
+| --- | --- | --- |
+| 新增运行时依赖 | `uv add requests` | 写入 `project.dependencies` |
+| 新增开发依赖 | `uv add --dev pytest` | 写入开发依赖组 |
+| 按锁文件同步 | `uv sync --locked` | CI 中避免意外改锁 |
+| 运行项目命令 | `uv run <cmd>` | 自动使用项目环境 |
+| 临时运行工具 | `uvx ruff check .` | 不污染项目依赖 |
+| 兼容 pip 流程 | `uv pip install -r requirements.txt` | 迁移旧项目时使用 |
+
+### 42.2 `uv.lock` 的团队策略
+
+- 应用项目通常提交 `uv.lock`，保证部署和 CI 可复现。
+- 库项目是否提交锁文件取决于团队策略；测试环境可以用锁文件，发布包仍应表达合理的版本范围。
+- CI 使用 `uv sync --locked`，如果依赖声明和锁文件不一致应失败。
+- 不要手动编辑 `uv.lock`，用 `uv add`、`uv remove`、`uv lock` 更新。
+
+### 42.3 dependency groups 与 extras
+
+| 机制 | 面向谁 | 例子 |
+| --- | --- | --- |
+| dependency groups | 开发者和项目工作流 | `dev`、`test`、`docs` |
+| optional dependencies / extras | 安装该包的用户 | `postgres`、`redis`、`cli` |
+
+简单判断：如果是“开发这个项目需要”，放 group；如果是“用户安装这个包时可选启用功能”，放 extras。
+
+### 42.4 迁移旧项目建议
+
+1. 保留原 `requirements.txt`，先用 `uv pip` 验证兼容性。
+2. 引入 `pyproject.toml`，把直接依赖迁入 `project.dependencies`。
+3. 生成 `uv.lock` 并在 CI 中使用 `uv sync --locked`。
+4. 再逐步替换 README、Dockerfile、CI 脚本中的 `pip install`。
+5. 对依赖冲突大的老项目，不要一次性升级所有包。
+
+## 43. 补充参考资料
+
+- uv Documentation：https://docs.astral.sh/uv/
+- uv Project Guide：https://docs.astral.sh/uv/guides/projects/
+- uv Locking and syncing：https://docs.astral.sh/uv/concepts/projects/sync/
+- uv Tools：https://docs.astral.sh/uv/concepts/tools/
+- uv Scripts：https://docs.astral.sh/uv/guides/scripts/
+- uv GitHub Releases：https://github.com/astral-sh/uv/releases

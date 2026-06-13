@@ -33,6 +33,7 @@ KiCad：
 
 - 官方文档：https://docs.kicad.org/
 - KiCad 官网：https://www.kicad.org/
+- PCB Editor 文档：https://docs.kicad.org/8.0/en/pcbnew/pcbnew.html
 
 学习重点：
 
@@ -41,6 +42,7 @@ KiCad：
 - PCB Editor。
 - Footprint Libraries。
 - Gerber Export。
+- Board Setup、Design Rules、Net Classes、DRC。
 
 立创 EDA：
 
@@ -107,6 +109,12 @@ Altium：
 - 贴片文件要求。
 
 每次下单前看板厂能力表。
+
+常用入口：
+
+- JLCPCB PCB Capabilities：https://jlcpcb.com/capabilities/pcb-capabilities
+- 嘉立创 PCB 工艺能力说明：https://www.jlc.com/portal/vtechnology.html
+- IPC 标准入口：https://www.ipc.org/meet-your-standards
 
 ## 6. 经典学习主题
 
@@ -193,12 +201,27 @@ USB_TypeC_reference_design.pdf
 
 - KiCad 官方文档：https://docs.kicad.org/
 - KiCad 官网：https://www.kicad.org/
+- KiCad PCB Editor 文档：https://docs.kicad.org/8.0/en/pcbnew/pcbnew.html
+- 嘉立创 EDA 专业版设计规则：https://prodocs.lceda.cn/cn/pcb/design-design-rule/
+- 嘉立创 EDA 标准版 DRC：https://docs.lceda.cn/cn/PCB/Design-Rule-Check/
 - IPC 标准入口：https://www.ipc.org/meet-your-standards
 - Texas Instruments 技术资料入口：https://www.ti.com/lit/
+- TI PCB Design Guidelines For Reduced EMI：https://www.ti.com/lit/an/szza009/szza009.pdf
+- TI Practical PCB Design Rules：https://www.ti.com/lit/an/slaae45/slaae45.pdf
+- TI 电机驱动器电路板布局的最佳实践：https://www.ti.com.cn/cn/lit/an/zhcaae6b/zhcaae6b.pdf
 - ST 官方资源入口：https://www.st.com/content/st_com/en/support/learning.html
 - Analog Devices 技术文章：https://www.analog.com/en/resources/technical-articles.html
+- Analog Devices 混合信号 PCB 布局指南：https://www.analog.com/en/resources/analog-dialogue/articles/what-are-the-basic-guidelines-for-layout-design-of-mixed-signal-pcbs.html
 - Espressif 文档：https://docs.espressif.com/
 - Nordic 文档：https://docs.nordicsemi.com/
+- JLCPCB PCB Capabilities：https://jlcpcb.com/capabilities/pcb-capabilities
+
+中文实践资料：
+
+- PCB 设计返回路径 / 回流路径实践说明：https://blog.csdn.net/weixin_45365488/article/details/134132810
+- PCB Layout 布局布线 Checklist 通用版：https://www.cnblogs.com/shaobojiao/p/7940269.html
+- 如何调试自己设计的 PCB 板：https://www.eet-china.com/mp/a17373.html
+- 按照 5 个步骤调试 PCB：https://zhuanlan.zhihu.com/p/467704060
 
 ## 11. 推荐学习方法
 

@@ -51,6 +51,9 @@
 | 35 | PCB 设计检查清单 | [35_PCB_CHECKLISTS.md](35_PCB_CHECKLISTS.md) |
 | 36 | 常见错误 | [36_COMMON_MISTAKES.md](36_COMMON_MISTAKES.md) |
 | 37 | 学习资料与参考链接 | [37_REFERENCES.md](37_REFERENCES.md) |
+| 38 | PCB 工程规则速查 | [38_ENGINEERING_RULES_QUICK_REFERENCE.md](38_ENGINEERING_RULES_QUICK_REFERENCE.md) |
+| 39 | 设计评审、上电与复盘模板 | [39_DESIGN_REVIEW_AND_BRINGUP_TEMPLATES.md](39_DESIGN_REVIEW_AND_BRINGUP_TEMPLATES.md) |
+| 40 | PCB 与硬件设计术语表 | [40_GLOSSARY.md](40_GLOSSARY.md) |
 
 ## 推荐节奏
 
@@ -60,7 +63,7 @@
 | 原理图与 PCB | 2-4 周 | 09-14 | 能画简单双层板 |
 | 电源与系统 | 2-4 周 | 15-22 | 能做 MCU 小系统和接口板 |
 | 工程进阶 | 4-8 周 | 23-30 | 能调试、处理噪声和可靠性问题 |
-| 项目化 | 长期 | 31-37 | 能管理版本、打样、复盘和迭代 |
+| 项目化 | 长期 | 31-40 | 能管理版本、打样、复盘、评审和迭代 |
 
 ## 重要提醒
 
@@ -68,4 +71,6 @@
 - 每次上电前都要检查电源和地是否短路，并使用限流电源。
 - 每个芯片都必须看数据手册，尤其是供电、电平、引脚、推荐原理图和布局建议。
 - DRC/ERC 通过不代表板子一定能工作，它们只是基础规则检查。
+- 线宽、线距、孔径等参数不要只背固定数字，应同时参考板厂能力表、芯片布局指南和项目电气需求。
+- 每次下单前建议填写工程参数表，每次上电和改版都要留下记录。
 - 硬件学习必须通过真实项目闭环，光看资料不够。

@@ -427,4 +427,4 @@ Feed 页面上线前至少检查：
 - `Effect` 只处理受约束的副作用。
 - `Test` 分层验证，不把所有逻辑压进 UI 测试。
 
-参考资料见 [10-references.md](10-references.md)。
+参考资料见 [10-references.md](10-参考资料.md)。

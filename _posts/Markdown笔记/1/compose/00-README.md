@@ -11,17 +11,17 @@ Jetpack Compose 是 Android 的声明式 UI 工具包。学习它不能只背 AP
 
 | 文件 | 主题 | 适合什么时候看 |
 |---|---|---|
-| [01-overview-and-setup.md](01-overview-and-setup.md) | Compose 是什么、环境、Gradle、BOM、Compiler | 刚开始搭项目或排查版本问题 |
-| [02-core-model-composition-recomposition.md](02-core-model-composition-recomposition.md) | 声明式模型、Composition、Recomposition、Slot Table 思维模型 | 理解 Compose 为什么这样写 |
-| [03-state-and-state-hoisting.md](03-state-and-state-hoisting.md) | `remember`、`rememberSaveable`、状态提升、ViewModel、Flow | 写交互页面前必看 |
-| [04-side-effects-and-lifecycle.md](04-side-effects-and-lifecycle.md) | `LaunchedEffect`、`DisposableEffect`、`SideEffect`、`produceState`、生命周期 | 处理网络请求、订阅、一次性事件 |
-| [05-ui-foundation-layout-modifier-material3.md](05-ui-foundation-layout-modifier-material3.md) | Composable、Modifier、布局、Lazy、Material 3、主题 | 写页面和组件 |
-| [06-architecture-navigation-data-flow.md](06-architecture-navigation-data-flow.md) | UDF、MVVM、Navigation Compose、状态保存、模块边界 | 写中大型 App |
-| [07-performance-stability-debugging.md](07-performance-stability-debugging.md) | 稳定性、跳过重组、Lazy 性能、工具、排查流程 | 页面卡顿或频繁重组时 |
-| [08-testing-accessibility-interoperability.md](08-testing-accessibility-interoperability.md) | UI 测试、语义树、无障碍、与 View 互操作 | 上线质量保障 |
-| [09-common-pitfalls-and-checklists.md](09-common-pitfalls-and-checklists.md) | 高频坑、代码审查清单、实战建议 | 开发和 Review 时快速查 |
-| [10-references.md](10-references.md) | 官方文档和社区资料 | 深入查证 |
-| [11-practical-sample-feed.md](11-practical-sample-feed.md) | 从列表页到详情页的完整实战样例 | 想把前面知识串成项目代码时 |
+| [01-overview-and-setup.md](01-总览与环境配置.md) | Compose 是什么、环境、Gradle、BOM、Compiler | 刚开始搭项目或排查版本问题 |
+| [02-core-model-composition-recomposition.md](02-核心模型与声明式AI.md) | 声明式模型、Composition、Recomposition、Slot Table 思维模型 | 理解 Compose 为什么这样写 |
+| [03-state-and-state-hoisting.md](03-状态管理与状态提升.md) | `remember`、`rememberSaveable`、状态提升、ViewModel、Flow | 写交互页面前必看 |
+| [04-side-effects-and-lifecycle.md](04-副作用与生命周期.md) | `LaunchedEffect`、`DisposableEffect`、`SideEffect`、`produceState`、生命周期 | 处理网络请求、订阅、一次性事件 |
+| [05-ui-foundation-layout-modifier-material3.md](05-UI 基础.md) | Composable、Modifier、布局、Lazy、Material 3、主题 | 写页面和组件 |
+| [06-architecture-navigation-data-flow.md](06-架构、导航与单向数据流.md) | UDF、MVVM、Navigation Compose、状态保存、模块边界 | 写中大型 App |
+| [07-performance-stability-debugging.md](07-性能、稳定性与调试.md) | 稳定性、跳过重组、Lazy 性能、工具、排查流程 | 页面卡顿或频繁重组时 |
+| [08-testing-accessibility-interoperability.md](08-测试、无障碍与 View 互操作.md) | UI 测试、语义树、无障碍、与 View 互操作 | 上线质量保障 |
+| [09-common-pitfalls-and-checklists.md](09-常见坑与检查清单.md) | 高频坑、代码审查清单、实战建议 | 开发和 Review 时快速查 |
+| [10-references.md](10-参考资料.md) | 官方文档和社区资料 | 深入查证 |
+| [11-practical-sample-feed.md](11-实战串联：Feed 列表页到详情页.md) | 从列表页到详情页的完整实战样例 | 想把前面知识串成项目代码时 |
 
 ## 建议学习路线
 
@@ -89,4 +89,4 @@ Compose 发展很快，下面这些内容会随版本变化：
 - Material 3 组件稳定性。
 - 强跳过模式、稳定性配置、性能诊断工具。
 
-本笔记写作时参考 Android Developers 官方文档，并补充了中文社区对实战坑点的总结。版本敏感信息请优先看 [10-references.md](10-references.md) 中的官方链接。
+本笔记写作时参考 Android Developers 官方文档，并补充了中文社区对实战坑点的总结。版本敏感信息请优先看 [10-references.md](10-参考资料.md) 中的官方链接。

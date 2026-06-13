@@ -2713,7 +2713,7 @@ KiCad 是开源 EDA 软件，适合学习和实际项目。
 - 板厂能力表中的最小值，以及本项目实际采用的保守值。
 - 下单参数表，包括层数、板厚、铜厚、表面处理、阻抗控制、BOM 和 CPL 版本。
 
-低压低速板可以从较宽松规则开始，但大电流、高压、阻抗控制、安规距离必须单独计算或按标准处理。详见 [38_ENGINEERING_RULES_QUICK_REFERENCE.md](38_ENGINEERING_RULES_QUICK_REFERENCE.md)。
+低压低速板可以从较宽松规则开始，但大电流、高压、阻抗控制、安规距离必须单独计算或按标准处理。详见 [38_ENGINEERING_RULES_QUICK_REFERENCE.md](38_PCB工程规则速查.md)。
 
 ## 39. 设计评审、上电与复盘模板
 
@@ -2731,7 +2731,7 @@ KiCad 是开源 EDA 软件，适合学习和实际项目。
 - 首次上电的限流值、测量点、电流、电压、温升和异常现象。
 - 改版时的问题编号、根因、修改方案和验证方法。
 
-不要只写“已修复”。要写清楚现象、复现条件、测量证据、根因、临时修复和正式改版。详见 [39_DESIGN_REVIEW_AND_BRINGUP_TEMPLATES.md](39_DESIGN_REVIEW_AND_BRINGUP_TEMPLATES.md)。
+不要只写“已修复”。要写清楚现象、复现条件、测量证据、根因、临时修复和正式改版。详见 [39_DESIGN_REVIEW_AND_BRINGUP_TEMPLATES.md](39_设计评审上电与复盘.md)。
 
 ## 40. PCB 与硬件设计术语表
 
@@ -2744,4 +2744,4 @@ KiCad 是开源 EDA 软件，适合学习和实际项目。
 - 它是否需要查板厂能力表、数据手册或标准。
 - 它和相近概念有什么区别。
 
-详见 [40_GLOSSARY.md](40_GLOSSARY.md)。
+详见 [40_GLOSSARY.md](40_PCB与硬件设计术语.md)。

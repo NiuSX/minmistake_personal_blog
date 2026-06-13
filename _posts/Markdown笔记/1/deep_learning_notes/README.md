@@ -25,19 +25,19 @@ flowchart TD
 
 ## 文件阅读顺序
 
-1. [00_learning_path.md](00_learning_path.md)：学习路线、知识地图和资料使用方式。
-2. [01_math_foundations.md](01_math_foundations.md)：线性代数、微积分、概率统计、信息论基础。
-3. [02_machine_learning_basics.md](02_machine_learning_basics.md)：西瓜书主线中的机器学习基本概念。
-4. [03_neural_network_foundations.md](03_neural_network_foundations.md)：神经元、层、激活函数、损失函数。
-5. [04_backpropagation.md](04_backpropagation.md)：计算图、链式法则、反向传播。
-6. [05_optimization.md](05_optimization.md)：梯度下降、Momentum、AdaGrad、RMSProp、Adam。
-7. [06_regularization_generalization.md](06_regularization_generalization.md)：过拟合、正则化、Dropout、归一化。
-8. [07_cnn.md](07_cnn.md)：卷积神经网络、卷积层、池化、经典结构。
-9. [08_rnn_sequence.md](08_rnn_sequence.md)：序列建模、RNN、LSTM、GRU。
-10. [09_attention_transformer.md](09_attention_transformer.md)：注意力机制、Self-Attention、Transformer。
-11. [10_training_practice.md](10_training_practice.md)：训练流程、调参、实验记录和项目路线。
-12. [11_formula_index.md](11_formula_index.md)：常用公式索引，便于集中查阅。
-13. [12_review_and_practice.md](12_review_and_practice.md)：综合复习、训练工程模板、排错清单和项目实践手册。
+1. [00_learning_path.md](00_学习路线与知识地图.md)：学习路线、知识地图和资料使用方式。
+2. [01_math_foundations.md](01_数学基础.md)：线性代数、微积分、概率统计、信息论基础。
+3. [02_machine_learning_basics.md](02_机器学习基础.md)：西瓜书主线中的机器学习基本概念。
+4. [03_neural_network_foundations.md](03_神经网络基础.md)：神经元、层、激活函数、损失函数。
+5. [04_backpropagation.md](04_反向传播.md)：计算图、链式法则、反向传播。
+6. [05_optimization.md](05_优化算法.md)：梯度下降、Momentum、AdaGrad、RMSProp、Adam。
+7. [06_regularization_generalization.md](06_正则化与泛化.md)：过拟合、正则化、Dropout、归一化。
+8. [07_cnn.md](07_CNN.md)：卷积神经网络、卷积层、池化、经典结构。
+9. [08_rnn_sequence.md](08_RNN.md)：序列建模、RNN、LSTM、GRU。
+10. [09_attention_transformer.md](09_Attention 与 Transformer.md)：注意力机制、Self-Attention、Transformer。
+11. [10_training_practice.md](10_深度学习训练实践.md)：训练流程、调参、实验记录和项目路线。
+12. [11_formula_index.md](11_常用公式索引.md)：常用公式索引，便于集中查阅。
+13. [12_review_and_practice.md](12_深度学习综合复习与实践手册.md)：综合复习、训练工程模板、排错清单和项目实践手册。
 
 ## 怎样配合西瓜书和南瓜书学习
 
@@ -61,8 +61,8 @@ flowchart TD
 ## 建议复习方式
 
 1. 第一遍按目录顺序读，重点理解“数据、模型、损失、优化、评估”的闭环。
-2. 第二遍边写代码边读：[10_training_practice.md](10_training_practice.md) 和 [12_review_and_practice.md](12_review_and_practice.md) 应该配合使用。
-3. 遇到公式卡住时回看 [01_math_foundations.md](01_math_foundations.md) 和 [11_formula_index.md](11_formula_index.md)，先弄清楚 shape，再看推导。
+2. 第二遍边写代码边读：[10_training_practice.md](10_深度学习训练实践.md) 和 [12_review_and_practice.md](12_深度学习综合复习与实践手册.md) 应该配合使用。
+3. 遇到公式卡住时回看 [01_math_foundations.md](01_数学基础.md) 和 [11_formula_index.md](11_常用公式索引.md)，先弄清楚 shape，再看推导。
 4. 遇到训练失败时优先做小数据过拟合测试、梯度检查、数据检查，而不是直接更换复杂模型。
 
 ## 参考资料

@@ -26,20 +26,20 @@
 
 | 文件 | 主题 | 重点 |
 |---|---|---|
-| [01-overview-and-roadmap.md](01-overview-and-roadmap.md) | 学习路线总览 | 计算机系统分层、学习顺序、实验路线 |
-| [02-data-representation.md](02-data-representation.md) | 信息表示 | 二进制、整数、补码、浮点、字符编码 |
-| [03-program-execution-and-assembly.md](03-program-execution-and-assembly.md) | 程序执行与汇编 | ISA、寄存器、栈帧、调用约定、控制流 |
-| [04-computer-architecture.md](04-computer-architecture.md) | 计算机组成与体系结构 | CPU、流水线、缓存、存储层次、I/O |
-| [05-compilation-linking-loading.md](05-compilation-linking-loading.md) | 编译、链接、加载 | 预处理、编译、汇编、ELF、动态链接 |
-| [06-memory-system.md](06-memory-system.md) | 内存系统 | 虚拟内存、页表、TLB、堆、栈、mmap |
-| [07-process-thread-scheduling.md](07-process-thread-scheduling.md) | 进程、线程与调度 | 进程模型、上下文切换、调度、信号 |
-| [08-concurrency-synchronization.md](08-concurrency-synchronization.md) | 并发与同步 | 竞态、锁、条件变量、死锁、内存模型 |
-| [09-io-filesystem-storage.md](09-io-filesystem-storage.md) | I/O、文件系统与存储 | 文件描述符、缓冲、磁盘、文件系统、日志 |
-| [10-networking.md](10-networking.md) | 网络系统 | TCP/IP、UDP、Socket、HTTP、DNS、TLS |
-| [11-performance-debugging-observability.md](11-performance-debugging-observability.md) | 性能、调试与可观测性 | profiling、perf、strace、gdb、日志、指标 |
-| [12-security-reliability.md](12-security-reliability.md) | 安全与可靠性 | 内存安全、权限、隔离、崩溃恢复、防御思维 |
-| [13-references.md](13-references.md) | 参考资料 | 官方文档、经典教材、中文社区入口 |
-| [14-labs-and-case-studies.md](14-labs-and-case-studies.md) | 实验与案例 | 从小程序、系统工具、故障现象反推底层机制 |
+| [01-overview-and-roadmap.md](01-总览和学习路线.md) | 学习路线总览 | 计算机系统分层、学习顺序、实验路线 |
+| [02-data-representation.md](02-数据表示.md) | 信息表示 | 二进制、整数、补码、浮点、字符编码 |
+| [03-program-execution-and-assembly.md](03-程序执行和汇编.md) | 程序执行与汇编 | ISA、寄存器、栈帧、调用约定、控制流 |
+| [04-computer-architecture.md](04-计算机组成与体系架构.md) | 计算机组成与体系结构 | CPU、流水线、缓存、存储层次、I/O |
+| [05-compilation-linking-loading.md](05-编译链接和加载.md) | 编译、链接、加载 | 预处理、编译、汇编、ELF、动态链接 |
+| [06-memory-system.md](06-内存系统.md) | 内存系统 | 虚拟内存、页表、TLB、堆、栈、mmap |
+| [07-process-thread-scheduling.md](07-进程线程与调度.md) | 进程、线程与调度 | 进程模型、上下文切换、调度、信号 |
+| [08-concurrency-synchronization.md](08-并发与同步.md) | 并发与同步 | 竞态、锁、条件变量、死锁、内存模型 |
+| [09-io-filesystem-storage.md](09-IO与文件系统和存储.md) | I/O、文件系统与存储 | 文件描述符、缓冲、磁盘、文件系统、日志 |
+| [10-networking.md](10-网络系统.md) | 网络系统 | TCP/IP、UDP、Socket、HTTP、DNS、TLS |
+| [11-performance-debugging-observability.md](11-性能调试和可观测性.md) | 性能、调试与可观测性 | profiling、perf、strace、gdb、日志、指标 |
+| [12-security-reliability.md](12-安全与可靠性.md) | 安全与可靠性 | 内存安全、权限、隔离、崩溃恢复、防御思维 |
+| [13-references.md](13-参考.md) | 参考资料 | 官方文档、经典教材、中文社区入口 |
+| [14-labs-and-case-studies.md](14-实验与案例.md) | 实验与案例 | 从小程序、系统工具、故障现象反推底层机制 |
 
 ## 一张总图
 

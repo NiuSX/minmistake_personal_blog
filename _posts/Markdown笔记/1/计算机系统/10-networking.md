@@ -1,6 +1,6 @@
 # 10. 网络系统：TCP/IP、Socket、HTTP 与 DNS
 
-最后调研时间：2026-06-11
+最后调研时间：2026-06-13
 
 ## 1. 网络系统解决什么问题
 
@@ -34,6 +34,16 @@
 - 上层不必知道底层所有细节。
 - 协议可替换。
 
+分层不是严格的一条直线。真实系统中经常跨层影响：
+
+- 应用层超时会影响 TCP 连接复用。
+- TLS 握手增加连接建立成本。
+- Nagle、延迟 ACK、拥塞控制会影响应用延迟。
+- DNS 解析慢会表现为 HTTP 慢。
+- MTU、丢包、重传会影响上层吞吐。
+
+排查网络问题时要从应用现象逐层拆开，而不是只看 HTTP 状态码。
+
 ## 3. IP
 
 IP 负责把数据包从源主机送到目标主机。
@@ -57,6 +67,16 @@ IP 提供的是尽力而为服务：
 - 不保证不重复。
 
 可靠性通常由传输层或应用层处理。
+
+IP 层还涉及：
+
+- 路由选择。
+- 分片与 MTU。
+- TTL / Hop Limit。
+- ICMP 错误报告。
+- NAT 地址转换。
+
+MTU 问题会导致大包异常、小包正常的现象。遇到“能 ping 通但大响应失败”，要考虑路径 MTU、防火墙丢弃 ICMP、隧道封装等因素。
 
 ## 4. 端口
 
@@ -83,6 +103,16 @@ IP + Port = 网络通信端点
 | 3306 | MySQL |
 | 5432 | PostgreSQL |
 
+端口有范围概念：
+
+| 类型 | 说明 |
+|---|---|
+| well-known ports | 常见服务端口，如 80、443 |
+| registered ports | 应用注册端口 |
+| ephemeral ports | 客户端临时端口，由系统分配 |
+
+客户端主动连接远端服务时，本地也会占用一个临时端口。高并发短连接可能遇到临时端口耗尽、TIME_WAIT 积累或 fd 限制问题。
+
 ## 5. UDP
 
 UDP 是无连接数据报协议。
@@ -102,6 +132,18 @@ UDP 是无连接数据报协议。
 - 游戏。
 - 简单局域网发现。
 - 自定义可靠协议。
+
+UDP 保留消息边界：一次 `sendto` 对应一个数据报。但数据报可能丢失、乱序、重复，过大还可能被 IP 分片，分片丢一个就导致整个数据报不可用。
+
+应用如果基于 UDP 自己实现可靠性，通常要处理：
+
+- 序列号。
+- ACK。
+- 重传。
+- 去重。
+- 流量控制。
+- 拥塞控制。
+- MTU 探测。
 
 ## 6. TCP
 
@@ -131,6 +173,17 @@ helloworld
 
 也可能分多次读到。应用层必须自己定义消息边界。
 
+常见消息边界设计：
+
+| 方式 | 示例 | 注意 |
+|---|---|---|
+| 固定长度 | 每条消息 128 bytes | 浪费空间，不够灵活 |
+| 分隔符 | 行协议 `\n` | 内容中出现分隔符要转义 |
+| 长度前缀 | 先发 4 字节长度 | 要限制最大长度，防止内存攻击 |
+| 自描述格式 | HTTP、JSON framing | 解析更复杂 |
+
+TCP 的可靠性不是“永远不断”。它只能在连接存在且网络条件允许时尽力重传、排序和校验。对端崩溃、网络中断、超时、缓冲区耗尽都需要应用层处理。
+
 ## 7. TCP 连接
 
 三次握手：
@@ -154,6 +207,20 @@ TIME_WAIT 的作用：
 
 - 确保最后 ACK 可重传。
 - 避免旧连接的包影响新连接。
+
+常见 TCP 状态直觉：
+
+| 状态 | 含义 |
+|---|---|
+| `LISTEN` | 服务端正在监听 |
+| `SYN-SENT` | 主动发起连接，等待响应 |
+| `SYN-RECV` | 收到 SYN，握手未完成 |
+| `ESTABLISHED` | 连接建立 |
+| `FIN-WAIT-*` | 主动关闭过程 |
+| `CLOSE-WAIT` | 对端已关闭，本端应用还没 close |
+| `TIME-WAIT` | 主动关闭方等待旧包过期 |
+
+大量 `CLOSE-WAIT` 往往说明应用没有及时关闭 socket；大量 `TIME-WAIT` 不一定是问题，但在短连接高并发场景下需要关注端口和连接复用。
 
 ## 8. Socket 编程
 
@@ -190,6 +257,25 @@ while (1) {
 }
 ```
 
+生产级 socket 代码还要处理：
+
+- `accept/read/write` 被信号中断。
+- 非阻塞 I/O 返回 `EAGAIN`。
+- 部分读写。
+- 对端关闭返回 0 或触发错误。
+- fd 泄漏。
+- 超时和连接生命周期。
+- backpressure，不能无限缓存待发送数据。
+
+服务端常见并发模型：
+
+| 模型 | 特点 |
+|---|---|
+| 每连接一个线程 | 简单，但大量连接时线程成本高 |
+| 线程池 + 阻塞 I/O | 控制线程数，适合请求相对短的服务 |
+| 事件循环 + 非阻塞 I/O | 适合大量连接，但状态机复杂 |
+| 多进程 | 隔离好，进程间通信成本更高 |
+
 ## 9. DNS
 
 DNS 把域名解析为 IP。
@@ -206,6 +292,22 @@ DNS 查询可能涉及：
 - 根域。
 - 顶级域。
 - 权威 DNS。
+
+DNS 常见问题：
+
+- 解析结果有 TTL，缓存可能导致切换不立即生效。
+- 一个域名可能返回多个 IP，客户端选择策略会影响负载。
+- `getaddrinfo` 可能同时涉及 IPv4/IPv6、搜索域、`/etc/hosts`、本地 resolver。
+- DNS 慢会表现为连接前耗时高，而不是 TCP 慢。
+
+排查：
+
+```bash
+dig example.com
+dig +trace example.com
+getent hosts example.com
+cat /etc/resolv.conf
+```
 
 常见记录：
 
@@ -262,6 +364,28 @@ Content-Type: text/html
 | 503 | Service Unavailable |
 | 504 | Gateway Timeout |
 
+HTTP 的几个关键语义：
+
+| 概念 | 说明 |
+|---|---|
+| header | 元数据，如 `Host`、`Content-Type`、`Cache-Control` |
+| body | 请求或响应主体 |
+| keep-alive | 复用 TCP 连接，减少握手成本 |
+| idempotent | 重复执行结果语义相同，影响重试策略 |
+| cache | 缓存响应，减少源站压力 |
+
+GET 通常应是安全且幂等的；POST 通常不是幂等的。重试 POST、支付、下单、扣库存等操作前必须设计幂等键或去重机制。
+
+HTTP/1.1、HTTP/2、HTTP/3 的直觉差异：
+
+| 版本 | 传输基础 | 关键特点 |
+|---|---|---|
+| HTTP/1.1 | TCP | 文本协议、连接复用、但同连接请求队头阻塞明显 |
+| HTTP/2 | TCP | 二进制分帧、多路复用、头部压缩 |
+| HTTP/3 | QUIC/UDP | 避免 TCP 层队头阻塞，连接迁移更好 |
+
+这里先把重点放在 HTTP 语义和 TCP/IP 基础；HTTP/2、HTTP/3 属于进一步学习内容。
+
 ## 11. HTTPS 与 TLS
 
 HTTPS = HTTP over TLS。
@@ -273,6 +397,14 @@ TLS 提供：
 - 完整性保护。
 
 HTTPS 不是新应用语义，而是在安全通道上传输 HTTP。
+
+TLS 握手会带来额外延迟，但连接复用、会话恢复和 HTTP/2/3 可以降低长期成本。排查 HTTPS 慢时，要区分：
+
+- DNS 慢。
+- TCP connect 慢。
+- TLS handshake 慢。
+- 服务端首字节慢。
+- 下载传输慢。
 
 ## 12. 网络调试命令
 
@@ -300,6 +432,21 @@ ss -tanp
 sudo tcpdump -i eth0 -nn host 1.2.3.4
 ```
 
+curl 分阶段分析：
+
+```bash
+curl -w 'dns=%{time_namelookup} connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer} total=%{time_total}\n' \
+    -o /dev/null -s https://example.com
+```
+
+常用连接状态统计：
+
+```bash
+ss -s
+ss -tan state established
+ss -tan state time-wait
+```
+
 ## 13. 常见问题
 
 | 问题 | 可能原因 |
@@ -311,6 +458,11 @@ sudo tcpdump -i eth0 -nn host 1.2.3.4
 | too many open files | 连接 fd 泄漏 |
 | HTTP 502 | 网关无法从上游获取有效响应 |
 | HTTP 504 | 网关等待上游超时 |
+| DNS 解析慢 | resolver、网络、缓存、IPv6/IPv4 回退 |
+| 大包失败小包正常 | MTU、分片、防火墙或隧道问题 |
+| CLOSE_WAIT 很多 | 应用未及时关闭 socket |
+| TIME_WAIT 很多 | 短连接多，主动关闭方积累状态 |
+| 请求偶发很慢 | 丢包重传、队列、下游抖动、连接池耗尽 |
 
 ## 14. 参考资料
 
@@ -334,4 +486,3 @@ sudo tcpdump -i eth0 -nn host 1.2.3.4
 
 - IANA Service Name and Port Number Registry  
   https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml
-

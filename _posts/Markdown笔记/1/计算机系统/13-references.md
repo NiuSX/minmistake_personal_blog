@@ -1,6 +1,6 @@
 # 13. 参考资料总表
 
-最后调研时间：2026-06-11
+最后调研时间：2026-06-13
 
 ## 官方与经典教材
 
@@ -51,6 +51,15 @@
 - Brendan Gregg Linux Performance  
   https://www.brendangregg.com/linuxperf.html
 
+- Linux kernel perf events documentation  
+  https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
+
+- strace project  
+  https://strace.io/
+
+- iproute2 project  
+  https://wiki.linuxfoundation.org/networking/iproute2
+
 ## 标准与协议
 
 - RFC 9293 - Transmission Control Protocol  
@@ -74,6 +83,15 @@
 - Beej's Guide to Network Programming  
   https://beej.us/guide/bgnet/
 
+- RFC 8446 - The Transport Layer Security Protocol Version 1.3  
+  https://www.rfc-editor.org/rfc/rfc8446
+
+- RFC 9000 - QUIC: A UDP-Based Multiplexed and Secure Transport  
+  https://www.rfc-editor.org/rfc/rfc9000
+
+- RFC 9114 - HTTP/3  
+  https://www.rfc-editor.org/rfc/rfc9114
+
 ## 调试、安全与可靠性
 
 - AddressSanitizer  
@@ -90,6 +108,29 @@
 
 - OWASP Top Ten  
   https://owasp.org/www-project-top-ten/
+
+- AFL++ Documentation  
+  https://aflplus.plus/docs/
+
+- Clang Control Flow Integrity  
+  https://clang.llvm.org/docs/ControlFlowIntegrity.html
+
+- Linux seccomp BPF documentation  
+  https://www.kernel.org/doc/html/latest/userspace-api/seccomp_filter.html
+
+## 实验与课程资料
+
+- CMU 15-213 Labs  
+  https://www.cs.cmu.edu/~213/labs.html
+
+- CS:APP Student Site  
+  https://csapp.cs.cmu.edu/3e/students.html
+
+- Beej's Guide to Network Programming  
+  https://beej.us/guide/bgnet/
+
+- Brendan Gregg: USE Method  
+  https://www.brendangregg.com/usemethod.html
 
 ## 中文社区资料入口
 
@@ -109,4 +150,3 @@
 
 - SegmentFault：Linux 系统编程问题  
   https://segmentfault.com/search?q=Linux%20%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B
-

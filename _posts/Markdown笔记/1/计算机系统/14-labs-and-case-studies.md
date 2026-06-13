@@ -1,0 +1,817 @@
+# 14. 实验与案例：把计算机系统知识跑起来
+
+最后调研时间：2026-06-13
+
+## 1. 为什么需要实验
+
+计算机系统知识很容易停留在概念层：知道“虚拟内存”“系统调用”“缓存”“TCP 可靠传输”，但遇到真实问题时仍然不知道该看什么、测什么、改什么。
+
+学习这门课最有效的方式是把每个抽象压到三个层面：
+
+| 层面 | 目标 | 典型手段 |
+|---|---|---|
+| 代码 | 制造可复现现象 | C/C++、Python、shell、小型服务 |
+| 工具 | 观察系统行为 | `gdb`、`strace`、`perf`、`tcpdump`、`ss`、`pmap` |
+| 解释 | 把输出映射回机制 | 地址空间、页表、调度、系统调用、协议状态机 |
+
+实验记录建议固定成下面格式：
+
+```text
+实验目标：
+环境：
+最小代码：
+运行命令：
+观察结果：
+底层解释：
+容易误判的点：
+延伸问题：
+```
+
+这样做的好处是：以后遇到线上故障时，不会只凭经验猜，而是知道如何缩小范围。
+
+## 2. 环境建议
+
+建议准备一个 Linux 环境。Windows 用户可以使用 WSL2、虚拟机或远程 Linux 服务器。
+
+常用工具：
+
+```bash
+gcc --version
+gdb --version
+strace -V
+perf --version
+tcpdump --version
+ss --version
+```
+
+常用安装命令示例：
+
+```bash
+sudo apt update
+sudo apt install -y build-essential gdb strace ltrace linux-tools-common \
+    linux-tools-generic valgrind tcpdump iproute2 dnsutils
+```
+
+不同发行版包名可能不同。工具版本不是学习重点，重点是形成“写程序 -> 跑命令 -> 解释现象”的闭环。
+
+## 3. 实验总路线
+
+| 阶段 | 实验 | 对应章节 | 核心问题 |
+|---|---|---|---|
+| 信息表示 | 打印整数、浮点、字节序 | 02 | 同一串位为什么有不同含义 |
+| 程序执行 | 反汇编函数调用 | 03 | C 语句如何变成机器指令 |
+| 编译链接 | 制造链接错误 | 05 | 符号如何解析，库如何参与链接 |
+| 内存 | 查看地址空间和缺页 | 06 | 虚拟地址如何映射到物理内存 |
+| 进程 | `fork`、`exec`、`wait` | 07 | 进程如何创建和替换映像 |
+| 并发 | 制造竞态和死锁 | 08 | 为什么共享状态需要同步 |
+| I/O | 观察 `read/write/open` | 09 | 文件描述符背后是什么 |
+| 网络 | 写 echo server 并抓包 | 10 | socket、TCP 状态和应用协议如何连接 |
+| 性能 | 对比顺序访问和随机访问 | 11 | 为什么访问模式影响性能 |
+| 安全可靠 | 触发 sanitizer 和崩溃一致性实验 | 12 | 错误如何被发现，数据如何避免损坏 |
+
+## 4. 实验 1：观察位模式和解释规则
+
+目标：理解“位模式不等于语义”。
+
+```c
+#include <stdint.h>
+#include <stdio.h>
+
+int main(void) {
+    uint8_t u = 255;
+    int8_t s = (int8_t)u;
+
+    printf("u = %u\n", u);
+    printf("s = %d\n", s);
+    printf("0.1 + 0.2 = %.17f\n", 0.1 + 0.2);
+
+    uint32_t x = 0x12345678;
+    unsigned char *p = (unsigned char *)&x;
+    printf("bytes: %02x %02x %02x %02x\n", p[0], p[1], p[2], p[3]);
+    return 0;
+}
+```
+
+运行：
+
+```bash
+gcc -Wall -Wextra -O0 bits.c -o bits
+./bits
+```
+
+应该观察：
+
+- `255` 转成 `int8_t` 后通常解释为 `-1`。
+- `0.1 + 0.2` 不是精确的十进制 `0.3`。
+- x86/Linux 上 `0x12345678` 通常以 `78 56 34 12` 存放，即小端。
+
+底层解释：
+
+- CPU 只处理位，类型语义由编译器、ABI、指令和程序解释共同决定。
+- 浮点数是有限位宽的二进制近似表示。
+- 字节序只影响多字节对象在内存中的布局，不改变寄存器里数值本身。
+
+常见误判：
+
+- 不要把 `char` 默认当作 signed 或 unsigned，C 标准允许实现自行决定。
+- 不要用浮点数直接做金额精确计算。
+
+## 5. 实验 2：从 C 到汇编再到调用栈
+
+目标：理解函数调用、栈帧、寄存器和反汇编。
+
+```c
+#include <stdio.h>
+
+int add(int a, int b) {
+    int c = a + b;
+    return c;
+}
+
+int main(void) {
+    int x = add(1, 2);
+    printf("%d\n", x);
+    return 0;
+}
+```
+
+编译和观察：
+
+```bash
+gcc -O0 -g call.c -o call
+objdump -d -Mintel call | less
+gdb ./call
+```
+
+在 `gdb` 中：
+
+```gdb
+break add
+run
+disassemble
+info registers
+bt
+layout asm
+```
+
+重点观察：
+
+- 参数如何进入寄存器或栈。
+- `call` 指令如何保存返回地址。
+- 函数返回时如何回到调用方。
+- `-O0` 和 `-O2` 下汇编差异很大，优化后变量可能不存在于栈上。
+
+底层解释：
+
+- 调用约定规定参数、返回值、哪些寄存器由调用者保存、哪些由被调用者保存。
+- 调试器显示的“变量”来自调试信息，不一定等同于内存里的固定位置。
+
+## 6. 实验 3：链接错误定位
+
+目标：理解 `.c -> .o -> executable`、符号和库顺序。
+
+文件 `foo.c`：
+
+```c
+int add(int a, int b) {
+    return a + b;
+}
+```
+
+文件 `main.c`：
+
+```c
+#include <stdio.h>
+
+int add(int a, int b);
+
+int main(void) {
+    printf("%d\n", add(1, 2));
+    return 0;
+}
+```
+
+命令：
+
+```bash
+gcc -c foo.c
+gcc -c main.c
+nm foo.o
+nm main.o
+gcc main.o foo.o -o app
+./app
+```
+
+制造错误：
+
+```bash
+gcc main.o -o app
+```
+
+会出现 `undefined reference to 'add'`。这不是编译阶段错误，而是链接阶段找不到符号定义。
+
+继续观察静态库顺序：
+
+```bash
+ar rcs libfoo.a foo.o
+gcc main.o -L. -lfoo -o app
+gcc -L. -lfoo main.o -o app
+```
+
+部分链接器对静态库解析有从左到右的顺序要求：引用对象应放在库之前，库放在后面。动态库和不同链接器可能表现不同，排查时应看实际命令行和链接器文档。
+
+## 7. 实验 4：观察进程地址空间
+
+目标：把虚拟内存、堆、栈、mmap 和动态库联系起来。
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int global = 1;
+
+int main(void) {
+    int local = 2;
+    void *heap = malloc(1024 * 1024);
+
+    printf("pid    = %d\n", getpid());
+    printf("text   = %p\n", (void *)main);
+    printf("global = %p\n", (void *)&global);
+    printf("heap   = %p\n", heap);
+    printf("stack  = %p\n", (void *)&local);
+    getchar();
+
+    free(heap);
+    return 0;
+}
+```
+
+运行：
+
+```bash
+gcc -O0 -g maps.c -o maps
+./maps
+```
+
+另一个终端观察：
+
+```bash
+cat /proc/<pid>/maps
+pmap -x <pid>
+```
+
+重点观察：
+
+- 代码段、数据段、堆、栈位置不同。
+- 动态库通过映射进入地址空间。
+- 多次运行地址可能不同，这是 ASLR 的结果。
+
+延伸：
+
+```bash
+cat /proc/<pid>/smaps
+```
+
+可以进一步看到 RSS、PSS、Private、Shared 等统计。不要把虚拟地址空间大小直接等同于实际物理内存占用。
+
+## 8. 实验 5：缺页和按需分配
+
+目标：理解“申请内存”和“真正占用物理内存”不是一回事。
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+int main(void) {
+    size_t n = 512UL * 1024 * 1024;
+    char *p = malloc(n);
+    printf("allocated, pid=%d\n", getpid());
+    getchar();
+
+    for (size_t i = 0; i < n; i += 4096) {
+        p[i] = 1;
+    }
+    printf("touched\n");
+    getchar();
+
+    free(p);
+    return 0;
+}
+```
+
+观察：
+
+```bash
+gcc -O0 -g pagefault.c -o pagefault
+./pagefault
+```
+
+另一个终端：
+
+```bash
+ps -o pid,vsz,rss,maj_flt,min_flt,cmd -p <pid>
+cat /proc/<pid>/status
+```
+
+重点解释：
+
+- `malloc` 可能只是拿到一段虚拟地址范围。
+- 第一次写入每个页时触发缺页，内核才分配物理页或建立映射。
+- minor page fault 不一定是错误，它常常是正常的按需分配机制。
+
+## 9. 实验 6：系统调用视角看文件 I/O
+
+目标：理解标准库缓冲和内核系统调用之间的区别。
+
+```c
+#include <stdio.h>
+
+int main(void) {
+    FILE *fp = fopen("out.txt", "w");
+    fprintf(fp, "hello\n");
+    fclose(fp);
+    return 0;
+}
+```
+
+观察：
+
+```bash
+gcc -O0 fileio.c -o fileio
+strace -o trace.txt ./fileio
+grep -E "open|write|close|fsync" trace.txt
+```
+
+重点解释：
+
+- `fopen/fprintf/fclose` 是 C 标准库接口。
+- `open/write/close` 是内核系统调用。
+- `fclose` 通常会刷新用户态缓冲，但不等于数据已经安全落盘。
+- 如果要讨论断电后的持久性，需要进一步考虑 `fsync`、目录 `fsync`、文件系统和存储设备行为。
+
+常见误判：
+
+- `write` 成功不代表磁盘已经完成持久化。
+- `close` 也可能返回错误，可靠写入不能忽略它。
+
+## 10. 实验 7：竞态条件和互斥锁
+
+目标：观察多线程共享变量为什么会出错。
+
+错误版本：
+
+```c
+#include <pthread.h>
+#include <stdio.h>
+
+long counter = 0;
+
+void *worker(void *arg) {
+    for (long i = 0; i < 1000000; i++) {
+        counter++;
+    }
+    return NULL;
+}
+
+int main(void) {
+    pthread_t t1, t2;
+    pthread_create(&t1, NULL, worker, NULL);
+    pthread_create(&t2, NULL, worker, NULL);
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+    printf("%ld\n", counter);
+    return 0;
+}
+```
+
+运行：
+
+```bash
+gcc -O2 race.c -pthread -o race
+for i in $(seq 1 10); do ./race; done
+```
+
+结果可能小于 `2000000`。原因是 `counter++` 不是原子操作，通常包含读、加、写多个步骤。
+
+修复版本：
+
+```c
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+
+void *worker(void *arg) {
+    for (long i = 0; i < 1000000; i++) {
+        pthread_mutex_lock(&lock);
+        counter++;
+        pthread_mutex_unlock(&lock);
+    }
+    return NULL;
+}
+```
+
+调试工具：
+
+```bash
+gcc -g -fsanitize=thread race.c -pthread -o race_tsan
+./race_tsan
+```
+
+ThreadSanitizer 可以发现许多数据竞争，但会增加运行开销，也不是所有平台都完整支持。
+
+## 11. 实验 8：网络 echo server 与抓包
+
+目标：把 socket API、TCP 连接和应用层消息联系起来。
+
+最小流程：
+
+```text
+server: socket -> bind -> listen -> accept -> read/write -> close
+client: socket -> connect -> write/read -> close
+```
+
+可以先用现成工具制造连接：
+
+```bash
+nc -l 127.0.0.1 8080
+```
+
+另一个终端：
+
+```bash
+nc 127.0.0.1 8080
+```
+
+观察连接：
+
+```bash
+ss -tanp | grep 8080
+```
+
+抓包：
+
+```bash
+sudo tcpdump -i lo -nn tcp port 8080
+```
+
+重点解释：
+
+- TCP 是字节流，不保存应用层消息边界。
+- `ESTABLISHED` 表示 TCP 连接已建立，不表示应用协议一定健康。
+- `connection refused` 通常说明目标主机可达但端口没有监听，或被主动拒绝。
+- `connection timed out` 更像路由、防火墙、丢包或对端无响应。
+
+延伸实验：
+
+- 客户端连续发送两次短消息，看服务端一次 `read` 是否可能读到合并内容。
+- 服务端关闭后客户端继续写，观察 `broken pipe` 或 `ECONNRESET`。
+
+## 12. 实验 9：缓存局部性
+
+目标：理解为什么同样的计算量，访问顺序不同，性能差很多。
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define N 4096
+
+static int a[N][N];
+
+long now_ns(void) {
+    struct timespec ts;
+    clock_gettime(CLOCK_MONOTONIC, &ts);
+    return ts.tv_sec * 1000000000L + ts.tv_nsec;
+}
+
+int main(void) {
+    long t1 = now_ns();
+    long sum = 0;
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            sum += a[i][j];
+        }
+    }
+
+    long t2 = now_ns();
+
+    for (int j = 0; j < N; j++) {
+        for (int i = 0; i < N; i++) {
+            sum += a[i][j];
+        }
+    }
+
+    long t3 = now_ns();
+    printf("row-major: %ld ms\n", (t2 - t1) / 1000000);
+    printf("col-major: %ld ms\n", (t3 - t2) / 1000000);
+    printf("sum=%ld\n", sum);
+    return 0;
+}
+```
+
+运行：
+
+```bash
+gcc -O2 locality.c -o locality
+./locality
+perf stat -e cache-references,cache-misses ./locality
+```
+
+解释：
+
+- C 的二维数组按行连续存储。
+- 按行访问更符合空间局部性。
+- 按列访问跨步较大，更容易造成 cache miss 和 TLB miss。
+
+不要只看运行时间，一定尽量结合硬件事件、输入规模和编译参数解释。
+
+## 13. 实验 10：用 sanitizer 抓内存错误
+
+目标：让隐藏错误尽早暴露。
+
+```c
+#include <stdlib.h>
+
+int main(void) {
+    int *p = malloc(sizeof(int));
+    free(p);
+    *p = 1;
+    return 0;
+}
+```
+
+运行：
+
+```bash
+gcc -g -O1 -fsanitize=address uaf.c -o uaf
+./uaf
+```
+
+观察：
+
+- AddressSanitizer 会报告 use-after-free。
+- 报告里通常包含分配位置、释放位置、错误访问位置。
+
+实践建议：
+
+- 开发和测试环境尽量开启 `-fsanitize=address,undefined`。
+- 并发代码另行使用 `-fsanitize=thread`，不要和 AddressSanitizer 混用在同一次构建里。
+- sanitizer 不是形式化证明，不能替代边界设计、代码审查和 fuzzing。
+
+## 14. 案例 1：服务 CPU 飙高怎么查
+
+现象：某服务 CPU 使用率突然升高。
+
+排查路径：
+
+```bash
+top
+pidstat -p <pid> 1
+perf top -p <pid>
+perf record -g -p <pid> -- sleep 30
+perf report
+strace -c -p <pid>
+```
+
+判断方向：
+
+| 观察 | 可能方向 |
+|---|---|
+| 用户态 CPU 高 | 热循环、算法退化、序列化、正则、压缩加密 |
+| 内核态 CPU 高 | 系统调用频繁、网络包处理、锁竞争、文件 I/O |
+| `strace -c` 某系统调用占比高 | 重点看调用频率和错误码 |
+| `perf` 显示锁相关函数 | 可能是锁竞争或临界区过大 |
+
+注意：
+
+- 先确认是单核打满还是多核打满。
+- 先保留现场数据，再重启。
+- 不要只看平均 CPU，要结合请求量、延迟、错误率。
+
+## 15. 案例 2：内存不断上涨怎么查
+
+现象：进程 RSS 持续增长。
+
+排查命令：
+
+```bash
+ps -o pid,vsz,rss,cmd -p <pid>
+pmap -x <pid>
+cat /proc/<pid>/status
+cat /proc/<pid>/smaps
+```
+
+可能原因：
+
+| 原因 | 特征 |
+|---|---|
+| 真正泄漏 | 对象不可达但未释放，RSS 长期增长 |
+| 缓存增长 | 有上限或可回收，但配置过大 |
+| 内存碎片 | 释放了对象但 RSS 不下降 |
+| mmap 未释放 | 映射区域增多 |
+| 线程过多 | 每个线程都有栈和相关元数据 |
+
+工具：
+
+```bash
+valgrind --leak-check=full ./app
+ASAN_OPTIONS=detect_leaks=1 ./app
+```
+
+解释重点：
+
+- VSZ 是虚拟地址空间，不等于实际物理内存。
+- RSS 是常驻物理内存，但也包含共享页的统计影响。
+- PSS 更适合估算共享库、共享映射在多进程间的摊销成本。
+
+## 16. 案例 3：接口变慢怎么查
+
+现象：接口 P99 延迟升高。
+
+先拆层：
+
+```text
+客户端 -> DNS -> TCP/TLS -> 网关 -> 应用 -> DB/cache/下游 -> 文件/网络/CPU
+```
+
+排查顺序：
+
+| 层 | 观察 |
+|---|---|
+| 应用 | 日志、trace、慢请求样本 |
+| CPU | `top`、`perf` |
+| 系统调用 | `strace -c` |
+| 网络 | `ss -tanp`、`tcpdump`、重传统计 |
+| 磁盘 | `iostat -x 1` |
+| 内存 | page fault、swap、RSS |
+| 下游 | 超时、重试、连接池耗尽 |
+
+常见机制：
+
+- 没有超时导致请求堆积。
+- 重试放大下游故障。
+- 连接池太小导致排队。
+- 慢 SQL 或锁等待。
+- GC、内存分配或 page fault 抖动。
+- 日志同步写或磁盘写满。
+
+原则：
+
+- 先看端到端延迟分布，再拆分阶段。
+- 先定位等待在哪里，再考虑优化代码。
+- P99 问题通常来自队列、锁、I/O 或尾部慢节点，不一定来自平均路径。
+
+## 17. 案例 4：文件写成功但数据丢了
+
+现象：程序显示写入成功，断电或崩溃后文件内容损坏或消失。
+
+需要区分：
+
+| 动作 | 含义 |
+|---|---|
+| 写入用户态缓冲 | 数据还在进程内存里 |
+| `write` 返回成功 | 数据进入内核页缓存或设备队列 |
+| `fsync(fd)` 成功 | 文件数据和必要元数据尽量提交到稳定存储 |
+| `rename` | 在同一文件系统内通常提供名称替换原子性 |
+| `fsync` 目录 | 确保目录项变更持久化 |
+
+常用安全写入模式：
+
+```text
+写入 target.tmp
+fsync(target.tmp)
+rename(target.tmp, target)
+fsync(parent directory)
+```
+
+注意：
+
+- 跨文件系统 `rename` 不是普通原子替换。
+- 不同文件系统、挂载参数、存储设备缓存策略会影响持久性语义。
+- 数据库通常使用 WAL、校验和、刷盘协议和恢复流程处理这个问题。
+
+## 18. 案例 5：TCP 连接很多但服务不响应
+
+观察：
+
+```bash
+ss -tanp | grep <port>
+ss -s
+cat /proc/sys/net/ipv4/ip_local_port_range
+ulimit -n
+```
+
+可能原因：
+
+| 现象 | 方向 |
+|---|---|
+| `SYN-SENT` 多 | 对端不可达、网络丢包、防火墙 |
+| `SYN-RECV` 多 | 半连接堆积、握手未完成 |
+| `ESTABLISHED` 多 | 长连接正常，也可能应用不读写 |
+| `CLOSE-WAIT` 多 | 本端程序没有及时 close |
+| `TIME-WAIT` 多 | 主动关闭连接多，通常不一定是问题 |
+| `too many open files` | fd 限制或 fd 泄漏 |
+
+排查时要同时看：
+
+- 监听 backlog。
+- fd 数量。
+- 应用线程池或事件循环是否阻塞。
+- 是否有慢客户端导致写阻塞。
+- 是否缺少超时和连接生命周期管理。
+
+## 19. 常用工具速查
+
+| 工具 | 用途 | 常见命令 |
+|---|---|---|
+| `gdb` | 调试崩溃、断点、栈 | `gdb ./app core` |
+| `strace` | 系统调用 | `strace -f -tt -p <pid>` |
+| `ltrace` | 动态库调用 | `ltrace ./app` |
+| `perf` | CPU profiling、硬件事件 | `perf record -g ./app` |
+| `pmap` | 进程地址空间 | `pmap -x <pid>` |
+| `ss` | socket 状态 | `ss -tanp` |
+| `tcpdump` | 抓包 | `tcpdump -i any -nn host 1.2.3.4` |
+| `iostat` | 磁盘统计 | `iostat -x 1` |
+| `vmstat` | CPU、内存、上下文切换 | `vmstat 1` |
+| `valgrind` | 内存错误、泄漏 | `valgrind --leak-check=full ./app` |
+| `asan/tsan/ubsan` | 编译期插桩检查 | `-fsanitize=address` |
+
+工具输出不要孤立解读。比如 CPU 高可能是业务计算，也可能是系统调用、锁竞争、内存抖动或网络包处理；必须结合调用栈、系统指标和业务请求量。
+
+## 20. 复盘模板
+
+每做完一个实验或排查一个问题，建议写一段复盘：
+
+```text
+我最初以为：
+实际观察到：
+关键证据：
+底层机制：
+我之前忽略了：
+以后遇到类似问题先看：
+```
+
+计算机系统学习的核心不是记住所有命令，而是建立从现象到证据、从证据到机制、从机制到修复方案的路径。
+
+## 21. 参考资料
+
+- CSAPP 官方资源  
+  https://csapp.cs.cmu.edu/
+
+- CMU 15-213 Introduction to Computer Systems  
+  https://www.cs.cmu.edu/~213/
+
+- OSTEP 官方在线书  
+  https://pages.cs.wisc.edu/~remzi/OSTEP/
+
+- Linux man-pages project  
+  https://www.kernel.org/doc/man-pages/
+
+- man7.org Linux manual pages  
+  https://man7.org/linux/man-pages/
+
+- GNU Binutils Documentation  
+  https://sourceware.org/binutils/docs/
+
+- GCC Documentation  
+  https://gcc.gnu.org/onlinedocs/
+
+- GDB Documentation  
+  https://sourceware.org/gdb/documentation/
+
+- Valgrind Documentation  
+  https://valgrind.org/docs/
+
+- AddressSanitizer 文档  
+  https://clang.llvm.org/docs/AddressSanitizer.html
+
+- ThreadSanitizer 文档  
+  https://clang.llvm.org/docs/ThreadSanitizer.html
+
+- Linux perf Wiki  
+  https://perf.wiki.kernel.org/
+
+- Brendan Gregg: Linux Performance  
+  https://www.brendangregg.com/linuxperf.html
+
+- RFC 9293 - Transmission Control Protocol  
+  https://www.rfc-editor.org/rfc/rfc9293
+
+- RFC 9110 - HTTP Semantics  
+  https://www.rfc-editor.org/rfc/rfc9110
+
+- Beej's Guide to Network Programming  
+  https://beej.us/guide/bgnet/
+
+- CSDN：CSAPP 学习笔记检索入口  
+  https://so.csdn.net/so/search?q=CSAPP%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0
+
+- 掘金：计算机系统与 Linux 系统编程检索入口  
+  https://juejin.cn/search?query=%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%20Linux%20%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B
+
+- 博客园：OSTEP 与操作系统学习笔记检索入口  
+  https://zzk.cnblogs.com/s/blogpost?w=OSTEP%20%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0
+

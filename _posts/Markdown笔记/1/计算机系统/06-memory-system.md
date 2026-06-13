@@ -1,6 +1,6 @@
 # 06. 内存系统：虚拟内存、堆、栈、页表与 mmap
 
-最后调研时间：2026-06-11
+最后调研时间：2026-06-13
 
 ## 1. 内存系统解决什么问题
 
@@ -34,6 +34,16 @@
 - 可以把文件映射到内存。
 - 可以让动态库映射到多个进程。
 
+虚拟内存不是“把磁盘当内存”这么简单。它同时解决三类问题：
+
+| 问题 | 虚拟内存提供的能力 |
+|---|---|
+| 隔离 | 进程不能随意访问别的进程或内核地址 |
+| 管理 | 内核可以按页分配、回收、换出、共享 |
+| 抽象 | 程序看到连续地址，底层物理页可以不连续 |
+
+因此同一个虚拟地址在不同进程里可以映射到完全不同的物理页。调试时看到 `0x7fff...` 这样的地址，不能脱离进程上下文解释。
+
 ## 3. 进程地址空间
 
 典型布局：
@@ -61,6 +71,25 @@ cat /proc/$$/maps
 ```bash
 cat /proc/<pid>/maps
 ```
+
+典型映射行包含：
+
+```text
+address           perms offset  dev   inode pathname
+00400000-00401000 r-xp 00000000 08:01 12345 /path/app
+```
+
+字段含义：
+
+| 字段 | 含义 |
+|---|---|
+| address | 虚拟地址范围 |
+| perms | 读、写、执行、私有/共享 |
+| offset | 文件映射偏移 |
+| dev/inode | 所属设备和 inode |
+| pathname | 映射来源，匿名映射可能没有路径 |
+
+常见匿名区域包括堆、栈、线程栈、匿名 `mmap`、JIT 代码区等。
 
 ## 4. 栈
 
@@ -124,6 +153,15 @@ auto p = std::make_unique<int[]>(100);
 - 分配释放有成本。
 - 容易内存泄漏和 use-after-free。
 
+堆内存不一定只来自传统 `brk/sbrk`。现代分配器通常会混合使用：
+
+- `brk` 扩展进程 heap 区域。
+- `mmap` 分配大块内存。
+- 每线程 arena 或 cache 降低锁竞争。
+- 空闲块缓存以便复用，未必马上还给操作系统。
+
+所以 `free` 后 RSS 不下降不一定是泄漏，可能是分配器保留内存等待复用。是否泄漏要看对象可达性、分配曲线、业务负载和分配器统计。
+
 ## 6. `malloc` 基本思想
 
 内存分配器管理一块或多块堆区域。
@@ -144,6 +182,17 @@ auto p = std::make_unique<int[]>(100);
 - best fit。
 - segregated free lists。
 - slab / arena。
+
+分配器常见权衡：
+
+| 目标 | 代价 |
+|---|---|
+| 分配更快 | 可能保留更多空闲内存 |
+| 碎片更少 | 可能查找空闲块更慢 |
+| 多线程扩展好 | 可能引入多个 arena，RSS 更高 |
+| 安全检查更强 | 可能增加元数据和运行开销 |
+
+因此不要在没有证据时替换分配器。先用 profiling 和分配统计确认瓶颈来自分配器，而不是对象生命周期设计、缓存无上限或数据结构选择。
 
 现代分配器还会考虑：
 
@@ -176,6 +225,18 @@ gcc -fsanitize=address -g main.c
 gcc -fsanitize=undefined -g main.c
 ```
 
+常见内存错误的定位线索：
+
+| 错误 | 典型现象 | 工具 |
+|---|---|---|
+| 越界写 | 随机崩溃、邻近变量被改 | ASan、Valgrind |
+| use-after-free | 偶发崩溃、数据突然变化 | ASan |
+| double free | 分配器报错或崩溃 | ASan、glibc 检查 |
+| 泄漏 | RSS 或堆统计持续增长 | LeakSanitizer、Valgrind |
+| 未初始化读取 | 分支随机、输出不稳定 | MemorySanitizer、Valgrind |
+
+崩溃点不一定是根因。越界写可能很早发生，直到后续 `free` 或访问损坏元数据时才崩溃。
+
 ## 8. 分页
 
 虚拟内存按页管理。常见页大小为 4 KiB。
@@ -194,6 +255,16 @@ gcc -fsanitize=undefined -g main.c
 - 是否脏页。
 - 是否被访问过。
 
+一次地址翻译可以分成：
+
+```text
+虚拟地址 = 虚拟页号 + 页内偏移
+虚拟页号 -> 页表/TLB -> 物理页框号
+物理地址 = 物理页框号 + 页内偏移
+```
+
+页内偏移不参与页表查找。4 KiB 页大小下，低 12 位就是页内偏移。更大的 huge page 可以减少 TLB 压力，但会带来内存浪费、碎片和管理复杂度。
+
 ## 9. TLB
 
 页表在内存中，直接查页表很慢。TLB 缓存地址转换结果。
@@ -205,6 +276,15 @@ gcc -fsanitize=undefined -g main.c
 
 TLB miss 会增加访问延迟。大内存随机访问可能受 TLB 影响。
 
+TLB 和 cache 解决的问题不同：
+
+| 结构 | 缓存什么 | miss 后果 |
+|---|---|---|
+| TLB | 虚拟页到物理页的地址翻译 | 需要查页表 |
+| CPU cache | 物理内存中的数据或指令 | 需要访问更低层缓存或内存 |
+
+一个程序可能 cache miss 不高但 TLB miss 很高，例如访问大量页面、每页只碰少量数据。
+
 ## 10. 缺页异常
 
 访问的虚拟页没有映射到物理内存时，CPU 触发缺页异常。
@@ -215,6 +295,15 @@ TLB miss 会增加访问延迟。大内存随机访问可能受 TLB 影响。
 - 延迟分配堆内存。
 - 文件 mmap 按需读取。
 - copy-on-write。
+
+缺页分为大致两类：
+
+| 类型 | 含义 |
+|---|---|
+| minor fault | 不需要从磁盘读取，例如按需分配、COW、页已在内存中但未映射 |
+| major fault | 需要等待磁盘或外部存储读取页面 |
+
+性能排查时 major fault 通常更值得警惕；minor fault 在程序启动、首次访问大内存、`mmap` 文件时很常见。
 
 也可能是错误：
 
@@ -258,6 +347,15 @@ void *p = mmap(NULL, size, PROT_READ | PROT_WRITE,
 
 `mmap` 后访问内存，内核可能按需加载页。
 
+`MAP_PRIVATE` 和 `MAP_SHARED` 的差异：
+
+| 标志 | 写入行为 |
+|---|---|
+| `MAP_PRIVATE` | 写入触发私有副本，不回写原文件 |
+| `MAP_SHARED` | 写入对共享映射可见，可回写到底层文件 |
+
+文件映射 I/O 不是总比 `read/write` 快。它减少了一些拷贝和系统调用，但会把 I/O 错误、缺页延迟和访问模式问题转化为内存访问时的异常或抖动。
+
 ## 13. 内存保护
 
 页级权限：
@@ -273,6 +371,13 @@ void *p = mmap(NULL, size, PROT_READ | PROT_WRITE,
 - ASLR：地址空间布局随机化。
 - guard page：栈保护页。
 - W^X：可写和可执行尽量不同时存在。
+
+保护机制是多层防御，不是绝对保证：
+
+- ASLR 增加地址预测难度，但信息泄漏可能绕过。
+- NX 阻止直接执行栈/堆数据，但 ROP/JOP 可能绕过。
+- Stack canary 能发现部分栈溢出，但不能覆盖所有内存破坏。
+- W^X 降低代码注入风险，但 JIT 需要额外设计写/执行切换。
 
 ## 14. 缓存与内存性能
 
@@ -306,6 +411,25 @@ valgrind --leak-check=full ./app
 ASAN_OPTIONS=detect_leaks=1 ./app
 ```
 
+查看缺页和 RSS：
+
+```bash
+ps -o pid,vsz,rss,maj_flt,min_flt,cmd -p <pid>
+cat /proc/<pid>/status
+cat /proc/<pid>/smaps_rollup
+```
+
+解释 `/proc/<pid>/smaps` 时常见指标：
+
+| 指标 | 含义 |
+|---|---|
+| RSS | 当前驻留物理内存 |
+| PSS | 按共享比例摊销后的物理内存 |
+| Private_Clean/Dirty | 进程私有页 |
+| Shared_Clean/Dirty | 与其他进程共享的页 |
+
+多进程服务或大量动态库场景下，PSS 往往比 RSS 更接近“这个进程实际贡献的内存压力”。
+
 ## 16. 参考资料
 
 - OSTEP Virtualization 章节  
@@ -325,4 +449,3 @@ ASAN_OPTIONS=detect_leaks=1 ./app
 
 - Valgrind Documentation  
   https://valgrind.org/docs/
-

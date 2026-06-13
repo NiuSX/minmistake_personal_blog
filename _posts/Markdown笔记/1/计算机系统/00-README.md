@@ -1,6 +1,6 @@
 # 计算机系统学习笔记总览
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 适合对象：已经学过一点编程，想系统理解“程序如何在计算机上运行”的学习者。  
 核心参考路径：CSAPP（Computer Systems: A Programmer's Perspective）、OSTEP（Operating Systems: Three Easy Pieces）、计算机组成与体系结构、Linux 系统编程、TCP/IP 与 HTTP 标准。
 
@@ -39,6 +39,7 @@
 | [11-performance-debugging-observability.md](11-performance-debugging-observability.md) | 性能、调试与可观测性 | profiling、perf、strace、gdb、日志、指标 |
 | [12-security-reliability.md](12-security-reliability.md) | 安全与可靠性 | 内存安全、权限、隔离、崩溃恢复、防御思维 |
 | [13-references.md](13-references.md) | 参考资料 | 官方文档、经典教材、中文社区入口 |
+| [14-labs-and-case-studies.md](14-labs-and-case-studies.md) | 实验与案例 | 从小程序、系统工具、故障现象反推底层机制 |
 
 ## 一张总图
 
@@ -79,6 +80,7 @@ flowchart TD
 9. 网络：理解 socket、TCP/UDP、HTTP。
 10. 性能与调试：用工具观察系统。
 11. 安全与可靠性：理解系统为什么会崩、会泄漏、会被攻击。
+12. 实验与案例：把每章概念压到可复现的小程序、命令输出和故障分析里。
 
 ## 学习时最重要的习惯
 
@@ -88,6 +90,7 @@ flowchart TD
 - 遇到并发问题先缩小复现，不靠打印碰运气。
 - 学系统要重视工具：`gdb`、`strace`、`ltrace`、`perf`、`top`、`vmstat`、`iostat`、`tcpdump`、`ss`。
 - 学网络和 OS 时要看标准、man page 和官方文档。
+- 每个实验都记录：环境、命令、预期现象、实际输出、解释和下一步追问。
 
 ## 参考资料
 
@@ -108,4 +111,3 @@ flowchart TD
 
 - IETF RFC 9110 - HTTP Semantics  
   https://www.rfc-editor.org/rfc/rfc9110
-

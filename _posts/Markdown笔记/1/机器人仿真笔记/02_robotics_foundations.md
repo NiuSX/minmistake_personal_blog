@@ -2,6 +2,15 @@
 
 机器人仿真不是单纯画模型。模型要能运动、能受力、能碰撞、能被控制，就必须理解一些机器人学基础。
 
+## 本篇学习目标
+
+学完本篇后，你应该能：
+
+- 用 `base_link`、`odom`、`map` 解释移动机器人的常见 TF 结构；
+- 看懂 URDF 中 `origin xyz rpy` 的含义；
+- 区分正运动学、逆运动学、动力学和差速运动学；
+- 根据小车运动异常反查轮子半径、轮距、关节轴和左右轮符号。
+
 ## 坐标系
 
 坐标系是机器人系统中最重要的基础之一。所有传感器数据、机器人位姿、关节位置、地图、速度命令，最终都依赖坐标系表达。
@@ -23,6 +32,20 @@ ROS 中移动机器人常见约定：
 - z：向上。
 
 这是右手坐标系。判断方法：右手四指从 x 轴转向 y 轴，大拇指指向 z 轴。
+
+移动机器人常见 TF 链路：
+
+```mermaid
+flowchart LR
+  map --> odom
+  odom --> base_footprint
+  base_footprint --> base_link
+  base_link --> laser_link
+  base_link --> camera_link
+  base_link --> imu_link
+```
+
+理解这个链路时要注意：`map -> odom` 常由定位或 SLAM 修正，`odom -> base_*` 常由里程计或底盘控制器发布，传感器 frame 通常由 URDF 中的 fixed joint 发布。
 
 ## 位姿
 
@@ -50,6 +73,15 @@ URDF 中常见写法：
 180 deg = 3.1416 rad
 360 deg = 6.2832 rad
 ```
+
+常见坑：
+
+| 问题 | 现象 | 检查点 |
+| --- | --- | --- |
+| 把角度当弧度 | 关节范围或模型姿态完全不对 | URDF/SDF 中角度一般用 rad |
+| 坐标轴方向错 | 小车前进、转弯方向异常 | x 前、y 左、z 上 |
+| link 原点和 joint 原点混淆 | visual 看似对了，TF 位置不对 | joint origin 放 child link 坐标系 |
+| frame 名称不一致 | RViz 报 No transform | topic 的 `frame_id` 是否在 TF 树里 |
 
 ## 齐次变换矩阵
 
@@ -217,6 +249,15 @@ wl = (v - w * L / 2) / r
 - 左右轮 joint axis 是否一致；
 - 控制器对左右轮符号的约定。
 
+差速底盘调试时先用小速度，不要一开始发布很大的 `/cmd_vel`。推荐先测：
+
+```bash
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1}, angular: {z: 0.0}}" --once
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0}, angular: {z: 0.2}}" --once
+```
+
+第一条验证前进方向，第二条验证旋转方向。
+
 ## 仿真和真实机器人的差距
 
 仿真不是现实。常见差距：
@@ -239,4 +280,20 @@ wl = (v - w * L / 2) / r
 - 调试上层逻辑。
 
 仿真不能完全替代真实测试。越接近真实机器人，越要认真建模质量、惯性、摩擦、延迟和噪声。
+
+## 复习问题
+
+1. `map` 和 `odom` 最大的区别是什么？
+2. 为什么 `base_footprint` 常常不包含 roll/pitch？
+3. `origin xyz rpy` 是移动 visual，还是定义子坐标系相对父坐标系？
+4. 差速小车原地旋转方向反了，至少列出 3 个可能原因。
+5. 为什么仿真里的传感器噪声不能设置得过于理想？
+
+## 参考资料
+
+- ROS 2 Jazzy TF2 教程：https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Tf2-Main.html
+- ROS REP 103 坐标系和单位约定：https://www.ros.org/reps/rep-0103.html
+- ROS REP 105 移动平台坐标系约定：https://www.ros.org/reps/rep-0105.html
+- Modern Robotics 在线教材：https://modernrobotics.northwestern.edu/nu-gm-book-resource/
+- ROS 2 控制器文档：https://control.ros.org/jazzy/
 

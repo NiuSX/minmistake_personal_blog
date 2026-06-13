@@ -2,6 +2,15 @@
 
 这一篇是仿真稳定性的核心。很多模型在 RViz 里看起来正常，但进入 Gazebo 后抖动、爆炸、穿模、陷入地面，通常都和 link、joint、inertial、collision 的设置有关。
 
+## 本篇学习目标
+
+学完本篇后，你应该能：
+
+- 判断一个 link 的 visual、collision、inertial 是否各自合理；
+- 用基础几何体估算常见惯性矩；
+- 根据 Gazebo 中的抖动、飞走、穿模、打滑反推可能原因；
+- 建立“先简单几何稳定，再替换复杂外观”的建模习惯。
+
 ## link 的三套模型
 
 一个 link 往往有三套模型：
@@ -19,6 +28,14 @@ inertial  -> 给物理引擎计算质量和转动惯量
 - visual 使用精细 mesh；
 - collision 使用几个 box 近似；
 - inertial 使用一个等效长方体的质量和惯性矩。
+
+三套模型的常见设计策略：
+
+| 模型 | 优先目标 | 典型选择 | 错误做法 |
+| --- | --- | --- | --- |
+| visual | 看得清楚 | mesh 或简单几何 | 为了好看牺牲坐标原点一致性 |
+| collision | 稳定、快速 | box/cylinder/sphere 组合 | 直接使用高精度视觉 mesh |
+| inertial | 物理合理 | 等效几何体公式或 CAD 数据 | 质量为 0、惯性矩随便填 0 |
 
 ## 为什么 collision 要简单
 
@@ -198,6 +215,16 @@ revolute 和 prismatic 应设置 limit：
 - 检查是否存在重叠 collision；
 - 检查仿真步长和实时因子。
 
+问题定位表：
+
+| 现象 | 优先检查 | 解释 |
+| --- | --- | --- |
+| 模型飞走 | 惯性矩、质量比例、collision 重叠 | 物理求解器可能遇到不合理约束 |
+| 原地抖动 | 接触参数、joint damping、轮子埋地 | 接触点或关节约束不稳定 |
+| 小车打滑 | 轮地摩擦、轮子 collision、控制命令 | 轮子没有足够切向摩擦或命令过大 |
+| 穿过地面 | collision 缺失、初始高度、步长 | 物理引擎没有检测到有效接触 |
+| 转向异常 | joint axis、左右轮列表、轮距 | 运动学和控制器参数不一致 |
+
 ## 自碰撞
 
 自碰撞是机器人自身 link 之间的碰撞。很多移动机器人可以关闭某些相邻 link 的自碰撞，因为它们本来就通过关节连接，碰撞模型可能重叠。
@@ -240,4 +267,18 @@ revolute 和 prismatic 应设置 limit：
 7. 最后微调 collision 和惯性。
 
 不要一开始就导入完整 CAD。复杂外观会掩盖基础问题。
+
+## 复习问题
+
+1. 为什么 collision 模型越复杂不一定越真实？
+2. 惯性矩为 0 会造成什么风险？
+3. wheel link 的局部坐标系为什么最好和轮子转轴一致？
+4. 小车打滑和小车不动分别优先检查什么？
+5. 为什么先用简单几何搭模型比直接导入 CAD 更适合学习？
+
+## 参考资料
+
+- URDF XML inertial 文档：https://wiki.ros.org/urdf/XML/link
+- SDFormat collision 规范：https://sdformat.org/spec
+- Gazebo Harmonic 文档：https://gazebosim.org/docs/harmonic/
 

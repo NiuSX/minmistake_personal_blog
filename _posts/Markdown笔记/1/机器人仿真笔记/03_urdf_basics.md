@@ -2,6 +2,15 @@
 
 URDF 全称 Unified Robot Description Format，是 ROS 中描述机器人结构的 XML 格式。它主要描述机器人由哪些 link 组成、link 之间通过哪些 joint 连接，以及每个 link 的视觉、碰撞和惯性属性。
 
+## 本篇学习目标
+
+学完本篇后，你应该能：
+
+- 写出一个至少包含 `base_link`、两个轮子和一个传感器的 URDF；
+- 解释 `link`、`joint`、`visual`、`collision`、`inertial` 的职责；
+- 判断一个 URDF 是否适合进入 Gazebo 做物理仿真；
+- 用 `check_urdf` 和 `urdf_to_graphiz` 做基础检查。
+
 ## URDF 能描述什么
 
 URDF 适合描述：
@@ -23,6 +32,8 @@ URDF 不擅长描述：
 - 很复杂的接触参数。
 
 这些内容通常由 SDF 或 Gazebo 扩展补充。
+
+URDF 的核心限制是：它描述的是机器人结构树，不是完整仿真世界。把“机器人是什么”放在 URDF，把“世界里有什么、物理怎么跑”放在 SDF，会更容易维护。
 
 ## 最小 URDF 结构
 
@@ -62,6 +73,17 @@ URDF 不擅长描述：
 ```
 
 `box size="0.4 0.3 0.1"` 表示 x 方向 0.4m，y 方向 0.3m，z 方向 0.1m。
+
+一个 link 的三套模型可以这样记：
+
+```mermaid
+flowchart TD
+  A[link 坐标系] --> B[visual: 给 RViz/Gazebo 显示]
+  A --> C[collision: 给物理引擎碰撞检测]
+  A --> D[inertial: 给物理引擎计算质量和惯性]
+```
+
+`visual` 对“看起来对不对”负责，`collision` 和 `inertial` 对“物理上稳不稳”负责。
 
 ## visual
 
@@ -149,6 +171,15 @@ URDF 不擅长描述：
 ```
 
 这表示 `laser_link` 固定安装在 `base_link` 前方 0.15m、高 0.12m 的位置。
+
+parent/child 心智模型：
+
+```mermaid
+flowchart LR
+  A[parent link 坐标系] -- joint origin + axis --> B[child link 坐标系]
+```
+
+`joint origin` 不是只移动某个几何体，而是定义 child link 坐标系相对 parent link 坐标系的位置和姿态。
 
 ## revolute joint
 
@@ -317,4 +348,29 @@ continuous joint 不设置上下限，但仍可设置动力学参数：
 - mesh 路径是否使用 `package://`；
 - 每个参与物理仿真的 link 是否有 inertial；
 - visual 和 collision 是否相对 link 原点放置正确。
+
+## 最小验证流程
+
+```bash
+ros2 run xacro xacro robot.urdf.xacro > /tmp/robot.urdf
+check_urdf /tmp/robot.urdf
+urdf_to_graphiz /tmp/robot.urdf
+ros2 launch my_robot_description display.launch.py
+ros2 run tf2_tools view_frames
+```
+
+先保证这些步骤通过，再考虑 Gazebo、控制器和传感器。
+
+## 复习问题
+
+1. 为什么 URDF 要求 link/joint 构成树结构？
+2. `visual` 和 `collision` 为什么经常不应该共用复杂 mesh？
+3. `continuous` joint 和 `revolute` joint 的主要区别是什么？
+4. 为什么参与物理仿真的 link 不能缺少合理 `inertial`？
+5. `axis xyz="0 1 0"` 的坐标系参考是谁？
+
+## 参考资料
+
+- ROS 2 Jazzy URDF 教程：https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html
+- URDF XML 文档索引：https://wiki.ros.org/urdf/XML
 

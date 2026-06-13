@@ -2,6 +2,15 @@
 
 Xacro 是 XML Macros 的缩写，用来生成 URDF。URDF 本身是 XML，重复内容很多；Xacro 可以定义变量、宏、表达式和文件包含，让机器人模型更容易维护。
 
+## 本篇学习目标
+
+学完本篇后，你应该能：
+
+- 把重复 URDF 片段抽成 Xacro macro；
+- 用 property 管理尺寸、质量、颜色和开关；
+- 用 include 拆分材料、惯性、传感器和控制配置；
+- 生成 URDF 并用检查工具验证结果，而不是只看 Xacro 源文件。
+
 ## 为什么要用 Xacro
 
 假设一个小车有左右两个轮子。纯 URDF 需要重复写两份 link、visual、collision、inertial、joint。以后轮子半径改了，你要改多个位置，容易漏。
@@ -13,6 +22,18 @@ Xacro 可以：
 - 把材料、惯性、传感器拆成多个文件；
 - 用表达式计算位置；
 - 根据参数启用或禁用模块。
+
+Xacro 的处理链路：
+
+```mermaid
+flowchart LR
+  A[*.urdf.xacro] --> B[xacro 展开]
+  B --> C[URDF XML]
+  C --> D[robot_description]
+  D --> E[robot_state_publisher / Gazebo / RViz]
+```
+
+调试时要记住：真正被下游工具消费的是展开后的 URDF，不是你写的 Xacro 源文件。
 
 ## 文件开头
 
@@ -139,6 +160,16 @@ urdf/
 
 主文件只保留结构，细节交给子文件。
 
+拆分建议：
+
+| 文件 | 建议内容 | 不建议放 |
+| --- | --- | --- |
+| `robot.urdf.xacro` | 主结构、include、顶层参数 | 大量重复 link 细节 |
+| `materials.xacro` | 颜色和材质 | 关节或传感器逻辑 |
+| `inertial_macros.xacro` | 常用惯性公式 | 具体机器人结构 |
+| `sensors.xacro` | LiDAR、IMU、camera 宏 | 底盘控制器参数 |
+| `ros2_control.xacro` | control interface 片段 | visual/collision 几何 |
+
 ## 轮子宏示例
 
 ```xml
@@ -203,6 +234,8 @@ check_urdf robot.urdf
 - 数学表达式是否能计算；
 - 是否把字符串当数字参与计算。
 
+建议把展开后的 URDF 保存到 `/tmp` 或 `build` 目录，不要把生成物长期提交成源文件，除非你明确需要给不支持 Xacro 的工具使用。
+
 ## Launch 中使用 Xacro
 
 ROS 2 launch 常见写法是运行 Xacro 并把结果作为 `robot_description` 参数传给 `robot_state_publisher`：
@@ -261,4 +294,17 @@ def generate_launch_description():
 5. 添加 `use_lidar` 参数控制是否生成雷达。
 6. 生成 URDF，用 `check_urdf` 验证。
 7. 在 RViz 中确认模型和 TF。
+
+## 复习问题
+
+1. 为什么 Xacro 能降低维护成本，但也可能增加调试难度？
+2. property、arg、macro 分别适合解决什么问题？
+3. 为什么要经常检查展开后的 URDF？
+4. 一个宏参数太多时，说明设计上可能有什么问题？
+5. 如果 include 路径找不到，应该检查哪些环境和包构建步骤？
+
+## 参考资料
+
+- ROS 2 Xacro 教程：https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html
+- xacro 包文档：https://docs.ros.org/en/rolling/p/xacro/
 

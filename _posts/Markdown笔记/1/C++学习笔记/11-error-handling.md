@@ -151,6 +151,68 @@ assert(value >= 0);
 - 不变量破坏可用 assert 或终止程序。
 - 外部输入错误要返回清晰错误信息。
 
+## 深入补充：错误分类
+
+错误处理先分类，再选机制：
+
+| 错误类型 | 示例 | 推荐表达 |
+| --- | --- | --- |
+| 程序员错误 | 越界、违反前置条件 | `assert`、测试、Sanitizer |
+| 外部输入错误 | 配置格式错误、用户输入非法 | 返回错误信息、异常、`expected` |
+| 可恢复运行时错误 | 文件不存在、网络超时 | `expected`、错误码、异常 |
+| 不可恢复错误 | 内存耗尽、核心不变量破坏 | 终止或让异常向上抛出 |
+| 查询无结果 | 找不到用户 | `std::optional<T>` |
+
+不要用一种机制处理所有问题。`optional` 没有错误原因，异常不适合普通控制流，错误码容易被忽略。
+
+## 深入补充：异常安全等级
+
+异常安全常分三档：
+
+| 等级 | 含义 |
+| --- | --- |
+| 基本保证 | 异常后对象仍有效，没有资源泄漏 |
+| 强保证 | 异常后状态回滚到调用前 |
+| 不抛保证 | 函数承诺不抛异常，常用 `noexcept` 表达 |
+
+RAII 是异常安全的基础。只要资源交给对象管理，即使中途抛异常，析构函数也会自动释放资源。
+
+## 深入补充：不要吞掉异常
+
+坏例子：
+
+```cpp
+try {
+    load_config();
+} catch (...) {
+}
+```
+
+这样会丢失上下文，让问题变得很难定位。更好的做法是补充上下文后继续抛出，或转换成明确的错误结果：
+
+```cpp
+try {
+    load_config();
+} catch (const std::exception& e) {
+    throw std::runtime_error(std::string{"load config failed: "} + e.what());
+}
+```
+
+## 深入补充：`assert` 与运行时校验
+
+`assert` 用来检查程序内部假设，不要用它校验外部输入，因为 Release 构建可能禁用断言。
+
+```cpp
+void set_age(int age) {
+    if (age < 0) {
+        throw std::invalid_argument{"age"};
+    }
+    age_ = age;
+}
+```
+
+外部输入必须在 Release 中也被检查。
+
 ## 本章检查清单
 
 - 是否能区分异常、错误码、optional、expected？
@@ -159,3 +221,9 @@ assert(value >= 0);
 - 是否知道未定义行为的严重性？
 - 是否能为不同错误选择合适表达方式？
 
+## 参考资料
+
+- Reference: cppreference exceptions，https://cppreference.com/w/cpp/language/exceptions
+- Reference: cppreference `std::optional`，https://cppreference.com/w/cpp/utility/optional
+- Reference: cppreference `std::expected`，https://cppreference.com/w/cpp/utility/expected
+- Guideline: C++ Core Guidelines E: Error handling，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-errors

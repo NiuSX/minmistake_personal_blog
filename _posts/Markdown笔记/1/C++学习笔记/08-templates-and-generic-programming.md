@@ -217,6 +217,64 @@ void print_range(const Range& range) {
 
 不是所有代码都需要模板。只有确实需要处理多种类型时再使用。
 
+## 深入补充：模板实例化
+
+模板本身不是普通函数或普通类，而是一套生成代码的规则。编译器只有在看到具体类型时才会实例化：
+
+```cpp
+template <typename T>
+T max_value(T a, T b) {
+    return a < b ? b : a;
+}
+
+auto x = max_value(1, 2);       // 实例化 T = int
+auto y = max_value(1.0, 2.0);   // 实例化 T = double
+```
+
+这也是模板定义通常放在头文件里的原因：使用点必须能看到完整定义。
+
+## 深入补充：模板参数推导
+
+模板参数推导会根据实参类型推导 `T`，但引用、数组、函数、`const` 等规则可能让结果和直觉不同。需要保留精确类型时，可以使用转发引用和 `std::forward`，但不要在入门阶段过早滥用完美转发。
+
+```cpp
+template <typename T>
+void wrapper(T&& value) {
+    process(std::forward<T>(value));
+}
+```
+
+`T&&` 在模板参数推导中可能是右值引用，也可能折叠成左值引用，这叫引用折叠。
+
+## 深入补充：Concepts 的价值
+
+Concepts 不是为了让模板更复杂，而是为了把“类型必须满足什么能力”写在接口上：
+
+```cpp
+#include <concepts>
+
+template <typename T>
+concept Addable = requires(T a, T b) {
+    a + b;
+};
+
+template <Addable T>
+T add(T a, T b) {
+    return a + b;
+}
+```
+
+相比传统 SFINAE，Concepts 的错误信息通常更清楚，阅读接口时也能直接看到约束。
+
+## 深入补充：何时不要写模板
+
+不要因为“可能以后有别的类型”就提前模板化。以下情况普通函数更合适：
+
+- 当前只服务一个明确类型。
+- 逻辑和业务概念绑定，而不是和类型能力绑定。
+- 模板会显著增加编译时间和错误信息复杂度。
+- 虚函数或函数对象已经能清楚表达变化点。
+
 ## 本章检查清单
 
 - 是否能写函数模板和类模板？
@@ -225,3 +283,8 @@ void print_range(const Range& range) {
 - 是否知道 concepts 用于约束模板？
 - 是否能避免为了炫技过度模板化？
 
+## 参考资料
+
+- Reference: cppreference templates，https://cppreference.com/w/cpp/language/templates
+- Reference: cppreference constraints and concepts，https://cppreference.com/w/cpp/language/constraints
+- Guideline: C++ Core Guidelines T: Templates and generic programming，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-templates

@@ -229,6 +229,70 @@ auto positive = values
 - 需要快速查找且不关心顺序用 `std::unordered_map`。
 - 需要唯一集合用 `set` 或 `unordered_set`。
 
+## 深入补充：容器选择决策
+
+| 需求 | 优先选择 | 原因 |
+| --- | --- | --- |
+| 大多数顺序数据 | `std::vector` | 连续内存、缓存友好、随机访问快 |
+| 固定长度 | `std::array` | 栈上或对象内存储，长度属于类型 |
+| 频繁头尾插入删除 | `std::deque` | 两端操作稳定 |
+| 需要按键排序遍历 | `std::map` / `std::set` | 有序结构 |
+| 只需要快速查找 | `std::unordered_map` / `std::unordered_set` | 平均 O(1) 查找 |
+| 频繁中间插入删除 | 先重新评估需求 | `list` 不一定更快，缓存局部性较差 |
+
+默认选 `vector` 是因为它简单、快、内存连续。只有明确需求推翻它时，再换其他容器。
+
+## 深入补充：迭代器失效规则
+
+迭代器失效是 STL 常见 bug 来源。大致规则：
+
+- `vector` 扩容会使所有迭代器、引用、指针失效。
+- `vector` 中间插入/删除会使插入点或删除点之后的迭代器失效。
+- `map`、`set` 插入通常不影响已有迭代器，删除只影响被删除元素。
+- `unordered_map` rehash 会使迭代器失效。
+
+安全删除示例：
+
+```cpp
+for (auto it = values.begin(); it != values.end();) {
+    if (*it < 0) {
+        it = values.erase(it);
+    } else {
+        ++it;
+    }
+}
+```
+
+## 深入补充：算法优先于手写循环
+
+标准算法把意图写得更清楚：
+
+```cpp
+const auto found = std::ranges::find(users, id, &User::id);
+const auto adult_count = std::ranges::count_if(users, [](const User& user) {
+    return user.age >= 18;
+});
+```
+
+算法也减少了下标越界、边界条件和重复代码。使用算法时重点关注：
+
+- 输入范围是什么。
+- 谓词是否有副作用。
+- 是否会改变元素顺序或内容。
+- 返回值是迭代器、计数还是新范围。
+
+## 深入补充：Ranges 和 Views
+
+Ranges 的价值是减少显式迭代器，并支持管道式组合。Views 通常是惰性的，不会立刻生成新容器：
+
+```cpp
+auto names = users
+    | std::views::filter([](const User& user) { return user.active; })
+    | std::views::transform([](const User& user) { return user.name; });
+```
+
+注意：view 也常常不拥有底层数据。如果底层容器销毁，view 会悬空。
+
 ## 本章检查清单
 
 - 是否熟悉 vector 的常用操作？
@@ -237,3 +301,9 @@ auto positive = values
 - 是否会使用 sort、find、count_if、transform？
 - 是否知道 erase-remove idiom？
 
+## 参考资料
+
+- Reference: cppreference containers library，https://cppreference.com/w/cpp/container
+- Reference: cppreference algorithms library，https://cppreference.com/w/cpp/algorithm
+- Reference: cppreference ranges library，https://cppreference.com/w/cpp/ranges
+- Guideline: C++ Core Guidelines SL: Standard library，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-libraries

@@ -238,6 +238,87 @@ private:
 - 多态基类需要 virtual 析构函数。
 - 重写虚函数时使用 `override`。
 
+## 深入补充：类的不变量
+
+类设计的重点不是把数据和函数放在一起，而是维护不变量。不变量是对象在任何公开函数调用前后都应该满足的条件。
+
+```cpp
+class Percent {
+public:
+    explicit Percent(int value) {
+        if (value < 0 || value > 100) {
+            throw std::out_of_range{"percent"};
+        }
+        value_ = value;
+    }
+
+    int value() const {
+        return value_;
+    }
+
+private:
+    int value_{};
+};
+```
+
+如果直接暴露 `value_`，外部代码就能把对象改成非法状态。封装的真正目的就是保护这种边界。
+
+## 深入补充：构造函数初始化列表
+
+成员初始化优先使用初始化列表，而不是在构造函数体内赋值：
+
+```cpp
+class User {
+public:
+    User(std::string name, int age)
+        : name_{std::move(name)}, age_{age} {}
+
+private:
+    std::string name_;
+    int age_{};
+};
+```
+
+成员实际初始化顺序由它们在类中的声明顺序决定，不由初始化列表的书写顺序决定。为了减少误解，初始化列表顺序应和成员声明顺序一致。
+
+## 深入补充：继承的成本
+
+继承适合表达稳定的 is-a 关系，但它也带来耦合：
+
+- 基类改动会影响派生类。
+- 虚函数调用有动态分派成本。
+- 对象切片可能丢失派生类部分。
+- 多继承和菱形继承会增加复杂度。
+
+如果只是想复用实现，优先组合；如果需要运行时多态，再考虑接口和虚函数。
+
+```cpp
+class Renderer {
+public:
+    virtual ~Renderer() = default;
+    virtual void draw() = 0;
+};
+```
+
+作为多态基类时，析构函数必须是 `virtual`，否则通过基类指针删除派生对象可能导致未定义行为。
+
+## 深入补充：对象切片
+
+把派生类对象按值赋给基类对象时，派生类部分会被切掉：
+
+```cpp
+Derived d;
+Base b = d; // 对象切片
+```
+
+需要多态时，应通过引用、指针或智能指针操作基类：
+
+```cpp
+void render(const Renderer& renderer) {
+    renderer.draw();
+}
+```
+
 ## 本章检查清单
 
 - 是否知道 public、private、protected 的区别？
@@ -246,3 +327,8 @@ private:
 - 是否知道多态需要 virtual？
 - 是否知道组合优先于继承？
 
+## 参考资料
+
+- Reference: cppreference classes，https://cppreference.com/w/cpp/language/classes
+- Reference: cppreference virtual functions，https://cppreference.com/w/cpp/language/virtual
+- Guideline: C++ Core Guidelines C: Classes and class hierarchies，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-class

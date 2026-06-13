@@ -212,6 +212,74 @@ CI 中建议执行：
 - sanitizer 测试。
 - 依赖漏洞检查。
 
+## 深入补充：现代 CMake 的目标思维
+
+现代 CMake 推荐围绕 target 组织，而不是全局堆变量：
+
+```cmake
+cmake_minimum_required(VERSION 3.20)
+project(hello LANGUAGES CXX)
+
+add_executable(hello src/main.cpp)
+target_compile_features(hello PRIVATE cxx_std_20)
+target_compile_options(hello PRIVATE -Wall -Wextra -Wpedantic)
+```
+
+`target_include_directories`、`target_link_libraries`、`target_compile_features` 都应该绑定到具体目标。这样依赖关系更清楚，也更适合大型项目。
+
+## 深入补充：Debug、Release 和 RelWithDebInfo
+
+常见构建类型：
+
+| 类型 | 特点 |
+| --- | --- |
+| Debug | 便于调试，通常不开优化 |
+| Release | 优化性能，调试信息较少 |
+| RelWithDebInfo | 开优化并保留调试信息，适合性能分析 |
+| MinSizeRel | 优化体积 |
+
+排查线上问题或性能问题时，`RelWithDebInfo` 往往比纯 `Release` 更实用。
+
+## 深入补充：Sanitizer 组合
+
+常用组合：
+
+```bash
+clang++ -std=c++20 -g -O1 -fsanitize=address,undefined main.cpp -o app
+```
+
+ThreadSanitizer 通常单独使用：
+
+```bash
+clang++ -std=c++20 -g -O1 -fsanitize=thread main.cpp -o app
+```
+
+Sanitizer 会带来运行时开销，不适合直接用于生产构建，但非常适合 CI 和调试环境。
+
+## 深入补充：测试分层
+
+C++ 项目测试可以分层：
+
+- 单元测试：验证小函数、小类。
+- 集成测试：验证模块协作，例如文件读取、网络协议。
+- 回归测试：固定历史 bug。
+- 性能基准：验证关键路径变化。
+
+测试不只是验证正确性，也能保护重构。尤其是 RAII、错误处理、并发代码，最好至少覆盖正常路径和典型失败路径。
+
+## 深入补充：调试优先级
+
+遇到问题时建议按顺序收集证据：
+
+1. 最小复现。
+2. 编译器警告。
+3. 单元测试失败信息。
+4. Sanitizer 报告。
+5. 调试器调用栈和变量。
+6. 日志和输入数据。
+
+不要只凭猜测改代码。C++ 的未定义行为会让现象很迷惑，工具能更快把问题拉回到事实。
+
 ## 本章检查清单
 
 - 是否会使用 CMake 构建项目？
@@ -220,3 +288,10 @@ CI 中建议执行：
 - 是否知道 sanitizer 能发现哪些问题？
 - 是否能为项目配置基本单元测试？
 
+## 参考资料
+
+- Official: CMake Tutorial，https://cmake.org/cmake/help/latest/guide/tutorial/index.html
+- Official: CMake `target_compile_features`，https://cmake.org/cmake/help/latest/command/target_compile_features.html
+- Tooling: Clang AddressSanitizer，https://clang.llvm.org/docs/AddressSanitizer.html
+- Tooling: Clang ThreadSanitizer，https://clang.llvm.org/docs/ThreadSanitizer.html
+- Tooling: GoogleTest Primer，https://google.github.io/googletest/primer.html

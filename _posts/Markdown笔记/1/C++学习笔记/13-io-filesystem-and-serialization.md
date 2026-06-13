@@ -194,6 +194,69 @@ json user = {
 - 配置文件优先用清晰格式。
 - 大文件读取注意内存和流式处理。
 
+## 深入补充：流状态检查
+
+文件打开和读取都要检查状态：
+
+```cpp
+std::ifstream input{"config.txt"};
+if (!input) {
+    throw std::runtime_error{"failed to open config.txt"};
+}
+
+for (std::string line; std::getline(input, line);) {
+    // process line
+}
+
+if (input.bad()) {
+    throw std::runtime_error{"I/O error while reading config.txt"};
+}
+```
+
+`eof()` 不适合作为循环条件。更常见的写法是把读取操作本身作为条件。
+
+## 深入补充：路径处理
+
+使用 `std::filesystem::path` 拼接路径：
+
+```cpp
+namespace fs = std::filesystem;
+
+fs::path root = "data";
+fs::path file = root / "users.json";
+```
+
+不要手动用 `"/"` 或 `"\\"` 拼接路径。跨平台项目还要注意大小写敏感、权限、符号链接和当前工作目录。
+
+## 深入补充：文本编码
+
+C++ 标准库对文本编码的高级处理能力有限。工程中常见建议：
+
+- 新项目统一使用 UTF-8。
+- 明确文件是否带 BOM。
+- Windows 控制台输出中文时注意终端编码。
+- 网络协议和配置文件明确声明编码。
+- 不要把“字符数量”和“字节数量”混为一谈。
+
+`std::string` 本质是字节序列，不自动理解 Unicode 字符边界。
+
+## 深入补充：不要直接序列化对象内存
+
+下面这种方式很危险：
+
+```cpp
+output.write(reinterpret_cast<const char*>(&user), sizeof(user));
+```
+
+风险包括：
+
+- 对象内存布局和填充字节不稳定。
+- 指针值没有跨进程或跨机器意义。
+- 大小端、对齐、版本升级都会出问题。
+- 含有 `std::string`、`std::vector` 的对象不能这样持久化。
+
+稳定的序列化应该显式写字段，并考虑版本兼容。
+
 ## 本章检查清单
 
 - 是否会读写文本文件？
@@ -202,3 +265,9 @@ json user = {
 - 是否知道路径不要手动字符串拼接？
 - 是否能根据场景选择 JSON、Protobuf 等格式？
 
+## 参考资料
+
+- Reference: cppreference I/O library，https://cppreference.com/w/cpp/io
+- Reference: cppreference filesystem library，https://cppreference.com/w/cpp/filesystem
+- Reference: nlohmann/json GitHub，https://github.com/nlohmann/json
+- Reference: Protocol Buffers C++，https://protobuf.dev/getting-started/cpptutorial/

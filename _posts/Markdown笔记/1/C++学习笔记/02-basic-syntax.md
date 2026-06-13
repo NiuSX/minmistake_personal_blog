@@ -233,6 +233,76 @@ class User {
 };
 ```
 
+## 深入补充：初始化优先级
+
+现代 C++ 中建议优先使用花括号初始化：
+
+```cpp
+int count{10};
+std::string name{"Alice"};
+std::vector<int> values{1, 2, 3};
+```
+
+它的优点是能减少未初始化变量，也能阻止部分窄化转换：
+
+```cpp
+int a = 3.14;  // 允许，但会丢失小数
+// int b{3.14}; // 编译错误，避免隐式窄化
+```
+
+但花括号初始化和 `std::initializer_list` 构造函数同时存在时，可能优先匹配 `initializer_list`，例如 `std::vector<int> a(10, 1)` 和 `std::vector<int> b{10, 1}` 的含义不同。
+
+## 深入补充：命名和作用域设计
+
+命名不是审美问题，而是降低理解成本：
+
+- 局部变量用具体名，例如 `line_count` 比 `n` 清楚。
+- 布尔值用谓词，例如 `is_valid`、`has_value`。
+- 函数名表达动作，例如 `parse_config`、`load_users`。
+- 类型名表达概念，例如 `UserRepository`、`RenderCommand`。
+
+作用域越小越好。变量尽量在第一次使用前定义，并且尽量初始化：
+
+```cpp
+for (std::string line; std::getline(input, line);) {
+    // line 只在循环中有效
+}
+```
+
+## 深入补充：输入输出的常见细节
+
+`std::cin >> value` 会按空白分隔读取，适合读数字和单词；读取整行应该用 `std::getline`：
+
+```cpp
+std::string name;
+std::getline(std::cin, name);
+```
+
+混用 `operator>>` 和 `std::getline` 时要小心残留换行：
+
+```cpp
+int age{};
+std::cin >> age;
+std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+std::string name;
+std::getline(std::cin, name);
+```
+
+## 深入补充：`auto` 的使用边界
+
+适合使用 `auto` 的场景：
+
+- 类型很长，例如迭代器、lambda、模板返回值。
+- 右侧类型很清楚，例如 `auto user = User{"Alice"};`。
+- 避免重复类型，例如 `auto it = users.find(id);`。
+
+不适合使用 `auto` 的场景：
+
+- 字面量类型不明显，尤其是整数、浮点、字符。
+- 需要强调接口类型或单位含义。
+- 推导会丢失引用或 `const`，但读者不容易看出来。
+
 ## 本章检查清单
 
 - 是否理解变量定义和初始化？
@@ -241,3 +311,7 @@ class User {
 - 是否能解释 `const` 和 `constexpr` 的区别？
 - 是否知道为什么推荐尽量初始化变量？
 
+## 参考资料
+
+- Reference: cppreference language reference，https://cppreference.com/w/cpp/language
+- Guideline: C++ Core Guidelines，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines

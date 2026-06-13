@@ -227,3 +227,49 @@ C++ 性能优化要先测量。
 - 使用线程、锁和原子变量处理简单并发。
 - 使用调试器、测试框架和 sanitizer 排查问题。
 
+## 进阶复习地图
+
+可以按下面顺序复习整套笔记：
+
+1. 语法和类型：变量、初始化、`const`、类型转换、流程控制。
+2. 生命周期：构造、析构、作用域、引用、指针、临时对象。
+3. 资源管理：RAII、智能指针、移动语义、零法则。
+4. 抽象能力：类、接口、组合、模板、Concepts。
+5. 标准库：容器、迭代器、算法、Ranges。
+6. 工程能力：CMake、调试、测试、Sanitizer、包管理。
+7. 专题能力：错误处理、并发、文件系统、序列化。
+
+## 代码评审自查表
+
+写完 C++ 代码后，可以快速检查：
+
+- 是否有未初始化变量？
+- 是否有裸 `new` / `delete`？
+- 是否有悬空引用、悬空指针、悬空 `string_view`？
+- 是否把所有权表达清楚？
+- 是否有不必要的 `shared_ptr`？
+- 是否有可能失效的迭代器？
+- 是否有异常后资源泄漏或状态破坏？
+- 是否在多线程中访问共享可变状态？
+- 是否开启了足够的编译警告？
+- 是否为复杂逻辑写了测试？
+
+## 继续深入方向
+
+| 方向 | 学习重点 |
+| --- | --- |
+| 系统编程 | ABI、链接、动态库、内存模型、系统调用 |
+| 高性能计算 | 缓存局部性、SIMD、并行算法、性能分析 |
+| 游戏开发 | 实时渲染、资源管理、ECS、内存池 |
+| 服务端 | 网络库、异步 I/O、协程、序列化协议 |
+| 工具链 | CMake、包管理、静态分析、CI/CD |
+| 语言深入 | 模板元编程、Concepts、Ranges、协程、Modules |
+
+## 参考资料补充
+
+- Reference: cppreference containers，https://cppreference.com/w/cpp/container
+- Reference: cppreference algorithms，https://cppreference.com/w/cpp/algorithm
+- Reference: cppreference threads，https://cppreference.com/w/cpp/thread
+- Tooling: GoogleTest，https://google.github.io/googletest/
+- Tooling: Conan，https://docs.conan.io/
+- Tooling: vcpkg，https://learn.microsoft.com/vcpkg/

@@ -226,6 +226,66 @@ void print(std::string_view text) {
 
 注意：`string_view` 不拥有字符串，不能引用已经销毁的临时数据。
 
+## 深入补充：指针的三种语义
+
+看到 `T*` 时不要只理解为“地址”，还要判断它表达哪种语义：
+
+| 语义 | 示例 | 说明 |
+| --- | --- | --- |
+| 可为空观察 | `User* find_user(int id)` | 找不到时返回 `nullptr` |
+| 指向数组首元素 | `int* data` | 必须额外知道长度，容易出错 |
+| 底层接口句柄 | C API、系统调用 | 通常需要封装进 RAII 类型 |
+
+现代 C++ 中，裸指针一般不应该表达拥有关系。拥有关系应使用局部对象、容器或智能指针。
+
+## 深入补充：引用的生命周期陷阱
+
+引用本身通常不能为空，但它仍然可能悬空：
+
+```cpp
+const std::string& bad_ref() {
+    std::string text = "hello";
+    return text; // 错误：text 离开函数后销毁
+}
+```
+
+`const T&` 可以绑定临时对象并延长生命周期，但这种延长有边界，不要把它误解成“永远安全”。一旦引用被保存到对象中、传给异步任务或跨作用域使用，就必须重新检查被引用对象是否还活着。
+
+## 深入补充：`span` 与 `string_view` 的共同点
+
+`std::span` 和 `std::string_view` 都是“非拥有视图”：
+
+- 创建成本低，适合参数传递。
+- 不负责释放资源。
+- 不保证底层数据仍然存在。
+- 不应该从临时对象构造后长期保存。
+
+```cpp
+std::string_view get_name_view() {
+    std::string name = "Alice";
+    return name; // 错误：返回悬空 string_view
+}
+```
+
+如果函数需要保存数据，应保存 `std::string` 或 `std::vector<T>`，而不是保存视图。
+
+## 深入补充：调试内存错误
+
+常见手段：
+
+- 开启编译警告：`-Wall -Wextra -Wpedantic`。
+- 使用 AddressSanitizer 检查越界、use-after-free、double-free。
+- 使用 UndefinedBehaviorSanitizer 检查未定义行为。
+- 用调试器观察变量地址、作用域和析构时机。
+
+示例：
+
+```bash
+clang++ -std=c++20 -g -O1 -fsanitize=address,undefined main.cpp -o app
+```
+
+Sanitizer 不能替代正确设计，但能快速定位大量内存类错误。
+
 ## 本章检查清单
 
 - 是否能解释指针和引用的区别？
@@ -234,3 +294,10 @@ void print(std::string_view text) {
 - 是否知道为什么优先使用 vector、array 和智能指针？
 - 是否能识别悬空指针、重复释放和越界访问？
 
+## 参考资料
+
+- Reference: cppreference pointers，https://cppreference.com/w/cpp/language/pointer
+- Reference: cppreference references，https://cppreference.com/w/cpp/language/reference
+- Reference: cppreference `std::span`，https://cppreference.com/w/cpp/container/span
+- Reference: cppreference `std::string_view`，https://cppreference.com/w/cpp/string/basic_string_view
+- Tooling: Clang AddressSanitizer，https://clang.llvm.org/docs/AddressSanitizer.html

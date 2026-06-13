@@ -217,6 +217,71 @@ Buffer(Buffer&& other) noexcept = default;
 - 用 `weak_ptr` 处理共享指针循环引用。
 - 自定义资源类优先遵循零法则。
 
+## 深入补充：RAII 管的不只是内存
+
+RAII 的核心是“资源获取即初始化”，资源释放绑定到析构函数。资源不只包括堆内存，还包括：
+
+- 文件句柄。
+- 互斥锁。
+- 网络连接。
+- 数据库连接。
+- 临时文件。
+- 线程 join 或 stop。
+
+例如锁的 RAII：
+
+```cpp
+std::mutex mutex;
+
+void update() {
+    std::lock_guard<std::mutex> lock{mutex};
+    // 临界区
+} // 自动解锁
+```
+
+## 深入补充：智能指针选择
+
+| 类型 | 表达含义 | 常见场景 | 注意点 |
+| --- | --- | --- | --- |
+| `std::unique_ptr<T>` | 独占拥有 | 工厂函数返回对象、PImpl、多态对象 | 不可拷贝，可移动 |
+| `std::shared_ptr<T>` | 共享拥有 | 多个对象确实共同延长生命周期 | 有引用计数开销，可能循环引用 |
+| `std::weak_ptr<T>` | 观察共享对象 | 缓存、父指针、打破环 | 使用前要 `lock()` |
+
+默认先考虑值对象和 `unique_ptr`。如果一开始就使用 `shared_ptr`，通常说明所有权边界还没有想清楚。
+
+## 深入补充：移动后的对象
+
+被移动后的对象仍然有效，但值通常不再有业务意义，只能执行析构、重新赋值或调用有明确保证的操作：
+
+```cpp
+std::string a = "hello";
+std::string b = std::move(a);
+
+a = "new value"; // 可以重新赋值
+```
+
+不要依赖移动后对象的内容。移动语义的重点不是“复制更快”，而是“转移资源所有权”。
+
+## 深入补充：五法则与零法则的取舍
+
+如果类直接管理资源，就要认真处理析构、拷贝和移动，这就是五法则。如果类只组合标准库类型，让成员自己管理资源，就可以不写这些特殊成员函数，这就是零法则。
+
+优先零法则：
+
+```cpp
+class User {
+public:
+    User(std::string name, std::vector<int> scores)
+        : name_{std::move(name)}, scores_{std::move(scores)} {}
+
+private:
+    std::string name_;
+    std::vector<int> scores_;
+};
+```
+
+只有在封装系统资源、C API 或特殊性能需求时，才手写资源管理类。
+
 ## 本章检查清单
 
 - 是否能解释 RAII？
@@ -225,3 +290,9 @@ Buffer(Buffer&& other) noexcept = default;
 - 是否理解移动语义是转移资源？
 - 是否知道零法则优先于五法则？
 
+## 参考资料
+
+- Guideline: C++ Core Guidelines R: Resource management，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-resource
+- Reference: cppreference `std::unique_ptr`，https://cppreference.com/w/cpp/memory/unique_ptr
+- Reference: cppreference `std::shared_ptr`，https://cppreference.com/w/cpp/memory/shared_ptr
+- Reference: cppreference move constructor，https://cppreference.com/w/cpp/language/move_constructor

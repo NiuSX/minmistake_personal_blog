@@ -232,6 +232,76 @@ std::function<int(int, int)> op = [](int a, int b) {
 - 需要转移所有权时用智能指针或移动语义表达。
 - 高风险函数命名要明确，例如 `delete_file`。
 
+## 深入补充：参数传递决策表
+
+| 需求 | 推荐写法 | 说明 |
+| --- | --- | --- |
+| 只读小对象 | `void f(int x)` | 直接值传递简单 |
+| 只读大对象 | `void f(const std::string& s)` | 避免拷贝 |
+| 函数需要保存一份 | `void f(std::string s)` | 调用处可拷贝或移动，函数内部再 `std::move` |
+| 必须修改实参 | `void f(T& value)` | 调用点能看出会修改 |
+| 可选对象 | `void f(const T* value)` | 指针可为空 |
+| 连续数据视图 | `void f(std::span<const int> values)` | 不绑定具体容器 |
+| 字符串只读视图 | `void f(std::string_view text)` | 避免不必要拷贝 |
+
+判断标准不是“引用一定快”，而是所有权、可空性、是否修改、是否需要保存。
+
+## 深入补充：返回值设计
+
+现代 C++ 中直接返回对象通常是合理的。编译器可以做返回值优化，移动语义也能降低成本：
+
+```cpp
+std::vector<int> make_values() {
+    std::vector<int> values{1, 2, 3};
+    return values;
+}
+```
+
+返回引用时要格外小心，不能返回局部变量引用：
+
+```cpp
+// 错误：返回悬空引用
+const std::string& name() {
+    std::string value = "Alice";
+    return value;
+}
+```
+
+可失败的查询可以用 `std::optional<T>`，需要错误信息时用错误码、异常或 C++23 的 `std::expected<T, E>`。
+
+## 深入补充：lambda 捕获
+
+lambda 捕获决定了闭包对象如何保存外部变量：
+
+```cpp
+int base = 10;
+
+auto by_value = [base](int x) { return x + base; };
+auto by_ref = [&base](int x) { return x + base; };
+```
+
+按值捕获更安全，按引用捕获更容易出现生命周期问题。异步任务、线程、回调中尤其要避免捕获局部变量引用。
+
+```cpp
+std::thread worker([data = std::vector<int>{1, 2, 3}] {
+    // data 属于 lambda 对象
+});
+worker.join();
+```
+
+## 深入补充：重载与默认参数
+
+重载适合表达同一概念的不同输入形式；默认参数适合表达“少数参数有自然默认值”。不要把大量配置塞进默认参数列表，复杂配置更适合结构体：
+
+```cpp
+struct ConnectOptions {
+    int timeout_ms{3000};
+    bool use_tls{true};
+};
+
+Connection connect(std::string_view host, ConnectOptions options = {});
+```
+
 ## 本章检查清单
 
 - 是否能区分值传递、引用传递和指针传递？
@@ -240,3 +310,8 @@ std::function<int(int, int)> op = [](int a, int b) {
 - 是否知道函数重载不能只按返回类型区分？
 - 是否理解 `constexpr` 函数的意义？
 
+## 参考资料
+
+- Reference: cppreference functions，https://cppreference.com/w/cpp/language/functions
+- Reference: cppreference lambda expressions，https://cppreference.com/w/cpp/language/lambda
+- Guideline: C++ Core Guidelines F: Functions，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-functions

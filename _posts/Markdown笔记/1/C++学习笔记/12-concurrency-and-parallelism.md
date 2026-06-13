@@ -186,6 +186,80 @@ std::sort(std::execution::par, values.begin(), values.end());
 - 为线程设置清晰生命周期。
 - 用工具检测数据竞争。
 
+## 深入补充：线程生命周期
+
+`std::thread` 对象销毁前必须已经 `join()` 或 `detach()`，否则程序会调用 `std::terminate()`：
+
+```cpp
+std::thread worker{do_work};
+worker.join();
+```
+
+C++20 的 `std::jthread` 更适合多数场景，因为它析构时会自动请求停止并 join：
+
+```cpp
+std::jthread worker([](std::stop_token token) {
+    while (!token.stop_requested()) {
+        do_one_step();
+    }
+});
+```
+
+线程函数里使用外部对象时，要确保对象生命周期覆盖线程执行时间。
+
+## 深入补充：数据竞争和竞态条件
+
+数据竞争是指多个线程同时访问同一内存位置，至少一个写入，并且没有同步。这是未定义行为。
+
+竞态条件是更宽泛的逻辑问题：程序结果依赖线程执行顺序。即使没有数据竞争，也可能有竞态条件。
+
+```cpp
+std::mutex mutex;
+int counter{};
+
+void increment() {
+    std::lock_guard<std::mutex> lock{mutex};
+    ++counter;
+}
+```
+
+`mutex` 保护的是共享状态，不是某一行代码。设计时要明确每个共享变量由哪把锁保护。
+
+## 深入补充：条件变量的正确模式
+
+`condition_variable` 必须配合谓词使用，以处理虚假唤醒和先通知后等待的问题：
+
+```cpp
+std::mutex mutex;
+std::condition_variable cv;
+std::queue<Task> tasks;
+
+Task wait_task() {
+    std::unique_lock lock{mutex};
+    cv.wait(lock, [] { return !tasks.empty(); });
+
+    Task task = std::move(tasks.front());
+    tasks.pop();
+    return task;
+}
+```
+
+通知前后都可以修改共享状态，但修改状态必须受同一把锁保护。
+
+## 深入补充：atomic 的边界
+
+`std::atomic` 适合简单计数、标志位和无锁结构的基础构件，但它不是“并发万能药”。多个变量之间的不变量通常仍然需要锁保护。
+
+```cpp
+std::atomic<bool> stop{false};
+
+while (!stop.load()) {
+    do_work();
+}
+```
+
+内存序是高级主题。入门阶段优先使用默认的顺序一致语义，只有在性能证据充分时再考虑放宽内存序。
+
 ## 本章检查清单
 
 - 是否知道 thread 必须 join 或 detach？
@@ -194,3 +268,9 @@ std::sort(std::execution::par, values.begin(), values.end());
 - 是否知道数据竞争是未定义行为？
 - 是否能说出避免死锁的基本方法？
 
+## 参考资料
+
+- Reference: cppreference threads library，https://cppreference.com/w/cpp/thread
+- Reference: cppreference `std::jthread`，https://cppreference.com/w/cpp/thread/jthread
+- Reference: cppreference `std::condition_variable`，https://cppreference.com/w/cpp/thread/condition_variable
+- Tooling: Clang ThreadSanitizer，https://clang.llvm.org/docs/ThreadSanitizer.html

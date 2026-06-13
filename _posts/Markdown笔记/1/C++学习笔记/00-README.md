@@ -100,3 +100,56 @@ STL 算法通常更清晰、更少 bug，也更容易表达意图。能用标准
 
 裸指针不是绝对错误。问题在于所有权不清。现代 C++ 中，裸指针更适合表示“不拥有对象的观察关系”，拥有资源时应优先使用对象、容器或智能指针。
 
+## 笔记使用方法
+
+这组笔记建议按照“先能跑，再理解，再工程化”的顺序使用：
+
+1. 先通读每章开头和代码示例，保证能把示例复制到本地编译运行。
+2. 遇到指针、引用、RAII、模板、并发等章节时，不要只看定义，要主动修改示例制造错误，再观察编译器、调试器和 Sanitizer 的反馈。
+3. 每学完 3 到 4 章，做一个小练习，把语法点组合起来，而不是孤立记忆。
+4. 到 STL 和现代 C++ 后，开始把“自己手写流程”改成“表达意图”：例如用 `std::find_if` 表达查找，用 `std::sort` 表达排序，用 `std::unique_ptr` 表达独占所有权。
+5. 到工程化章节后，所有练习都尽量放进 CMake 项目中，并开启警告、格式化、单元测试和 Sanitizer。
+
+## 学习时要抓住的四个问题
+
+### 这个对象活多久
+
+看到变量、引用、指针、`string_view`、`span`、lambda 捕获时，第一反应应该是判断它引用的数据是否还活着。很多 C++ bug 本质上都是生命周期判断错误。
+
+### 谁拥有资源
+
+资源包括内存、文件、锁、线程、网络连接、数据库连接等。拥有者负责释放资源，观察者只能使用资源。现代 C++ 倾向用类型表达所有权：
+
+| 关系 | 推荐表达 |
+| --- | --- |
+| 独占拥有 | 局部对象、`std::unique_ptr<T>` |
+| 共享拥有 | `std::shared_ptr<T>`，但要谨慎 |
+| 临时借用 | `T&`、`const T&`、`std::span<T>`、`std::string_view` |
+| 可为空观察 | `T*` |
+
+### 编译期能不能发现错误
+
+C++ 的类型系统、`const`、`enum class`、模板、Concepts、`static_assert` 都能把部分错误提前到编译期。越早暴露错误，调试成本越低。
+
+### 代码表达的是机制还是意图
+
+初学者容易写大量下标循环、裸指针和手动释放；更现代的写法会使用容器、算法、RAII 和明确的类型，把“我要做什么”表达清楚。
+
+## 推荐实践项目路线
+
+| 阶段 | 项目 | 重点 |
+| --- | --- | --- |
+| 入门 | 命令行通讯录 | 结构体、函数、`vector`、文件读写 |
+| 基础巩固 | 文本统计工具 | 字符串、`unordered_map`、排序、异常处理 |
+| 内存与 RAII | 简单日志库 | 文件资源管理、析构函数、移动语义 |
+| STL | 待办事项管理器 | 容器选择、算法、迭代器失效 |
+| 工程化 | CMake 小工具库 | 多文件、单元测试、包管理、CI |
+| 并发 | 多线程下载/任务队列 | `thread`、`mutex`、`condition_variable`、取消机制 |
+
+## 参考资料
+
+- Official: ISO C++ 官网，https://isocpp.org/
+- Reference: cppreference，https://cppreference.com/
+- Guideline: C++ Core Guidelines，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+- Official: CMake Tutorial，https://cmake.org/cmake/help/latest/guide/tutorial/index.html
+- Tooling: Clang UndefinedBehaviorSanitizer，https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html

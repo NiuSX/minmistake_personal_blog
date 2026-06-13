@@ -262,6 +262,76 @@ Color c = Color::Red;
 
 `enum class` 不会隐式转换为整数，命名污染更少。
 
+## 深入补充：类型选择原则
+
+选择类型时先表达含义，再考虑大小：
+
+| 场景 | 推荐类型 |
+| --- | --- |
+| 普通计数 | `int`，除非确实需要更大范围 |
+| 容器下标和大小 | `std::size_t`，但注意无符号比较 |
+| 金额 | 不要直接用 `double` 表示精确金额，可用整数分或定点数 |
+| 文本 | `std::string`、`std::string_view` |
+| 固定数量集合 | `std::array<T, N>` |
+| 动态数量集合 | `std::vector<T>` |
+| 强语义状态 | `enum class` |
+
+无符号整数不是“不会出错的整数”。它会按模运算回绕，尤其在倒序循环和有符号/无符号比较中容易出问题。
+
+## 深入补充：隐式转换的风险
+
+C++ 允许很多隐式转换，这是兼容性和底层能力的一部分，但也会制造 bug：
+
+```cpp
+double price = 9.9;
+int cents = static_cast<int>(price * 100);
+```
+
+建议：
+
+- 跨类型转换时优先显式写出意图。
+- 避免 C 风格强转，优先使用 `static_cast`、`const_cast`、`reinterpret_cast`。
+- 业务类型不要滥用隐式构造函数，单参数构造函数通常加 `explicit`。
+
+```cpp
+class UserId {
+public:
+    explicit UserId(int value) : value_{value} {}
+private:
+    int value_{};
+};
+```
+
+## 深入补充：流程控制的可读性
+
+流程控制不是越短越好，而是越容易验证越好：
+
+- 先处理错误和特殊情况，减少深层嵌套。
+- `switch` 处理枚举时尽量覆盖所有枚举值。
+- 循环中修改容器时要注意迭代器失效。
+- 条件表达式太复杂时，拆成有名字的布尔变量。
+
+```cpp
+const bool is_adult = age >= 18;
+const bool has_ticket = ticket_id.has_value();
+
+if (is_adult && has_ticket) {
+    enter();
+}
+```
+
+## 深入补充：未定义行为
+
+未定义行为不是“运行结果不确定”这么简单，而是标准不再约束程序行为。常见来源：
+
+- 有符号整数溢出。
+- 数组越界。
+- 解引用空指针或悬空指针。
+- 使用未初始化变量。
+- 违反对象生命周期。
+
+对初学者来说，开启编译器警告、UBSan 和 ASan，比凭经验猜 bug 更可靠。
+
 ## 本章检查清单
 
 - 是否知道整数除法和浮点除法的区别？
@@ -270,3 +340,8 @@ Color c = Color::Red;
 - 是否知道 `enum class` 优于传统 enum 的原因？
 - 是否能避免无符号整数比较陷阱？
 
+## 参考资料
+
+- Reference: cppreference fundamental types，https://cppreference.com/w/cpp/language/types
+- Reference: cppreference usual arithmetic conversions，https://cppreference.com/w/cpp/language/usual_arithmetic_conversions
+- Tooling: Clang UndefinedBehaviorSanitizer，https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html

@@ -1,6 +1,6 @@
 # 07. 性能、稳定性与调试
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers Compose Performance、Stability、Phases、Lazy layouts 文档，以及中文社区对重组、LazyColumn、状态稳定性的实战总结。
 
 ## 1. 性能优化的正确顺序
@@ -97,6 +97,34 @@ data class FeedUiState(
 - 避免公开可变集合。
 - 不要依赖“反正会跳过”来掩盖昂贵逻辑。
 - 性能敏感模块可查看 Compose Compiler metrics。
+
+### 稳定性配置文件
+
+当项目中某些类型实际不可变，但 Compose 编译器无法推断稳定性时，可以用稳定性配置文件辅助编译器判断。典型例子是某些跨模块模型、第三方不可变类型、Java 时间类型。
+
+示意配置：
+
+```text
+// compose-stability.conf
+java.time.LocalDate
+java.time.Instant
+com.example.core.model.*
+```
+
+Gradle 中传给 Compose compiler：
+
+```kotlin
+composeCompiler {
+    stabilityConfigurationFile =
+        rootProject.layout.projectDirectory.file("compose-stability.conf")
+}
+```
+
+注意：
+
+- 配置文件是对编译器的承诺，不会让可变对象真的不可变。
+- 如果把实际可变的类型标成稳定，UI 可能跳过本该发生的更新。
+- 优先修正模型不可变性；配置文件用于确实无法改类型或跨模块推断不足的场景。
 
 ## 5. Lambda 稳定性
 
@@ -275,7 +303,60 @@ Modifier.drawWithCache {
 
 Compose Compiler metrics 通常用于性能专项，不建议日常一直开。
 
-## 12. 性能排查流程
+### Compose Compiler metrics 看什么
+
+开启 metrics 后重点看：
+
+| 指标 | 含义 | 处理方向 |
+|---|---|---|
+| `restartable` | Composable 可作为重组入口 | 正常，不一定是问题 |
+| `skippable` | 参数没变时可跳过 | 关键列表 item 希望尽量可跳过 |
+| `stable` / `unstable` | 参数稳定性判断 | 检查可变集合、公开 var、跨模块类型 |
+| `readonly` | 不写入状态的只读函数 | 了解即可 |
+
+排查顺序：
+
+1. 先用性能现象定位页面或列表。
+2. 再看 metrics 找不可跳过的热点 Composable。
+3. 检查参数类型是否暴露 `MutableList`、可变实体、匿名包装对象。
+4. 修正 UI model 和参数边界。
+5. 用 Layout Inspector 或 Macrobenchmark 验证，而不是只看 metrics。
+
+## 12. Baseline Profile 与 Macrobenchmark
+
+Compose 页面启动、首帧、滚动都可能受编译和运行时热点影响。Baseline Profile 可以提前优化关键路径，Macrobenchmark 用于测量。
+
+适合测量：
+
+- App 启动时间。
+- Feed 首屏渲染。
+- Lazy 列表滚动帧时间。
+- 搜索结果切换。
+- 复杂动画页面。
+
+示意：
+
+```kotlin
+@Test
+fun scrollFeed() = benchmarkRule.measureRepeated(
+    packageName = "com.example.app",
+    metrics = listOf(FrameTimingMetric()),
+    iterations = 5,
+    setupBlock = {
+        startActivityAndWait()
+    }
+) {
+    device.findObject(By.res("feed_list")).fling(Direction.DOWN)
+}
+```
+
+注意：
+
+- Macrobenchmark 需要独立 benchmark 模块。
+- 用 release 或接近 release 的构建测，不要用普通 debug 判断最终性能。
+- 性能优化要保留可复现测试，否则很容易退化。
+
+## 13. 性能排查流程
 
 ```text
 问题：列表滚动卡顿
@@ -290,7 +371,7 @@ Compose Compiler metrics 通常用于性能专项，不建议日常一直开。
 8. 用 Macrobenchmark 验证
 ```
 
-## 13. 实战优化示例
+## 14. 实战优化示例
 
 原始：
 
@@ -333,7 +414,7 @@ fun ArticleRow(article: ArticleUiModel) {
 
 日期格式化放到 ViewModel 或 mapper。
 
-## 14. 不要过度优化
+## 15. 不要过度优化
 
 这些通常不需要优先优化：
 
@@ -351,4 +432,3 @@ fun ArticleRow(article: ArticleUiModel) {
 - 图片密集页面。
 - 自定义绘制。
 - 首页和启动路径。
-

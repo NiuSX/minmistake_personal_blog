@@ -1,6 +1,6 @@
 # Jetpack Compose 学习笔记总览
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 适用范围：Android 原生 Jetpack Compose。笔记默认使用 Kotlin、Android Gradle Plugin、Compose BOM、Material 3、Navigation Compose、ViewModel、Kotlin Coroutines/Flow。
 
 ## 这套笔记解决什么问题
@@ -21,6 +21,7 @@ Jetpack Compose 是 Android 的声明式 UI 工具包。学习它不能只背 AP
 | [08-testing-accessibility-interoperability.md](08-testing-accessibility-interoperability.md) | UI 测试、语义树、无障碍、与 View 互操作 | 上线质量保障 |
 | [09-common-pitfalls-and-checklists.md](09-common-pitfalls-and-checklists.md) | 高频坑、代码审查清单、实战建议 | 开发和 Review 时快速查 |
 | [10-references.md](10-references.md) | 官方文档和社区资料 | 深入查证 |
+| [11-practical-sample-feed.md](11-practical-sample-feed.md) | 从列表页到详情页的完整实战样例 | 想把前面知识串成项目代码时 |
 
 ## 建议学习路线
 
@@ -30,6 +31,7 @@ Jetpack Compose 是 Android 的声明式 UI 工具包。学习它不能只背 AP
 4. 读 `06`，把 Compose 放进 MVVM / Clean Architecture / Navigation 的工程结构里。
 5. 页面变复杂后读 `07`，重点掌握稳定性、Lazy 列表、重组排查。
 6. 上线前读 `08` 和 `09`，补测试、无障碍和常见坑。
+7. 最后读 `11`，把状态、架构、导航、副作用、测试串成一个可落地的 Feed 示例。
 
 ## Compose 的核心心智模型
 
@@ -53,6 +55,30 @@ flowchart LR
 - UI 组件不要直接持有业务规则；业务规则放在 ViewModel、UseCase、Repository。
 - 性能优化不是到处加 `remember`，而是减少无意义状态读取、提升类型稳定性、让列表有稳定 key。
 
+## 学完后应该能做什么
+
+读完这套笔记后，至少应该能独立完成下面这些任务：
+
+- 搭建一个使用 Kotlin 2.x、Compose BOM、Material 3、Navigation Compose、Lifecycle Compose 的新页面模块。
+- 判断状态应该放在 `remember`、`rememberSaveable`、ViewModel、`SavedStateHandle` 还是 Repository。
+- 写出 `Route + Screen + ViewModel + UiState + Event/Effect` 的页面结构。
+- 使用类型安全 Navigation Compose 传递简单参数，并避免把大对象塞进导航参数。
+- 在 Lazy 列表中正确配置 `key`、`contentType`、图片尺寸和滚动状态。
+- 使用 `LaunchedEffect`、`DisposableEffect`、`rememberUpdatedState`、`snapshotFlow` 处理副作用，不依赖 Composable 执行次数。
+- 用 Compose UI Test 验证加载、成功、失败、点击、输入和动画时间推进。
+- 用 Layout Inspector、Compose Compiler metrics、Macrobenchmark 初步定位重组和卡顿问题。
+
+## 推荐练习顺序
+
+| 练习 | 目标 |
+|---|---|
+| Counter 页面 | 理解 `rememberSaveable`、状态驱动 UI |
+| 搜索列表页 | 练习状态提升、ViewModel、Flow 收集 |
+| Feed + Detail | 练习 Lazy 列表、导航参数、详情页恢复 |
+| 登录页 | 练习表单状态、一次性事件、Snackbar、导航 |
+| 混合 View 页面 | 练习 `ComposeView`、`AndroidView` 和生命周期释放 |
+| 性能排查 | 练习 stable key、稳定性报告、滚动性能测量 |
+
 ## 版本说明
 
 Compose 发展很快，下面这些内容会随版本变化：
@@ -64,4 +90,3 @@ Compose 发展很快，下面这些内容会随版本变化：
 - 强跳过模式、稳定性配置、性能诊断工具。
 
 本笔记写作时参考 Android Developers 官方文档，并补充了中文社区对实战坑点的总结。版本敏感信息请优先看 [10-references.md](10-references.md) 中的官方链接。
-

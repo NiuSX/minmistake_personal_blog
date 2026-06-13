@@ -1,6 +1,6 @@
 # 04. 副作用与生命周期
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers Side-effects、Lifecycle、State 文档。
 
 ## 1. 什么是副作用
@@ -334,3 +334,85 @@ val uiState by viewModel.uiState.collectAsState()
 | key 太窄 | 参数变化但 Effect 不更新 | 把影响任务的参数放入 key |
 | ViewModel 暴露 Channel 但 UI 未及时收集 | 事件丢失或阻塞 | 根据语义选 `SharedFlow`/`StateFlow`/Channel |
 
+## 13. Effect 选择决策表
+
+| 需求 | 推荐 API | 说明 |
+|---|---|---|
+| 进入页面后启动一个协程任务 | `LaunchedEffect(key)` | key 变化会取消并重启 |
+| 点击按钮后调用 suspend UI 操作 | `rememberCoroutineScope()` | 例如 Snackbar、滚动 |
+| 注册监听器并释放 | `DisposableEffect(key)` | `onDispose` 必须释放 |
+| 把 Compose 状态同步给外部对象 | `SideEffect` | 每次成功重组后执行 |
+| 外部异步源转成 Compose State | `produceState` | 适合封装小型桥接 |
+| 长生命周期任务拿最新 lambda | `rememberUpdatedState` | 避免为了新 lambda 重启任务 |
+| 监听 Compose State 并用 Flow 操作符处理 | `snapshotFlow` | 常用于滚动埋点 |
+| 从高频状态派生低频 UI 状态 | `derivedStateOf` | 常用于滚动按钮显隐 |
+
+## 14. `snapshotFlow` 的实战用法
+
+滚动埋点不要直接在 Composable 函数体里判断并上报：
+
+```kotlin
+@Composable
+fun FeedList(analytics: Analytics) {
+    val listState = rememberLazyListState()
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .map { index -> index > 0 }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect {
+                analytics.logScrolledPastFirstItem()
+            }
+    }
+
+    LazyColumn(state = listState) {
+        // items
+    }
+}
+```
+
+注意：
+
+- `snapshotFlow` 只追踪 block 中读取的 Compose State。
+- block 中不要做耗时计算。
+- 常配合 `distinctUntilChanged()`、`debounce()`、`filter()` 降低事件频率。
+- 如果只是显示“回到顶部”按钮，用 `derivedStateOf` 比 Flow 更简单。
+
+## 15. 生命周期收集一次性事件
+
+如果希望事件只在页面至少 STARTED 时收集，可以结合 `repeatOnLifecycle`：
+
+```kotlin
+@Composable
+fun LoginRoute(
+    viewModel: LoginViewModel = viewModel(),
+    onLoginSuccess: () -> Unit
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(viewModel, lifecycleOwner) {
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.effects.collect { effect ->
+                when (effect) {
+                    LoginEffect.NavigateHome -> onLoginSuccess()
+                }
+            }
+        }
+    }
+}
+```
+
+`collectAsStateWithLifecycle()` 适合持续状态；`repeatOnLifecycle` 适合需要自己控制收集 block 的 Flow，例如一次性事件、多路 Flow、复杂收集逻辑。
+
+## 16. 不要用 Effect 修补错误架构
+
+这些写法通常说明边界放错了：
+
+| 写法 | 问题 | 更好的方向 |
+|---|---|---|
+| `LaunchedEffect(Unit) { viewModel.load() }` 到处出现 | 页面初始化逻辑分散 | ViewModel 从参数初始化或明确 Route 触发 |
+| `LaunchedEffect(uiState) { if (...) navigate() }` | 可能重复导航，key 太宽 | 用一次性 `Effect` Flow |
+| `DisposableEffect(Unit)` 注册全局单例监听 | 生命周期可能不符合业务 | 放 Application/Repository 或明确 lifecycle owner |
+| `SideEffect` 里写耗时逻辑 | 阻塞重组后流程 | 放 ViewModel 或后台线程 |
+| `rememberCoroutineScope` 发业务请求 | UI scope 生命周期太短 | ViewModel `viewModelScope` |

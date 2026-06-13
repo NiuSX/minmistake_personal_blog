@@ -1,6 +1,6 @@
 # 02. 核心模型：Composition、Recomposition 与声明式 UI
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers Compose mental model、lifecycle、state 文档。
 
 ## 1. Compose 的基本公式
@@ -238,7 +238,38 @@ data class UserListUiState(
 
 但要知道：普通 `List` 接口不天然保证实现不可变，性能敏感页面需要进一步诊断。
 
-## 9. Composable 调用顺序与条件分支
+## 9. Snapshot 系统的直觉
+
+Compose 的 `mutableStateOf` 不是普通变量，它参与 Snapshot 状态系统。可以简化理解为：
+
+- 当 Composable 读取某个 State，Compose 记录“这个位置依赖这个状态”。
+- 当 State 写入新值，依赖它的相关范围会被标记为需要重组。
+- 状态写入通常应该发生在主线程或受控协程上下文中，避免并发修改带来的难查问题。
+- 不可观察的普通可变对象内部变化不会自动通知 Compose。
+
+示例：
+
+```kotlin
+var title by remember { mutableStateOf("Hello") }
+
+Text(title) // 读取 title，建立依赖
+
+Button(onClick = { title = "Compose" }) {
+    Text("更新")
+}
+```
+
+如果状态对象内部藏了可变字段，Compose 只能看到外层引用是否变化，无法知道内部字段是否被偷偷改了。
+
+```kotlin
+data class UserUiState(
+    val tags: MutableList<String>
+)
+```
+
+这种模型既难推理，也会影响稳定性判断。UI State 应尽量使用不可变字段。
+
+## 10. Composable 调用顺序与条件分支
 
 ```kotlin
 @Composable
@@ -266,7 +297,25 @@ key(user.id) {
 }
 ```
 
-## 10. 常见误解
+## 11. 跳过、重组、重绘的关系
+
+三者不要混为一谈：
+
+| 概念 | 发生了什么 | 是否一定导致下一步 |
+|---|---|---|
+| 重组 Recomposition | 重新执行部分 Composable | 不一定重新布局或重绘 |
+| 布局 Layout | 重新测量和摆放节点 | 不一定重绘所有内容 |
+| 绘制 Draw | 重新绘制像素 | 不一定重新执行 Composable |
+
+优化方向取决于瓶颈在哪个阶段：
+
+- 文本、列表 item、条件分支频繁变化，多看重组范围。
+- 尺寸、约束、图片加载导致跳动，多看布局。
+- 阴影、模糊、渐变、大面积透明叠加，多看绘制。
+
+这也是为什么 `Modifier.graphicsLayer { translationY = ... }` 有时比在 Composition 阶段读取滚动状态更合适：如果只是视觉位移，不需要整块 UI 重新执行。
+
+## 12. 常见误解
 
 | 误解 | 正确认识 |
 |---|---|
@@ -276,7 +325,7 @@ key(user.id) {
 | Composable 只会执行一次 | 它可能被多次执行、跳过、取消、重新执行 |
 | `LaunchedEffect(Unit)` 永远只执行一次 | 只在当前 Composition 生命周期内“一次”，离开再进入会重新执行 |
 
-## 11. 小结
+## 13. 小结
 
 写 Compose 时要始终问：
 
@@ -285,4 +334,3 @@ key(user.id) {
 - 这个状态变化时，哪些 UI 应该变化？
 - 这里有没有副作用依赖 Composable 执行次数？
 - 动态列表中的元素有没有稳定身份？
-

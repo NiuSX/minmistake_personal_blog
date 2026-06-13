@@ -1,6 +1,6 @@
 # 05. UI 基础：Composable、Modifier、布局、Lazy 与 Material 3
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers Modifiers、Layouts、Lists、Material 3、Animation 文档。
 
 ## 1. Composable 组件设计
@@ -429,3 +429,123 @@ AsyncImage(
 - `contentDescription` 是否正确。
 - 是否把业务逻辑挤进 UI 组件。
 
+## 14. 响应式布局与窗口尺寸
+
+Compose 页面不要只按一台手机尺寸设计。常见适配维度：
+
+- 手机竖屏。
+- 手机横屏。
+- 折叠屏。
+- 平板。
+- 桌面模式或大屏。
+
+简单策略：
+
+| 场景 | 建议 |
+|---|---|
+| 窄屏 | 单列布局，底部导航或顶部栏 |
+| 中等宽度 | 内容限制最大宽度，避免拉得太散 |
+| 宽屏 | 列表 + 详情双栏、NavigationRail |
+| 大字体 | 避免固定高度，允许换行 |
+
+示意：
+
+```kotlin
+@Composable
+fun ArticleAdaptiveScreen(
+    compact: Boolean,
+    list: @Composable () -> Unit,
+    detail: @Composable () -> Unit
+) {
+    if (compact) {
+        list()
+    } else {
+        Row(Modifier.fillMaxSize()) {
+            Box(Modifier.weight(1f)) { list() }
+            VerticalDivider()
+            Box(Modifier.weight(2f)) { detail() }
+        }
+    }
+}
+```
+
+实际项目可以结合 Window Size Class 或自定义断点，把“选择什么布局”的逻辑放在页面上层，不要散落在每个小组件里。
+
+## 15. 输入法、焦点与键盘动作
+
+表单页常见交互：
+
+```kotlin
+@Composable
+fun LoginForm(
+    username: String,
+    password: String,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onSubmit: () -> Unit
+) {
+    val passwordFocusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    Column {
+        TextField(
+            value = username,
+            onValueChange = onUsernameChange,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(
+                onNext = { passwordFocusRequester.requestFocus() }
+            )
+        )
+
+        TextField(
+            value = password,
+            onValueChange = onPasswordChange,
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    keyboardController?.hide()
+                    onSubmit()
+                }
+            ),
+            modifier = Modifier.focusRequester(passwordFocusRequester)
+        )
+    }
+}
+```
+
+注意：
+
+- `FocusRequester` 要 `remember`。
+- 键盘动作只负责 UI 交互，提交校验仍应进 ViewModel。
+- 输入框不要固定太小高度，支持错误文案和大字体。
+
+## 16. Preview 组织方式
+
+Preview 不是测试，但能提高组件开发效率。
+
+```kotlin
+@Preview(name = "Light")
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun UserCardPreview() {
+    AppTheme {
+        UserCard(
+            user = UserUiModel(
+                id = "1",
+                name = "Ada Lovelace",
+                email = "ada@example.com"
+            ),
+            onClick = {}
+        )
+    }
+}
+```
+
+建议：
+
+- Preview 面向 `Screen` 和可复用组件，不直接预览依赖真实 ViewModel 的 `Route`。
+- 准备一组 fake UI state：loading、empty、content、error、long text。
+- 预览深色模式、大字体、窄屏/宽屏。
+- 不在 Preview 中访问网络、数据库、真实 DI 容器。

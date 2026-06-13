@@ -1,6 +1,6 @@
 # 09. 常见坑与检查清单
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 来源：官方文档规则 + 中文社区 CSDN、掘金、博客园、SegmentFault 中关于 Compose 状态、重组、LazyColumn、副作用的实战经验综合。
 
 ## 1. 状态相关坑
@@ -370,3 +370,44 @@ Compose UI 树可能变化，不要写过度依赖层级结构的测试。优先
 - 点击区域是否足够大。
 - 关键状态是否有 UI 测试。
 
+## 9. 迁移与版本升级坑
+
+### Kotlin 2.x Compose Compiler 插件遗漏
+
+Kotlin 2.x 项目应使用：
+
+```kotlin
+plugins {
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+```
+
+老项目从 Kotlin 1.x 升级时，不要同时保留旧的 `composeOptions.kotlinCompilerExtensionVersion` 和新的插件配置，按官方迁移指南清理。
+
+### BOM 不能管理所有 Jetpack 版本
+
+Compose BOM 管理 Compose artifact，不管理：
+
+- `androidx.activity:activity-compose`
+- `androidx.lifecycle:lifecycle-runtime-compose`
+- `androidx.navigation:navigation-compose`
+- `androidx.paging:paging-compose`
+- Coil、Hilt、Accompanist 等第三方库
+
+这些仍要单独升级和验证。
+
+### 强行一次性迁移整站
+
+Compose 和 View 可以互操作。已有大型 View 项目更适合按页面或局部组件迁移，先把边界清楚、依赖少的页面迁过去。
+
+## 10. 上线前最小检查
+
+- 首屏加载、空列表、错误、重试、刷新都有 UI。
+- 关键输入在旋转屏幕后能恢复。
+- 详情页只通过 ID 定位资源。
+- 一次性事件不会旋转后重复触发。
+- Lazy 列表有 key，图片有稳定尺寸。
+- 图标按钮有 `contentDescription`。
+- 大字体下按钮和列表 item 不裁剪。
+- 关键路径有 ViewModel 单元测试和 Screen UI 测试。
+- 性能敏感列表至少用 release 构建或 Macrobenchmark 验证过。

@@ -1,6 +1,6 @@
 # 08. 测试、无障碍与 View 互操作
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers Compose Testing、Accessibility、Interop 文档。
 
 ## 1. Compose 测试基础
@@ -116,7 +116,67 @@ fun loginButton_emitsClick() {
 
 不要用 UI 测试覆盖所有业务逻辑；业务逻辑放 ViewModel/UseCase 单元测试更稳定。
 
-## 5. 无障碍基础
+## 5. 动画、协程与测试时钟
+
+Compose 测试默认会等待 UI 空闲。对于动画或延迟，可以控制测试时钟。
+
+```kotlin
+@Test
+fun splash_navigatesAfterDelay() {
+    composeTestRule.mainClock.autoAdvance = false
+
+    var navigated = false
+    composeTestRule.setContent {
+        SplashScreen(onTimeout = { navigated = true })
+    }
+
+    composeTestRule.mainClock.advanceTimeBy(1_999)
+    assertThat(navigated).isFalse()
+
+    composeTestRule.mainClock.advanceTimeBy(1)
+    assertThat(navigated).isTrue()
+}
+```
+
+注意：
+
+- 不要在 UI 测试里 `Thread.sleep()` 等动画。
+- 对 `LaunchedEffect` 中的 `delay`，测试时钟通常能推进 Compose 相关协程时间。
+- ViewModel 中复杂协程逻辑更适合用 coroutine test 单元测试。
+
+## 6. 列表测试
+
+Lazy 列表中不可见 item 不一定存在于语义树里，需要先滚动。
+
+```kotlin
+composeTestRule
+    .onNodeWithTag("feed_list")
+    .performScrollToIndex(30)
+
+composeTestRule
+    .onNodeWithText("第 30 篇文章")
+    .assertIsDisplayed()
+```
+
+给列表添加 tag：
+
+```kotlin
+LazyColumn(
+    modifier = Modifier.testTag("feed_list")
+) {
+    items(items, key = { it.id }) { item ->
+        ArticleRow(item)
+    }
+}
+```
+
+建议：
+
+- 测试滚动目标时，用稳定文本或 tag。
+- 不要假设 LazyColumn 会组合所有 item。
+- 对重复文本节点，用 `onAllNodesWithText()` 或更精确 matcher。
+
+## 7. 无障碍基础
 
 Compose 无障碍依赖语义信息。
 
@@ -149,7 +209,7 @@ Image(
 - 不要只用颜色表达状态。
 - 表单错误要能被读屏理解。
 
-## 6. 自定义语义
+## 8. 自定义语义
 
 ```kotlin
 Box(
@@ -178,7 +238,7 @@ Row(
 
 适合让读屏把多个视觉元素当成一个逻辑元素。
 
-## 7. 文本与动态字体
+## 9. 文本与动态字体
 
 Compose 应支持用户系统字体缩放。
 
@@ -189,7 +249,7 @@ Compose 应支持用户系统字体缩放。
 - 使用 `sp` 而不是 `dp` 作为文字大小。
 - 对关键操作按钮测试大字体。
 
-## 8. View 中嵌入 Compose
+## 10. View 中嵌入 Compose
 
 在 XML/View 项目中逐步迁移时，可以用 `ComposeView`。
 
@@ -215,7 +275,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 - Fragment 中通常用 `DisposeOnViewTreeLifecycleDestroyed`。
 - 避免因为 View 生命周期和 Composition 生命周期不匹配导致泄漏。
 
-## 9. Compose 中嵌入 View
+## 11. Compose 中嵌入 View
 
 使用 `AndroidView`：
 
@@ -252,7 +312,9 @@ fun MapPanel(
 - `update` 会在状态变化时调用，保持幂等。
 - View 生命周期资源要正确释放，必要时结合 `DisposableEffect`。
 
-## 10. Fragment 与 Compose 导航迁移
+`AndroidView` 的 `update` 可能频繁执行，不要在里面重复创建昂贵对象或重复注册监听器。监听器注册通常在 `factory` 或 `DisposableEffect` 中处理，`update` 只同步当前状态。
+
+## 12. Fragment 与 Compose 导航迁移
 
 渐进迁移策略：
 
@@ -263,7 +325,7 @@ fun MapPanel(
 
 不要一次性重写所有导航，风险较高。先从边界清晰、依赖少的页面开始。
 
-## 11. 测试与无障碍清单
+## 13. 测试与无障碍清单
 
 - 关键按钮是否可通过文本或 contentDescription 找到。
 - 图标按钮是否有正确描述。
@@ -275,4 +337,5 @@ fun MapPanel(
 - ViewModel 测试是否覆盖状态转换。
 - ComposeView 是否设置 CompositionStrategy。
 - AndroidView 是否处理 update 和资源释放。
-
+- 动画测试是否使用 `mainClock`，没有真实 sleep。
+- Lazy 列表测试是否先滚动到目标 item。

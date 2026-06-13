@@ -1,6 +1,6 @@
 # 06. 架构、导航与单向数据流
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers Compose Architecture、Navigation Compose、Save UI state 文档。
 
 ## 1. 单向数据流 UDF
@@ -153,6 +153,60 @@ data object Home
 @Serializable
 data class ArticleDetail(val articleId: String)
 ```
+
+完整示意：
+
+```kotlin
+@Serializable
+data object Home
+
+@Serializable
+data class ArticleDetail(val articleId: String)
+
+@Composable
+fun AppNavHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = Home
+    ) {
+        composable<Home> {
+            HomeRoute(
+                onArticleClick = { articleId ->
+                    navController.navigate(ArticleDetail(articleId))
+                }
+            )
+        }
+
+        composable<ArticleDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<ArticleDetail>()
+            ArticleRoute(
+                articleId = route.articleId,
+                onBack = navController::popBackStack
+            )
+        }
+    }
+}
+```
+
+ViewModel 中通过 `SavedStateHandle` 解析：
+
+```kotlin
+class ArticleViewModel(
+    savedStateHandle: SavedStateHandle,
+    repository: ArticleRepository
+) : ViewModel() {
+    private val route = savedStateHandle.toRoute<ArticleDetail>()
+    private val articleId = route.articleId
+}
+```
+
+类型安全路由的收益：
+
+- 参数名和类型由 Kotlin 编译期约束。
+- 减少 `"article/{articleId}"` 和 `"article/$id"` 手拼不一致。
+- 深链和参数解析更集中。
+
+仍然要注意：类型安全不等于可以传大对象。导航参数仍应保持小而稳定。
 
 ## 5. 导航参数原则
 
@@ -345,7 +399,61 @@ data class FeedUiState(
 
 不要把异常对象直接暴露到 UI；转换成用户可理解文案或错误类型。
 
-## 12. 架构检查清单
+## 12. 分页与 Paging Compose
+
+大列表通常不应一次性全部加载。Jetpack Paging 可以和 Compose 配合：
+
+```kotlin
+@Composable
+fun ArticleFeedRoute(
+    viewModel: ArticleFeedViewModel = viewModel()
+) {
+    val articles = viewModel.articles.collectAsLazyPagingItems()
+
+    LazyColumn {
+        items(
+            count = articles.itemCount,
+            key = articles.itemKey { it.id },
+            contentType = articles.itemContentType { "article" }
+        ) { index ->
+            val article = articles[index]
+            if (article != null) {
+                ArticleRow(article)
+            } else {
+                ArticlePlaceholder()
+            }
+        }
+    }
+}
+```
+
+Paging 页面还要处理：
+
+- `loadState.refresh`：首次加载、首次失败。
+- `loadState.append`：加载更多中、加载更多失败。
+- 空列表状态。
+- 重试入口：`articles.retry()`。
+- 刷新入口：`articles.refresh()`。
+
+不要把 Paging 的 `PagingData` 转成普通大 List 再交给 UI，这会破坏分页和懒加载意义。
+
+## 13. 页面事件、领域事件、导航事件
+
+| 事件类型 | 示例 | 归属 |
+|---|---|---|
+| UI 事件 | 点击按钮、输入文字、切换 tab | Screen 上抛给 ViewModel 或 Route |
+| 领域事件 | 保存订单、收藏文章、提交登录 | ViewModel 调用 UseCase |
+| 导航事件 | 打开详情、返回上一页 | Route/App 层执行 |
+| 一次性 UI 事件 | Snackbar、Toast、权限弹窗 | ViewModel 发 Effect，Route 收集 |
+
+经验规则：
+
+- Screen 不知道 `NavController`。
+- ViewModel 不持有 Android UI 对象。
+- 导航目标由 app/navigation 层统一组装。
+- 跨 feature 导航通过 lambda 上抛，不让 feature 互相直接依赖。
+
+## 14. 架构检查清单
 
 - Screen 是否无状态或少状态。
 - Route 是否只做连接，不写复杂 UI。
@@ -356,4 +464,3 @@ data class FeedUiState(
 - 一次性事件是否与持续 UI State 分开。
 - 顶层 tab 是否处理 `saveState/restoreState`。
 - 多模块依赖是否单向。
-

@@ -1,6 +1,6 @@
 # 03. 状态管理与状态提升
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers State、State hoisting、Save UI state、Lifecycle Compose 文档。
 
 ## 1. 什么是状态
@@ -443,7 +443,134 @@ class DetailViewModel(
 }
 ```
 
-## 14. 常见错误
+### `SavedStateHandle.saveable`
+
+对于简单 UI 元素状态，`SavedStateHandle` 也可以配合 `saveable` 保存 Compose `MutableState`。它适合 ViewModel 中的输入框草稿、筛选条件、tab 等小状态。
+
+```kotlin
+class SearchViewModel(
+    savedStateHandle: SavedStateHandle,
+    private val repository: SearchRepository
+) : ViewModel() {
+    var query by savedStateHandle.saveable {
+        mutableStateOf("")
+    }
+        private set
+
+    fun onQueryChange(value: String) {
+        query = value
+    }
+}
+```
+
+注意：
+
+- 只保存小而关键的 UI 元素状态。
+- 不要把完整列表、图片、网络响应、复杂对象塞进 `SavedStateHandle`。
+- 进程恢复后，仍应通过 Repository 重新拉取权威数据。
+
+## 14. StateHolder 模式
+
+不是所有状态都必须进 ViewModel。纯 UI 交互状态可以封装成普通 state holder，尤其是复杂组件内部状态。
+
+```kotlin
+@Stable
+class SearchPanelState(
+    initialQuery: String = ""
+) {
+    var query by mutableStateOf(initialQuery)
+        private set
+
+    var filtersExpanded by mutableStateOf(false)
+        private set
+
+    fun onQueryChange(value: String) {
+        query = value
+    }
+
+    fun toggleFilters() {
+        filtersExpanded = !filtersExpanded
+    }
+}
+
+@Composable
+fun rememberSearchPanelState(
+    initialQuery: String = ""
+): SearchPanelState {
+    return remember(initialQuery) {
+        SearchPanelState(initialQuery)
+    }
+}
+```
+
+适合 StateHolder：
+
+- 只服务某个复合 UI 组件。
+- 不直接调用 Repository。
+- 不包含跨页面业务规则。
+- 想减少 Screen 参数数量，但又不想引入 ViewModel。
+
+不适合 StateHolder：
+
+- 需要持久化业务状态。
+- 需要调用 UseCase/Repository。
+- 需要跨多个页面共享。
+- 需要进程死亡后可靠恢复大量数据。
+
+## 15. 表单状态建模
+
+表单页常见错误是每个 `TextField` 自己 `remember`，最后提交时父级拿不到完整状态。更推荐把字段集中建模。
+
+```kotlin
+data class LoginUiState(
+    val username: String = "",
+    val password: String = "",
+    val usernameError: String? = null,
+    val passwordError: String? = null,
+    val submitting: Boolean = false
+) {
+    val canSubmit: Boolean
+        get() = username.isNotBlank() && password.isNotBlank() && !submitting
+}
+```
+
+事件：
+
+```kotlin
+sealed interface LoginEvent {
+    data class UsernameChange(val value: String) : LoginEvent
+    data class PasswordChange(val value: String) : LoginEvent
+    data object SubmitClick : LoginEvent
+}
+```
+
+Screen：
+
+```kotlin
+@Composable
+fun LoginScreen(
+    uiState: LoginUiState,
+    onEvent: (LoginEvent) -> Unit
+) {
+    TextField(
+        value = uiState.username,
+        onValueChange = { onEvent(LoginEvent.UsernameChange(it)) },
+        isError = uiState.usernameError != null,
+        supportingText = {
+            uiState.usernameError?.let { Text(it) }
+        }
+    )
+}
+```
+
+表单建议：
+
+- 字段值和错误文案放在同一个 `UiState`。
+- 提交中状态要禁用按钮，避免重复提交。
+- 密码明文/密文切换属于 UI 状态，可在 Screen 或 ViewModel，取决于是否要恢复。
+- 错误不要只靠 Toast，字段错误应能显示在对应字段附近。
+
+## 16. 常见错误
 
 | 错误 | 后果 | 修正 |
 |---|---|---|
@@ -453,4 +580,5 @@ class DetailViewModel(
 | 子组件私有持有业务状态 | 父级无法控制、难测试 | 状态提升 |
 | Flow 用 `collectAsState()` 忽略 Lifecycle | 后台也可能收集 | Android 中优先 `collectAsStateWithLifecycle()` |
 | UI State 暴露可变对象 | 难追踪，影响稳定性 | 使用不可变 data class |
-
+| 把所有状态都放 ViewModel | UI 组件难复用，ViewModel 变胖 | 临时局部状态用 `remember`/StateHolder |
+| 把大型对象保存进 `SavedStateHandle` | Bundle 过大、恢复慢、可能崩溃 | 保存 ID/查询条件，数据重拉 |

@@ -1,6 +1,6 @@
 # 10. 参考资料
 
-最后调研时间：2026-06-11
+最后调研时间：2026-06-13
 
 ## 官方资料
 
@@ -9,6 +9,9 @@
 
 - Android Developers：Compose setup / BOM  
   https://developer.android.com/develop/ui/compose/bom
+
+- Android Developers：Compose BOM to library version mapping  
+  https://developer.android.com/develop/ui/compose/bom/bom-mapping
 
 - Android Developers：Thinking in Compose  
   https://developer.android.com/develop/ui/compose/mental-model
@@ -43,8 +46,14 @@
 - Android Developers：Navigation with Compose  
   https://developer.android.com/develop/ui/compose/navigation
 
+- Android Developers：Navigation type safety  
+  https://developer.android.com/guide/navigation/design/type-safety
+
 - Android Developers：Architecture in Compose  
   https://developer.android.com/develop/ui/compose/architecture
+
+- Android Developers：Paging with Compose  
+  https://developer.android.com/topic/libraries/architecture/paging/v3-paged-data#compose
 
 - Android Developers：Performance in Compose  
   https://developer.android.com/develop/ui/compose/performance
@@ -55,11 +64,17 @@
 - Android Developers：Fix stability issues  
   https://developer.android.com/develop/ui/compose/performance/stability/fix
 
+- Android Developers：Strong skipping mode  
+  https://developer.android.com/develop/ui/compose/performance/stability/strongskipping
+
 - Android Developers：Phases  
   https://developer.android.com/develop/ui/compose/phases
 
 - Android Developers：Testing Compose  
   https://developer.android.com/develop/ui/compose/testing
+
+- Android Developers：Synchronize Compose tests  
+  https://developer.android.com/develop/ui/compose/testing/synchronization
 
 - Android Developers：Accessibility in Compose  
   https://developer.android.com/develop/ui/compose/accessibility
@@ -67,8 +82,17 @@
 - Android Developers：Interoperability APIs  
   https://developer.android.com/develop/ui/compose/migrate/interoperability-apis
 
+- Android Developers：Macrobenchmark overview  
+  https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview
+
+- Android Developers：Baseline profiles overview  
+  https://developer.android.com/topic/performance/baselineprofiles/overview
+
 - Kotlin：Compose compiler Gradle plugin  
   https://kotlinlang.org/docs/compose-compiler-migration-guide.html
+
+- Kotlin：Compose compiler options  
+  https://kotlinlang.org/docs/compose-compiler-options.html
 
 ## 社区与实践资料
 
@@ -80,17 +104,26 @@
 - 掘金：Jetpack Compose 副作用相关文章  
   https://juejin.cn/search?query=Jetpack%20Compose%20LaunchedEffect%20DisposableEffect
 
+- 掘金：Jetpack Compose Navigation Compose 类型安全路由相关文章  
+  https://juejin.cn/search?query=Jetpack%20Compose%20Navigation%20%E7%B1%BB%E5%9E%8B%E5%AE%89%E5%85%A8
+
 - CSDN：Jetpack Compose 状态管理、remember、rememberSaveable 实践文章  
   https://so.csdn.net/so/search?q=Jetpack%20Compose%20%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%20rememberSaveable
 
 - CSDN：Jetpack Compose LazyColumn key 与性能问题  
   https://so.csdn.net/so/search?q=Jetpack%20Compose%20LazyColumn%20key%20%E6%80%A7%E8%83%BD
 
+- CSDN：Jetpack Compose LaunchedEffect、rememberUpdatedState、副作用实践  
+  https://so.csdn.net/so/search?q=Jetpack%20Compose%20LaunchedEffect%20rememberUpdatedState
+
 - 博客园：Jetpack Compose 学习笔记和实战总结  
   https://zzk.cnblogs.com/s/blogpost?w=Jetpack%20Compose%20%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0
 
 - SegmentFault：Jetpack Compose 常见问题  
   https://segmentfault.com/search?q=Jetpack%20Compose
+
+- 知乎：Jetpack Compose 实战与性能排查讨论  
+  https://www.zhihu.com/search?type=content&q=Jetpack%20Compose%20%E6%80%A7%E8%83%BD
 
 ## 继续深入的关键词
 
@@ -104,4 +137,6 @@
 - `snapshotFlow derivedStateOf`
 - `Navigation Compose type safe routes`
 - `Compose Macrobenchmark Baseline Profile`
-
+- `SavedStateHandle toRoute`
+- `Paging Compose itemKey itemContentType`
+- `Compose testing mainClock`

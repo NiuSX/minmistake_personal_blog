@@ -1,6 +1,6 @@
 # 01. Jetpack Compose 总览与环境配置
 
-最后调研时间：2026-06-11  
+最后调研时间：2026-06-13  
 主要来源：Android Developers Compose 文档、Compose BOM 文档、Kotlin Compose Compiler 文档。
 
 ## 1. Compose 是什么
@@ -121,7 +121,54 @@ dependencies {
 }
 ```
 
-> 版本说明：Android Developers 的 Compose BOM 页面在 2026-06-11 查询时展示的示例 BOM 为 `2026.05.00`。实际项目应以官方 BOM 页面或 Android Studio 新建项目模板为准。
+> 版本说明：Android Developers 的 Compose BOM 页面在 2026-06-13 查询时展示的示例 BOM 为 `2026.05.00`。实际项目应以官方 BOM 页面或 Android Studio 新建项目模板为准。
+
+### 使用 Version Catalog 管理依赖
+
+团队项目更推荐把版本放进 `gradle/libs.versions.toml`，避免多模块里到处散落版本号。
+
+```toml
+[versions]
+agp = "8.11.0"
+kotlin = "2.2.0"
+composeBom = "2026.05.00"
+activityCompose = "1.10.1"
+lifecycle = "2.9.0"
+navigation = "2.9.0"
+
+[libraries]
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+```
+
+模块中使用：
+
+```kotlin
+dependencies {
+    implementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.activity.compose)
+}
+```
+
+注意：BOM 只管理 Compose 族 artifact 版本，不会管理 Activity、Lifecycle、Navigation、Kotlin、AGP、Coil、Accompanist 等版本。
 
 ## 4. Compose Compiler 与 Kotlin
 
@@ -141,6 +188,16 @@ Compose 代码需要编译器插件把 Composable 调用、状态跟踪、重组
 | 老项目升级 | 先升级 AGP/Kotlin，再切 Compose Compiler 插件，最后升级 Compose BOM |
 | 多模块项目 | 所有包含 Composable 的模块都要启用 Compose 编译能力 |
 | KMP/Compose Multiplatform | 不要把 Android Compose 配置和 Compose Multiplatform 配置混用，先看目标平台文档 |
+
+### 常见编译错误排查
+
+| 现象 | 可能原因 | 处理 |
+|---|---|---|
+| `This version of the Compose Compiler requires Kotlin...` | Kotlin 1.x 项目中 compiler 扩展版本不匹配 | 查 Compose Compiler/Kotlin 兼容表，或升级到 Kotlin 2.x 插件方式 |
+| `Unresolved reference: compose` | 没有启用 Compose build feature 或没应用 compose 插件 | 检查 `buildFeatures.compose = true` 和 `org.jetbrains.kotlin.plugin.compose` |
+| 预览不显示 | 缺少 `ui-tooling-preview` 或 debug tooling | 添加 preview/debug tooling，检查 Android Studio 版本 |
+| 多模块部分 Composable 编译失败 | 只有 app 模块启用了 Compose | 每个含 Composable 源码的 Android 模块都要启用 |
+| BOM 已配置但版本仍冲突 | 某些 Compose 依赖显式写了版本 | 使用 BOM 时 Compose artifact 通常不要再写显式版本 |
 
 ## 5. Activity 中启动 Compose
 
@@ -264,4 +321,20 @@ app/
 - 只有包含 Composable 代码的模块才需要启用 Compose。
 - `debugImplementation("androidx.compose.ui:ui-tooling")` 是否只放在 debug。
 - 测试依赖是否配置了 `ui-test-junit4` 和 `ui-test-manifest`。
+- Version Catalog 中是否把 Compose BOM 和非 Compose 库版本区分管理。
+- CI 是否使用与本地一致的 JDK、AGP、Kotlin、Gradle 版本。
 
+## 10. 新项目推荐基线
+
+| 维度 | 建议 |
+|---|---|
+| 语言 | Kotlin 2.x |
+| UI | Jetpack Compose + Material 3 |
+| 依赖版本 | Compose BOM + Version Catalog |
+| 状态收集 | `collectAsStateWithLifecycle()` |
+| 导航 | Navigation Compose，优先类型安全路由 |
+| 图片 | Coil Compose 或团队统一图片库 |
+| 架构 | `Route + Screen + ViewModel + UiState` |
+| 测试 | ViewModel 单元测试 + Compose UI 测试 + 关键路径 Macrobenchmark |
+
+这不是唯一正确答案，但它能减少新项目早期最常见的版本、状态和生命周期问题。

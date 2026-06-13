@@ -228,3 +228,107 @@ val dataModule = module {
 - 是否能区分 Entity、DTO、Domain Model、UI Model？
 - 是否知道 UI 不应直接访问数据库或网络？
 
+## 官方推荐分层的理解
+
+现代 Android 推荐把应用拆成三个主要层次：
+
+```text
+UI layer -> Domain layer -> Data layer
+```
+
+其中 Domain layer 是可选的。简单 CRUD 项目可以是：
+
+```text
+UI layer -> Data layer
+```
+
+当业务规则复杂、多个 ViewModel 复用同一业务动作、或需要纯 Kotlin 单元测试时，再引入 UseCase。不要为了套 Clean Architecture 给每个简单 Repository 方法都写一个只有一行代码的 UseCase。
+
+## 模型分层
+
+| 模型 | 所属层 | 作用 | 是否暴露给 UI |
+| --- | --- | --- | --- |
+| DTO | Data / remote | 匹配 API JSON | 否 |
+| Entity | Data / local | 匹配数据库表结构 | 否 |
+| Domain Model | Domain | 表达业务概念 | 可转换后使用 |
+| UI Model | UI | 表达界面需要的数据 | 是 |
+
+转换示例：
+
+```kotlin
+fun ArticleDto.toEntity(): ArticleEntity {
+    return ArticleEntity(
+        id = id,
+        title = title,
+        content = content,
+        updatedAt = updatedAt
+    )
+}
+
+fun ArticleEntity.toDomain(): Article {
+    return Article(
+        id = id,
+        title = title,
+        content = content
+    )
+}
+
+fun Article.toUiModel(): ArticleUiModel {
+    return ArticleUiModel(
+        id = id,
+        title = title,
+        summary = content.take(80)
+    )
+}
+```
+
+不要因为字段暂时一样就复用同一个模型。API、数据库、业务和 UI 的变化节奏不同，复用会让改动互相牵连。
+
+## UseCase 的合适粒度
+
+UseCase 应代表一个业务动作：
+
+```kotlin
+class ToggleArticleFavoriteUseCase(
+    private val repository: ArticleRepository
+) {
+    suspend operator fun invoke(articleId: String) {
+        val article = repository.getArticle(articleId)
+        repository.setFavorite(articleId, !article.isFavorite)
+    }
+}
+```
+
+适合做：
+
+- 组合多个 Repository。
+- 处理业务校验。
+- 处理事务性业务流程。
+- 复用跨页面逻辑。
+- 降低 ViewModel 复杂度。
+
+不适合做：
+
+- 单纯转发一行 Repository 调用。
+- 依赖 Android `Context`。
+- 直接操作 UI 状态。
+
+## 模块拆分策略
+
+小项目不需要一开始就多模块。可按阶段演进：
+
+1. 单模块：`ui`、`data`、`domain` 包结构清晰即可。
+2. 基础多模块：`app`、`core`、`data`、`domain`、`feature-*`。
+3. 大型项目：按 feature 垂直拆分，每个 feature 内再有 presentation/domain/data。
+
+拆模块的收益是构建边界、团队边界和依赖约束；成本是配置复杂、依赖传递和重构成本。没有明确收益时，不要过早拆。
+
+## 架构评审清单
+
+- ViewModel 是否只处理 UI 事件、状态编排和调用 UseCase？
+- Repository 是否屏蔽了网络、本地缓存和错误来源？
+- Domain 是否不依赖 Android 框架、Room、Retrofit？
+- UI 是否看不到 DTO、Entity、DAO、API Service？
+- 错误类型是否统一映射，而不是到处 `try/catch`？
+- 是否能用普通 JVM 单元测试覆盖核心 UseCase？
+- 是否存在循环依赖或跨 feature 乱调用？

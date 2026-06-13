@@ -219,3 +219,101 @@ productFlavors {
 - 是否理解 implementation、api、testImplementation？
 - 是否知道 build type 和 flavor 的区别？
 
+## Gradle 配置的关键边界
+
+Android 项目常见三层 Gradle 配置：
+
+```text
+settings.gradle.kts       声明插件仓库、依赖仓库、模块 include
+build.gradle.kts          根项目公共插件版本和全局约定
+app/build.gradle.kts      Android 插件、namespace、SDK、依赖、构建变体
+```
+
+现代项目建议：
+
+- 使用 Kotlin DSL，即 `*.gradle.kts`。
+- 使用 Version Catalog，即 `gradle/libs.versions.toml` 管理依赖版本。
+- 使用 Gradle Wrapper，即 `gradlew` 固定 Gradle 版本。
+- 避免在每个模块重复写一大段相同配置，复杂项目可抽到 convention plugin。
+
+示例：
+
+```toml
+[versions]
+agp = "x.y.z"
+kotlin = "x.y.z"
+composeBom = "yyyy.mm.00"
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+[libraries]
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+```
+
+这里的版本号是占位示例。真实项目要以 Android Gradle Plugin release notes、Kotlin release notes、Compose BOM 和项目兼容矩阵为准，不要直接复制旧笔记里的版本。
+
+## Manifest 的常见职责
+
+Manifest 不只是注册 Activity。它还承担：
+
+- 声明包内组件：Activity、Service、Receiver、Provider。
+- 声明权限：如网络、相机、通知、定位。
+- 声明应用级属性：主题、图标、备份策略、网络安全配置。
+- 声明 Intent Filter：决定外部如何启动组件。
+- 声明 `exported`：决定组件是否可被其他应用访问。
+
+Android 12 之后，带有 intent filter 的组件必须显式声明 `android:exported`。原则是：没有跨应用访问需求就设为 `false`。
+
+## 资源系统实践
+
+资源不是简单文件夹，它会参与编译并生成类型安全 ID。
+
+| 目录 | 用途 | 注意点 |
+| --- | --- | --- |
+| `res/values/strings.xml` | 文案 | 不要在 UI 中硬编码可见文案 |
+| `res/values/colors.xml` | 传统颜色资源 | Compose 项目也可能用于启动主题 |
+| `res/drawable` | 位图、shape、vector | 大图要关注内存和密度 |
+| `res/mipmap` | 启动图标 | 启动器图标优先放这里 |
+| `res/xml` | 配置文件 | file provider、network security config 常见 |
+
+多语言资源示例：
+
+```text
+res/values/strings.xml
+res/values-zh-rCN/strings.xml
+res/values-ja/strings.xml
+```
+
+不要拼接自然语言句子，复数、占位符和语序在不同语言中可能不同。
+
+## 构建变体实践
+
+`buildTypes` 表示构建用途，`productFlavors` 表示产品维度。
+
+常见组合：
+
+```text
+devDebug       开发环境调试包
+stagingDebug   预发环境调试包
+prodRelease    正式发布包
+```
+
+常见差异：
+
+- API base URL。
+- 应用名后缀。
+- 日志开关。
+- 是否启用混淆。
+- 是否启用调试菜单。
+
+不要把密钥直接写进 Gradle 文件或 Git 仓库。可使用 CI Secret、`local.properties`、远程配置或后端下发机制。
+
+## 常见构建问题排查顺序
+
+1. 先看第一条真正的 error，不要只看最后的 `BUILD FAILED`。
+2. 确认 AGP、Gradle、JDK、Kotlin、Compose Compiler 是否兼容。
+3. 清理无效缓存前先尝试命令行构建，区分 IDE 问题和项目问题。
+4. 多模块循环依赖时，用 `./gradlew :app:dependencies` 或 IDE dependency analyzer 看依赖图。
+5. 依赖冲突时优先升级或对齐 BOM，不要随意 `exclude`。

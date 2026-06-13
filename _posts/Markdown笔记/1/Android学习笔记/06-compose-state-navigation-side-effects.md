@@ -212,3 +212,107 @@ NavHost(
 - 是否能区分状态和一次性事件？
 - 是否知道 LaunchedEffect 的 key 变化会重新启动？
 
+## 单向数据流模板
+
+推荐数据流：
+
+```text
+User action -> ViewModel event -> UseCase / Repository
+            -> new UI State -> Composable recomposition
+```
+
+ViewModel 示例：
+
+```kotlin
+class SearchViewModel(
+    private val searchArticles: SearchArticlesUseCase
+) : ViewModel() {
+    private val query = MutableStateFlow("")
+
+    val state: StateFlow<SearchUiState> =
+        query
+            .debounce(300)
+            .distinctUntilChanged()
+            .flatMapLatest { keyword -> searchArticles(keyword) }
+            .map { articles -> SearchUiState(articles = articles) }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = SearchUiState()
+            )
+
+    fun onQueryChange(value: String) {
+        query.value = value
+    }
+}
+```
+
+UI 只调用事件：
+
+```kotlin
+SearchScreen(
+    state = state,
+    onQueryChange = viewModel::onQueryChange
+)
+```
+
+## 状态与事件的区分
+
+| 类型 | 示例 | 推荐表达 |
+| --- | --- | --- |
+| 持久 UI 状态 | 列表、加载中、错误文案、输入框内容 | `StateFlow<UiState>` |
+| 一次性事件 | Toast、Snackbar、导航、打开系统页面 | `Channel` / `SharedFlow` |
+| 业务数据 | 用户、文章、订单 | Domain Model，经 Repository 暴露 |
+
+不要把一次性事件长期保存在 `UiState` 里，否则旋转屏幕或重新收集后可能重复弹 Toast、重复导航。
+
+## Effect API 使用边界
+
+| API | 适用场景 | 注意点 |
+| --- | --- | --- |
+| `LaunchedEffect` | 进入组合后启动协程、收集一次性事件 | key 变化会重启 |
+| `DisposableEffect` | 注册和注销监听器 | 必须释放资源 |
+| `SideEffect` | 每次成功重组后同步非 Compose 状态 | 不做耗时任务 |
+| `rememberUpdatedState` | Effect 内引用最新 lambda 或值 | 避免旧闭包 |
+| `produceState` | 把外部异步数据转换为 Compose State | 注意取消 |
+
+收集一次性事件示例：
+
+```kotlin
+LaunchedEffect(Unit) {
+    viewModel.events.collect { event ->
+        when (event) {
+            is UiEvent.ShowMessage -> snackbarHostState.showSnackbar(event.message)
+            is UiEvent.NavigateBack -> navController.popBackStack()
+        }
+    }
+}
+```
+
+## Navigation 实践
+
+简单项目可以用字符串路由，但中大型项目建议集中定义：
+
+```kotlin
+object Routes {
+    const val HOME = "home"
+    const val DETAIL = "detail/{id}"
+
+    fun detail(id: String): String = "detail/$id"
+}
+```
+
+导航参数原则：
+
+- 路由里只传 id、filter、tab 这类轻量参数。
+- 不传大对象，不传完整 JSON。
+- 详情页通过 id 从 Repository 重新读取数据。
+- 登录态、用户信息这类全局状态不要塞进导航参数。
+
+## 重组排查思路
+
+- 检查是否在 Composable 内创建新的 lambda、大列表、复杂对象。
+- 检查子组件是否接收了整个页面 State，而不是只接收自己需要的字段。
+- 检查 `LazyColumn` item 是否有稳定 key。
+- 使用 Layout Inspector 和 Compose recomposition tooling 观察重组次数。
+- 不要为了“减少重组”过早优化，先保证状态模型正确。

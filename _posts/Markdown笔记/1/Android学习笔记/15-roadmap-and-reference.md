@@ -177,17 +177,138 @@
 - ANR。
 - R8 与混淆。
 
+## 分阶段项目路线
+
+### 项目一：单机待办 App
+
+目标：掌握 Compose、状态和基础 ViewModel。
+
+要求：
+
+- 列表、新增、编辑、删除、完成状态。
+- `TodoUiState` 使用不可变 data class。
+- ViewModel 暴露 `StateFlow`。
+- Composable 只接收状态和事件 lambda。
+- 至少写 3 个 ViewModel 单元测试。
+
+不要一开始接入网络和复杂架构，先把 UI 状态流跑顺。
+
+### 项目二：离线优先笔记 App
+
+目标：掌握 Room、DataStore、Repository 和错误处理。
+
+要求：
+
+- Room 保存笔记。
+- DataStore 保存主题、排序方式。
+- Repository 屏蔽本地数据源。
+- 搜索和排序由数据库或 Repository 提供。
+- 数据库迁移有测试。
+
+进阶：
+
+- 增加标签、多条件筛选。
+- 增加导入导出。
+- 增加暗色模式和多语言。
+
+### 项目三：网络 + 缓存新闻 App
+
+目标：掌握网络、分页、缓存和失败兜底。
+
+要求：
+
+- Retrofit 或 Ktor 请求 API。
+- DTO、Entity、Domain、UI Model 分离。
+- Room 作为本地缓存。
+- 首页优先展示缓存，再后台刷新。
+- 网络错误映射为统一 `AppError`。
+
+进阶：
+
+- Paging 3。
+- `RemoteMediator`。
+- 收藏离线可用。
+- 下拉刷新和错误重试。
+
+### 项目四：生产化练习
+
+目标：掌握发布前工程能力。
+
+要求：
+
+- Debug / staging / release 构建变体。
+- R8 开启并验证 release 包。
+- 崩溃和 ANR 监控。
+- Macrobenchmark 或启动耗时记录。
+- 隐私政策、权限说明、数据安全表单检查。
+- 内部测试、灰度发布和版本回滚预案。
+
+## 面试回答框架
+
+| 问题 | 回答时应覆盖 |
+| --- | --- |
+| MVVM 是什么 | View 只展示状态，ViewModel 管理 UI State 和事件，Model / Repository 提供数据 |
+| Clean Architecture 有什么价值 | 依赖方向、测试边界、业务复用；Domain 是可选层，不应过度设计 |
+| Compose 为什么会重组 | 状态读取发生变化后，相关 Composable 重新执行以计算新 UI |
+| `remember` 和 `rememberSaveable` 区别 | 前者跨重组，后者还能跨配置变更等可保存场景 |
+| StateFlow 和 SharedFlow 区别 | StateFlow 有当前值，适合状态；SharedFlow 可用于事件或广播 |
+| Room 和 DataStore 区别 | Room 适合结构化关系数据和查询，DataStore 适合小型偏好配置 |
+| WorkManager 使用场景 | 可延迟、可约束、需可靠执行的后台任务，不是精确定时器 |
+| ANR 如何排查 | 看主线程堆栈、耗时 IO、锁竞争、启动初始化、广播耗时 |
+| R8 有什么风险 | 反射、序列化、JNI、JS Bridge、第三方 SDK 可能需要 keep 规则 |
+
+## 版本与政策注意
+
+Android 版本、Android Gradle Plugin、Kotlin、Compose BOM、Google Play target API 要求都会变化。最后核对日期：2026-06-13。
+
+截至本次核对，Google Play 要求新应用和应用更新通常需要 target Android 15（API level 35）或更高，Wear OS、Android Automotive OS、Android TV 有例外规则。发布前必须以 Google Play Console 和官方 target API 页面为准。
+
+建议每次升级前检查：
+
+- Android Studio 稳定版和 AGP release notes。
+- Gradle 与 JDK 兼容性。
+- Kotlin 与 Compose Compiler / Compose BOM 兼容性。
+- AndroidX release notes。
+- targetSdk 行为变更。
+- 权限、隐私、后台任务、通知、照片访问等平台行为变更。
+- Google Play 政策和数据安全表单要求。
+
 ## 官方参考资料
 
 - Android Developers：https://developer.android.com/
 - Android app architecture guide：https://developer.android.com/topic/architecture
+- UI layer：https://developer.android.com/topic/architecture/ui-layer
+- Data layer：https://developer.android.com/topic/architecture/data-layer
 - Jetpack Compose：https://developer.android.com/compose
+- Compose state：https://developer.android.com/develop/ui/compose/state
+- Compose side effects：https://developer.android.com/develop/ui/compose/side-effects
 - Android Kotlin guides：https://developer.android.com/kotlin
 - Kotlin Coroutines on Android：https://developer.android.com/kotlin/coroutines
 - Kotlin Flow on Android：https://developer.android.com/kotlin/flow
+- Lifecycle-aware coroutines：https://developer.android.com/topic/libraries/architecture/coroutines
 - Android Gradle Plugin：https://developer.android.com/build
 - Material Design：https://m3.material.io/
 - Codelabs：https://developer.android.com/codelabs
+- Android testing fundamentals：https://developer.android.com/training/testing/fundamentals
+- Compose testing：https://developer.android.com/develop/ui/compose/testing
+- Performance guide：https://developer.android.com/topic/performance
+- Baseline Profiles：https://developer.android.com/topic/performance/baselineprofiles/overview
+- R8 app optimization：https://developer.android.com/topic/performance/app-optimization/enable-app-optimization
+- Build for release：https://developer.android.com/build/build-for-release
+- Google Play target API requirements：https://developer.android.com/google/play/requirements/target-sdk
+
+## 中文与社区实践资料
+
+以下资料适合补充工程经验、常见坑和实践视角。涉及版本、政策、API 行为时仍以官方文档为准。
+
+- Android Developers Blog：https://android-developers.googleblog.com/
+- Android Architecture 官方课程：https://developer.android.com/courses/pathways/android-architecture
+- AndroidX release notes：https://developer.android.com/jetpack/androidx/versions/all-channel
+- 掘金 Android 专栏：https://juejin.cn/android
+- CSDN Android 专区：https://blog.csdn.net/nav/android
+- 博客园 Android 分类：https://www.cnblogs.com/cate/android/
+- SegmentFault Android：https://segmentfault.com/t/android
+- ProAndroidDev：https://proandroiddev.com/
 
 ## 持续更新建议
 
@@ -208,4 +329,3 @@ Android 生态变化很快，建议定期检查：
 - Compose API。
 - 架构推荐实践。
 - 发布和数据安全要求。
-

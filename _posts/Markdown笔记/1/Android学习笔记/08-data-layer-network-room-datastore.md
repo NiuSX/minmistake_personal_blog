@@ -208,3 +208,138 @@ sealed interface AppError {
 - 是否知道 DataStore 适合保存什么？
 - 是否理解离线优先数据流？
 
+## 数据层职责边界
+
+Data layer 的目标是给上层提供稳定、可测试的数据接口，而不是把 Retrofit、Room、DataStore 直接暴露给 UI。
+
+推荐结构：
+
+```text
+data/
+├── remote/
+│   ├── ArticleApi
+│   └── ArticleDto
+├── local/
+│   ├── ArticleDao
+│   ├── ArticleEntity
+│   └── AppDatabase
+├── mapper/
+│   └── ArticleMappers.kt
+└── ArticleRepositoryImpl
+```
+
+Domain 层只看到：
+
+```kotlin
+interface ArticleRepository {
+    fun observeArticles(): Flow<List<Article>>
+    suspend fun refresh(): AppResult<Unit>
+}
+```
+
+## 离线优先数据流
+
+离线优先通常不是“没网时读缓存”这么简单，而是让本地数据库成为 UI 的主要数据源：
+
+```text
+UI observes Room Flow
+        ^
+        |
+Repository refreshes network
+        |
+Remote DTO -> Entity -> Room transaction
+```
+
+示例：
+
+```kotlin
+class ArticleRepositoryImpl(
+    private val api: ArticleApi,
+    private val dao: ArticleDao
+) : ArticleRepository {
+    override fun observeArticles(): Flow<List<Article>> {
+        return dao.observeAll()
+            .map { entities -> entities.map { it.toDomain() } }
+    }
+
+    override suspend fun refresh(): AppResult<Unit> {
+        return runCatching {
+            val articles = api.fetchArticles()
+            dao.replaceAll(articles.map { it.toEntity() })
+        }.fold(
+            onSuccess = { AppResult.Success(Unit) },
+            onFailure = { AppResult.Error(it.toAppError()) }
+        )
+    }
+}
+```
+
+这样 UI 不需要知道数据来自网络还是缓存。
+
+## Room 实践要点
+
+- 数据库操作不要阻塞主线程。
+- 多表更新使用 `@Transaction`。
+- 数据库迁移必须测试，不能只开发期 `fallbackToDestructiveMigration()`。
+- Entity 不要承担业务逻辑。
+- DAO 返回 `Flow` 时，Room 会在表变化后重新发射数据。
+
+迁移示例：
+
+```kotlin
+val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE articles ADD COLUMN summary TEXT NOT NULL DEFAULT ''")
+    }
+}
+```
+
+## DataStore 使用边界
+
+DataStore 适合：
+
+- 用户设置。
+- 小型 key-value 配置。
+- 简单持久状态，例如主题、排序方式、是否首次打开。
+
+不适合：
+
+- 大量结构化列表数据。
+- 需要复杂查询的数据。
+- 关系型数据。
+- 高频大体积写入。
+
+这类数据应使用 Room。
+
+## 网络层实践
+
+网络层至少要处理：
+
+- 超时和重试。
+- 认证失效。
+- 错误响应体解析。
+- JSON 字段缺失或类型变化。
+- 分页和缓存策略。
+- 日志脱敏。
+
+不要让 ViewModel 直接判断 HTTP code。Repository 应把底层异常映射为业务可理解的错误：
+
+```kotlin
+fun Throwable.toAppError(): AppError {
+    return when (this) {
+        is IOException -> AppError.NetworkUnavailable
+        is HttpException -> {
+            if (code() == 401) AppError.Unauthorized else AppError.Server(code())
+        }
+        else -> AppError.Unknown(message.orEmpty())
+    }
+}
+```
+
+## 数据层测试重点
+
+- Mapper：DTO、Entity、Domain 转换是否正确。
+- DAO：增删改查、排序、事务、迁移。
+- Repository：网络成功、网络失败、缓存回退、错误映射。
+- DataStore：默认值、写入、读取、迁移。
+- 分页：刷新、追加、空列表、错误重试。

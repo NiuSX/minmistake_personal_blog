@@ -2,11 +2,16 @@
 
 本章整理学习 AI Agent 时值得优先阅读的官方资料和经典论文。框架和 API 更新较快，具体用法以官方文档为准。
 
+最后调研日期：2026-06-13
+
 ## 官方文档
 
 ### OpenAI
 
+- OpenAI Agents SDK 指南：https://developers.openai.com/api/docs/guides/agents
 - OpenAI Agents SDK 文档：https://openai.github.io/openai-agents-python/
+- OpenAI Agents SDK Tracing：https://openai.github.io/openai-agents-python/tracing/
+- OpenAI Agents SDK Handoffs：https://openai.github.io/openai-agents-python/handoffs/
 - OpenAI Platform 文档：https://platform.openai.com/docs
 - OpenAI Cookbook：https://cookbook.openai.com/
 
@@ -23,6 +28,7 @@
 
 - MCP 官方文档：https://modelcontextprotocol.io/docs
 - MCP 规范：https://modelcontextprotocol.io/specification
+- MCP 2025-06-18 规范：https://modelcontextprotocol.io/specification/2025-06-18
 - MCP GitHub：https://github.com/modelcontextprotocol
 
 建议关注：
@@ -99,6 +105,58 @@
 - Memory。
 - 企业应用集成。
 
+### Microsoft Agent Framework
+
+- Microsoft Agent Framework 文档：https://learn.microsoft.com/en-us/agent-framework/
+- Microsoft Agent Framework Overview：https://learn.microsoft.com/en-us/agent-framework/overview/
+- AutoGen to Microsoft Agent Framework Migration Guide：https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-autogen/
+- Semantic Kernel to Microsoft Agent Framework Migration Guide：https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-semantic-kernel/
+
+建议关注：
+
+- 与 AutoGen、Semantic Kernel 的关系。
+- 企业应用集成。
+- 多 Agent 编排。
+- Python 与 .NET SDK 支持。
+
+### Anthropic Agent 工程资料
+
+- Building Effective AI Agents：https://www.anthropic.com/research/building-effective-agents
+- Writing effective tools for AI agents：https://www.anthropic.com/engineering/writing-tools-for-agents
+
+建议关注：
+
+- Workflow 与 Agent 的区别。
+- Prompt chaining、routing、parallelization、orchestrator-workers、evaluator-optimizer 等模式。
+- 工具原型、工具评测和工具描述优化。
+
+## 安全与治理资料
+
+### OWASP
+
+- OWASP Top 10 for LLM Applications：https://owasp.org/www-project-top-10-for-large-language-model-applications/
+- OWASP GenAI Security Project：https://genai.owasp.org/
+- LLM01 Prompt Injection：https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+
+建议关注：
+
+- Prompt Injection。
+- Sensitive Information Disclosure。
+- Excessive Agency。
+- Insecure Output Handling。
+- Supply Chain Vulnerabilities。
+
+### NIST
+
+- NIST AI Risk Management Framework：https://www.nist.gov/itl/ai-risk-management-framework
+- NIST Generative AI Profile：https://www.nist.gov/itl/ai-risk-management-framework/generative-artificial-intelligence
+
+建议关注：
+
+- AI 风险识别。
+- 治理、映射、测量和管理流程。
+- 生成式 AI 的风险分类与缓解措施。
+
 ## 经典论文与思想
 
 ### ReAct
@@ -131,6 +189,18 @@ Voyager: An Open-Ended Embodied Agent with Large Language Models
 
 核心思想：在开放环境中积累技能库并持续探索。
 
+### AgentBench
+
+AgentBench: Evaluating LLMs as Agents
+
+核心思想：从多种交互环境评估 LLM 作为 Agent 的能力，提醒我们不能只用静态问答 benchmark 衡量 Agent。
+
+### SWE-bench
+
+SWE-bench: Can Language Models Resolve Real-World GitHub Issues?
+
+核心思想：用真实 GitHub issue 评估代码 Agent 修改真实代码库的能力。对代码型 Agent 来说，它比普通代码补全评测更贴近实际任务。
+
 ## 关键词索引
 
 - Agent Runtime：Agent 执行循环和状态管理。
@@ -148,6 +218,12 @@ Voyager: An Open-Ended Embodied Agent with Large Language Models
 - Guardrails：安全护栏和输出约束。
 - Human-in-the-loop：人工参与审批或判断。
 - Multi-Agent：多个 Agent 分工协作。
+- Agentic Workflow：固定工作流中嵌入 LLM 决策、生成或工具调用。
+- Handoff：一个 Agent 将任务移交给更专门的 Agent。
+- Idempotency Key：幂等键，用于防止写工具在重试时重复产生副作用。
+- Checkpoint：执行过程中的可恢复状态快照。
+- Rerank：对检索候选结果重新排序，提高上下文质量。
+- Excessive Agency：模型或 Agent 被赋予过高权限、过多自主动作导致的安全风险。
 
 ## 推荐阅读顺序
 
@@ -156,6 +232,8 @@ Voyager: An Open-Ended Embodied Agent with Large Language Models
 3. 读 OpenAI Agents SDK 或 LangGraph，理解现代 Agent Runtime。
 4. 读 LlamaIndex RAG 文档，补齐知识库能力。
 5. 读评测和 tracing 相关文档，把 Demo 推向生产。
+6. 读 OWASP LLM Top 10，把工具权限、注入攻击和过度代理风险纳入设计。
+7. 读 `14-production-agent-playbook.md`，把概念串成生产级工程清单。
 
 ## 持续更新建议
 
@@ -175,4 +253,3 @@ AI Agent 领域变化快，建议定期检查：
 - 安全建议。
 - 成本和延迟经验。
 - 实战项目踩坑。
-

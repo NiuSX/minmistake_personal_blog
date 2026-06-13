@@ -205,3 +205,117 @@ AndroidView(factory = { context ->
 - 是否会使用 LazyColumn？
 - 是否知道 Scaffold 和 Material 3 的作用？
 
+## View 系统与 Compose 的本质区别
+
+| 维度 | View 系统 | Compose |
+| --- | --- | --- |
+| UI 描述方式 | XML 或命令式创建 View | Kotlin 函数声明 UI |
+| 更新方式 | 手动 `setText()`、`notifyDataSetChanged()` | 状态变化触发重组 |
+| 状态保存 | View、Fragment、ViewModel 混合 | `remember`、`rememberSaveable`、ViewModel |
+| 复用单位 | View、Fragment、自定义 View | Composable 函数 |
+| 迁移方式 | 已有项目常见 | 可通过 `ComposeView` 渐进接入 |
+
+Compose 不是“用 Kotlin 写 XML”，而是“UI = f(state)”。你不应该手动寻找某个 TextView 再改文字，而是改变状态，让 UI 根据状态重新计算。
+
+## Composable 设计原则
+
+推荐把界面拆成两类函数：
+
+```kotlin
+@Composable
+fun ArticleRoute(
+    viewModel: ArticleViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    ArticleScreen(
+        state = state,
+        onRefresh = viewModel::refresh,
+        onOpenArticle = viewModel::openArticle
+    )
+}
+
+@Composable
+fun ArticleScreen(
+    state: ArticleUiState,
+    onRefresh: () -> Unit,
+    onOpenArticle: (String) -> Unit
+) {
+    // 只负责展示状态和发送事件
+}
+```
+
+- `Route` 负责连接 ViewModel、导航和生命周期。
+- `Screen` 负责纯展示，更容易 Preview 和 UI Test。
+
+## Modifier 顺序示例
+
+Modifier 是有顺序的：
+
+```kotlin
+Text(
+    text = "Android",
+    modifier = Modifier
+        .padding(16.dp)
+        .background(Color.Yellow)
+)
+```
+
+和：
+
+```kotlin
+Text(
+    text = "Android",
+    modifier = Modifier
+        .background(Color.Yellow)
+        .padding(16.dp)
+)
+```
+
+视觉结果不同。前者先加外边距再绘制背景，后者先绘制背景再给内容留内边距。写布局问题时先检查 Modifier 顺序。
+
+## 列表与 key
+
+`LazyColumn` 中稳定 key 很重要：
+
+```kotlin
+LazyColumn {
+    items(
+        items = articles,
+        key = { it.id }
+    ) { article ->
+        ArticleRow(article = article)
+    }
+}
+```
+
+没有稳定 key 时，插入、删除、排序可能导致状态错位，例如复选框、展开状态、输入框内容出现在错误 item 上。
+
+## Preview 和设计系统
+
+建议为设计系统组件写 Preview：
+
+```kotlin
+@Preview(showBackground = true)
+@Composable
+private fun ArticleRowPreview() {
+    AppTheme {
+        ArticleRow(
+            article = ArticleUiModel(
+                id = "1",
+                title = "Compose 入门",
+                summary = "状态驱动 UI"
+            )
+        )
+    }
+}
+```
+
+Preview 不代替测试，但能快速发现布局溢出、深色模式、长文本和空状态问题。
+
+## UI 常见坑
+
+- 在 Composable 里直接发网络请求，导致重组时重复请求。
+- `LazyColumn` 不设置 key，列表状态错位。
+- 把大对象或不稳定对象层层传递，导致重组范围过大。
+- 所有页面直接使用 Material 组件，没有抽设计系统，后期统一风格困难。
+- 只测正常长度文案，没有测试长标题、多语言、无数据、错误状态。

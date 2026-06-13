@@ -157,3 +157,61 @@ app/
 - 是否知道 Logcat 和 Profiler 的基本用途？
 - 是否知道模拟器和真机测试各自适合什么？
 
+## 进一步理解：Android 应用从安装到运行
+
+一个 Android 应用不是一个普通的 `main()` 程序。它由系统进程管理，系统根据 Manifest、Intent、权限、组件声明和用户操作来创建组件。
+
+典型流程：
+
+1. 用户点击图标，Launcher 发送启动 Intent。
+2. 系统根据 Manifest 找到启动 Activity。
+3. 应用进程不存在时，系统创建进程并初始化 Application。
+4. 系统创建 Activity，调用 `onCreate()`。
+5. Activity 设置 Compose 或 View 内容。
+6. 用户离开、旋转屏幕、内存紧张或任务切换时，系统按生命周期回调管理组件。
+
+理解这条链路后，很多问题会更容易定位：
+
+- 为什么不要把大对象放在 Activity 静态字段里。
+- 为什么配置变更会导致 Activity 重建。
+- 为什么 UI 状态要放进 ViewModel 或可保存状态。
+- 为什么后台任务不能依赖 Activity 一直存在。
+
+## 开发环境版本建议
+
+实际项目建议把环境版本写进项目文档，例如：
+
+```text
+Android Studio: 使用稳定版
+JDK: 跟随 Android Gradle Plugin 要求
+Gradle: 使用 wrapper 固定版本
+Android Gradle Plugin: 使用稳定版本，升级前读 release notes
+Kotlin: 与 Compose Compiler / AGP 兼容
+compileSdk: 使用稳定最新 SDK
+targetSdk: 跟随 Google Play 当前要求
+minSdk: 根据用户设备占比和业务能力决定
+```
+
+不要只在本机全局安装 Gradle 后直接构建。真实项目应使用 `gradlew`，保证团队、CI 和本地构建一致。
+
+## 初学者常见环境问题
+
+| 问题 | 可能原因 | 处理思路 |
+| --- | --- | --- |
+| Gradle sync 失败 | 网络、版本不兼容、仓库不可达 | 先看完整错误栈，再检查 AGP、Gradle、JDK 兼容性 |
+| 模拟器很慢 | 未开启虚拟化、镜像过重、内存不足 | 开启硬件虚拟化，使用合适 ABI 和较新的系统镜像 |
+| 真机无法调试 | 未开开发者选项、USB 模式错误、驱动问题 | 开启 USB 调试，确认 `adb devices` 能看到设备 |
+| 运行后白屏 | 首帧初始化过重、主题配置问题、崩溃后重启 | 看 Logcat、启动耗时和 Activity 主题 |
+| 中文乱码 | 文件编码或终端编码不一致 | Markdown、源码、Gradle 文件统一使用 UTF-8 |
+
+## 最小可运行项目检查
+
+一个新项目至少应能做到：
+
+- `./gradlew assembleDebug` 可以命令行构建。
+- `./gradlew test` 可以运行本地测试。
+- Debug 包能安装到模拟器。
+- Logcat 中没有启动期崩溃。
+- README 写明 Android Studio、JDK、AGP、Gradle 版本。
+
+如果这些基础不稳定，不建议马上引入复杂框架。

@@ -157,3 +157,92 @@ val state by viewModel.state.collectAsStateWithLifecycle()
 - 是否知道 Fragment 生命周期和 View 生命周期不同？
 - 是否能使用生命周期感知方式收集 Flow？
 
+## 生命周期的三个层次
+
+Android 生命周期至少要分三层理解：
+
+| 层次 | 典型对象 | 关注点 |
+| --- | --- | --- |
+| 组件生命周期 | Activity、Fragment、Service | 系统何时创建、暂停、销毁组件 |
+| UI 生命周期 | Fragment View、Compose Composition | 界面树何时存在、何时可绘制、何时退出组合 |
+| 状态生命周期 | ViewModel、SavedStateHandle、数据库 | 状态是否能跨旋转、进程死亡、应用重启 |
+
+常见错误是把这三层混在一起。例如 Fragment 对象还活着，不代表它的 View 还活着；ViewModel 还活着，不代表页面还可见；Compose 重新组合，不代表 Activity 重新创建。
+
+## Activity 生命周期重点
+
+典型回调：
+
+```text
+onCreate -> onStart -> onResume -> onPause -> onStop -> onDestroy
+```
+
+实践建议：
+
+- `onCreate`：初始化依赖、设置 UI、读取启动参数。
+- `onStart`：开始可见时需要的轻量资源。
+- `onResume`：恢复前台交互。
+- `onPause`：提交短小、必须立即保存的状态。
+- `onStop`：停止可见时资源，例如相机预览。
+- `onDestroy`：只做组件释放，不要假设一定会被调用。
+
+耗时初始化不要全部塞进 `onCreate`，否则会拖慢冷启动。
+
+## Fragment View 生命周期
+
+Fragment 有两个生命周期：
+
+- Fragment 自身生命周期。
+- Fragment 创建出来的 View 生命周期。
+
+收集 UI Flow 时应绑定 `viewLifecycleOwner`：
+
+```kotlin
+viewLifecycleOwner.lifecycleScope.launch {
+    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        viewModel.state.collect { state ->
+            render(state)
+        }
+    }
+}
+```
+
+不要在 Fragment 的 `lifecycleScope` 中长期持有 View 引用，否则 View 销毁后仍可能更新旧 View，造成崩溃或内存泄漏。
+
+## Compose 生命周期关注点
+
+Compose 中要区分：
+
+- Recomposition：状态变化导致函数重新执行。
+- Composition：Composable 进入或离开组合。
+- Activity lifecycle：宿主 Activity 的生命周期。
+
+副作用要放在 Effect API 中：
+
+```kotlin
+LaunchedEffect(userId) {
+    viewModel.loadUser(userId)
+}
+```
+
+`LaunchedEffect` 的 key 变化会取消旧协程并启动新协程。key 选择错误会导致重复请求或请求不触发。
+
+## 进程死亡与状态恢复
+
+ViewModel 可以跨配置变更，但不能保证跨进程死亡。重要状态分三类保存：
+
+| 状态类型 | 示例 | 保存位置 |
+| --- | --- | --- |
+| UI 临时状态 | 输入框文本、当前 tab | `rememberSaveable`、`SavedStateHandle` |
+| 业务状态 | 笔记内容、用户设置 | Room、DataStore、后端 |
+| 可重新加载状态 | 列表数据、详情数据 | Repository 重新拉取或本地缓存 |
+
+不要把大量对象塞进 `Bundle` 或 `SavedStateHandle`，它们适合保存小型、可序列化、用于恢复入口的状态，例如 id、筛选条件、页码。
+
+## 生命周期相关排错清单
+
+- 旋转屏幕后状态丢失：检查是否只存在 Composable 局部 `remember` 中。
+- 返回上一页后崩溃：检查协程是否仍在更新已销毁的 View。
+- 重复请求接口：检查 `LaunchedEffect` key、`init` 和导航回退栈。
+- 内存泄漏：检查静态单例、长生命周期对象是否持有 Activity、View、Context。
+- 后台回来 UI 旧数据：检查 Repository 是否有刷新策略和缓存失效策略。

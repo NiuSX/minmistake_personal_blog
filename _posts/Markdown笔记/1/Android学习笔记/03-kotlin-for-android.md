@@ -232,3 +232,113 @@ Android 项目也常定义自己的错误类型，而不是只用 Kotlin 标准 
 - 是否知道 sealed 类型适合 UI 状态？
 - 是否能使用 map、filter、firstOrNull 等集合操作？
 
+## Android 中最常用的 Kotlin 思维
+
+Kotlin 在 Android 中的核心价值不是语法更短，而是更适合表达状态、结果和异步流程。
+
+### 用不可变数据表达 UI 状态
+
+```kotlin
+data class ArticleListUiState(
+    val isLoading: Boolean = false,
+    val articles: List<ArticleUiModel> = emptyList(),
+    val errorMessage: String? = null
+)
+```
+
+更新状态时使用 `copy`：
+
+```kotlin
+_state.update {
+    it.copy(isLoading = true, errorMessage = null)
+}
+```
+
+这样比在多个可变字段之间同步更容易测试，也更适合 Compose 重组。
+
+### 用 sealed 表达有限结果
+
+```kotlin
+sealed interface LoadState<out T> {
+    data object Loading : LoadState<Nothing>
+    data class Success<T>(val data: T) : LoadState<T>
+    data class Error(val cause: AppError) : LoadState<Nothing>
+}
+```
+
+适合用于：
+
+- 页面加载状态。
+- 网络请求结果。
+- 表单提交结果。
+- 权限授权状态。
+
+如果结果类型只有成功和失败，也可以定义业务自己的 `AppResult`，不要把异常、HTTP 状态码、数据库错误直接暴露给 UI。
+
+## 空安全实践
+
+不要滥用 `!!`。它通常表示“我没有建模清楚这个值是否可能为空”。
+
+更好的写法：
+
+```kotlin
+val userName = user?.name.orEmpty()
+```
+
+或显式提前返回：
+
+```kotlin
+val id = savedStateHandle["id"] ?: return
+```
+
+当空值本身有业务含义时，要把语义写出来：
+
+```kotlin
+data class ProfileUiState(
+    val avatarUrl: String?,
+    val hasCustomAvatar: Boolean
+)
+```
+
+## 扩展函数的边界
+
+扩展函数适合做局部、无状态、可读性强的转换：
+
+```kotlin
+fun ArticleDto.toDomain(): Article {
+    return Article(
+        id = id,
+        title = title,
+        content = content.orEmpty()
+    )
+}
+```
+
+不适合把复杂业务藏进扩展函数，尤其是需要依赖网络、数据库、Context 或时钟的逻辑。那类逻辑应该进入 Repository、UseCase 或明确的服务类。
+
+## 协程前置概念
+
+学习协程前先记住三点：
+
+- `suspend` 表示函数可以挂起，不表示它一定在后台线程执行。
+- 切线程通常由调用链中的合适层负责，例如数据层使用 `withContext(Dispatchers.IO)`。
+- 取消是协作式的，长循环、阻塞 IO 和第三方回调都要额外处理取消。
+
+错误示例：
+
+```kotlin
+viewModelScope.launch {
+    val user = api.getUser() // 如果 API 内部没有切 IO，可能阻塞主线程
+    _state.value = UserUiState(user)
+}
+```
+
+更好的边界是 Repository 保证耗时操作不阻塞主线程，ViewModel 只负责编排状态。
+
+## 代码风格建议
+
+- 优先 `val`，只有确实需要重新赋值时使用 `var`。
+- 集合转换链超过三步时考虑拆中间变量。
+- `let`、`also`、`apply`、`run` 不要混用到难以阅读。
+- DTO、Entity、Domain Model、UiModel 不要复用同一个 data class。
+- 不要把 `Context` 传进纯 Kotlin 业务类，除非它确实是 Android 边界对象。

@@ -118,6 +118,7 @@ optimizer.step()
 | 阶段 5 | 正则化和泛化 | 能处理过拟合、欠拟合 |
 | 阶段 6 | CNN/RNN/Attention | 能理解不同结构适合什么数据 |
 | 阶段 7 | 项目实践 | 能训练、调参、记录实验 |
+| 阶段 8 | 综合复习与排错 | 能把公式、代码、训练曲线和 debug 流程串起来 |
 
 ## 5. 学习材料分工
 
@@ -130,3 +131,22 @@ optimizer.step()
 | CS231n | CNN、视觉任务、训练技巧 |
 | PyTorch Tutorials | 工程实现和 API 熟悉 |
 
+## 6. 最后复习建议
+
+完成 01 到 11 章后，建议阅读 [12_review_and_practice.md](12_review_and_practice.md)。这一章不是引入全新理论，而是把前面的知识整理成训练工程中的判断流程：
+
+- 看到一个任务，先判断数据类型和合适的模型归纳偏置。
+- 写模型前先写清楚输入、输出和中间张量 shape。
+- 训练前先跑通一个 batch，再做小数据过拟合测试。
+- 调参时优先检查数据、loss、学习率和梯度，而不是盲目堆模型。
+- 做最终实验时保存配置、随机种子、checkpoint 和评估指标。
+
+## 7. 参考资料
+
+- Deep Learning Book：https://www.deeplearningbook.org/
+- Dive into Deep Learning：https://d2l.ai/
+- CS231n Convolutional Neural Networks for Visual Recognition：https://cs231n.github.io/
+- PyTorch Tutorials：https://pytorch.org/tutorials/
+- PyTorch Documentation：https://docs.pytorch.org/docs/stable/index.html
+- Attention Is All You Need：https://arxiv.org/abs/1706.03762
+- Adam: A Method for Stochastic Optimization：https://arxiv.org/abs/1412.6980

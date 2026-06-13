@@ -37,6 +37,7 @@ flowchart TD
 10. [09_attention_transformer.md](09_attention_transformer.md)：注意力机制、Self-Attention、Transformer。
 11. [10_training_practice.md](10_training_practice.md)：训练流程、调参、实验记录和项目路线。
 12. [11_formula_index.md](11_formula_index.md)：常用公式索引，便于集中查阅。
+13. [12_review_and_practice.md](12_review_and_practice.md)：综合复习、训练工程模板、排错清单和项目实践手册。
 
 ## 怎样配合西瓜书和南瓜书学习
 
@@ -57,6 +58,13 @@ flowchart TD
 - 网络结构的归纳偏置是什么？
 - 训练不收敛时如何排查？
 
+## 建议复习方式
+
+1. 第一遍按目录顺序读，重点理解“数据、模型、损失、优化、评估”的闭环。
+2. 第二遍边写代码边读：[10_training_practice.md](10_training_practice.md) 和 [12_review_and_practice.md](12_review_and_practice.md) 应该配合使用。
+3. 遇到公式卡住时回看 [01_math_foundations.md](01_math_foundations.md) 和 [11_formula_index.md](11_formula_index.md)，先弄清楚 shape，再看推导。
+4. 遇到训练失败时优先做小数据过拟合测试、梯度检查、数据检查，而不是直接更换复杂模型。
+
 ## 参考资料
 
 - 周志华：《机器学习》，清华大学出版社。
@@ -65,3 +73,8 @@ flowchart TD
 - Dive into Deep Learning：https://d2l.ai/
 - CS231n Convolutional Neural Networks for Visual Recognition：https://cs231n.github.io/
 - PyTorch Tutorials：https://pytorch.org/tutorials/
+- PyTorch Documentation：https://docs.pytorch.org/docs/stable/index.html
+- Attention Is All You Need：https://arxiv.org/abs/1706.03762
+- Adam: A Method for Stochastic Optimization：https://arxiv.org/abs/1412.6980
+- Batch Normalization：https://arxiv.org/abs/1502.03167
+- Dropout: A Simple Way to Prevent Neural Networks from Overfitting：https://jmlr.org/papers/v15/srivastava14a.html

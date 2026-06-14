@@ -16,18 +16,18 @@
 
 | 顺序 | 文件 | 目标 |
 |---|---|---|
-| 1 | [01_math_foundations.md](01_math_foundations.md) | 补齐机器人最常用的数学基础 |
-| 2 | [02_rigid_body_motion_and_tf.md](02_rigid_body_motion_and_tf.md) | 理解坐标系、姿态、刚体变换和 TF |
-| 3 | [03_mobile_robot_kinematics.md](03_mobile_robot_kinematics.md) | 理解差速、阿克曼、全向底盘如何运动 |
-| 4 | [04_manipulator_kinematics.md](04_manipulator_kinematics.md) | 理解机械臂正逆运动学、雅可比和奇异位形 |
-| 5 | [05_dynamics_and_control.md](05_dynamics_and_control.md) | 理解动力学、PID、轨迹跟踪和闭环控制 |
-| 6 | [06_state_estimation_sensor_fusion.md](06_state_estimation_sensor_fusion.md) | 理解噪声、卡尔曼滤波、粒子滤波和传感器融合 |
-| 7 | [07_slam_theory.md](07_slam_theory.md) | 理解 SLAM 的前端、后端、回环和地图 |
-| 8 | [08_motion_planning.md](08_motion_planning.md) | 理解 A*、RRT、轨迹优化、Nav2 和 MoveIt 规划思想 |
-| 9 | [09_robot_perception_geometry.md](09_robot_perception_geometry.md) | 理解相机模型、标定、点云、ICP 和手眼标定 |
-| 10 | [10_robot_modeling_and_simulation.md](10_robot_modeling_and_simulation.md) | 理解 URDF/SDF、仿真、传感器模型和数字孪生 |
-| 11 | [11_task_planning_behavior_trees.md](11_task_planning_behavior_trees.md) | 理解状态机、行为树、任务规划和失败恢复 |
-| 12 | [12_robot_safety_systems_engineering.md](12_robot_safety_systems_engineering.md) | 理解企业级机器人安全、可靠性、测试和系统工程 |
+| 1 | [01_math_foundations.md](01_数学基础.md) | 补齐机器人最常用的数学基础 |
+| 2 | [02_rigid_body_motion_and_tf.md](02_刚体运动坐标变换.md) | 理解坐标系、姿态、刚体变换和 TF |
+| 3 | [03_mobile_robot_kinematics.md](03_移动机器人运动学.md) | 理解差速、阿克曼、全向底盘如何运动 |
+| 4 | [04_manipulator_kinematics.md](04_机械臂运动学.md) | 理解机械臂正逆运动学、雅可比和奇异位形 |
+| 5 | [05_dynamics_and_control.md](05_动力学与控制理论.md) | 理解动力学、PID、轨迹跟踪和闭环控制 |
+| 6 | [06_state_estimation_sensor_fusion.md](06_状态估计与传感器融合.md) | 理解噪声、卡尔曼滤波、粒子滤波和传感器融合 |
+| 7 | [07_slam_theory.md](07_Slam理论.md) | 理解 SLAM 的前端、后端、回环和地图 |
+| 8 | [08_motion_planning.md](08_路径规划.md) | 理解 A*、RRT、轨迹优化、Nav2 和 MoveIt 规划思想 |
+| 9 | [09_robot_perception_geometry.md](09_机器人感知几何.md) | 理解相机模型、标定、点云、ICP 和手眼标定 |
+| 10 | [10_robot_modeling_and_simulation.md](10_机器人建模仿真与数字孪生.md) | 理解 URDF/SDF、仿真、传感器模型和数字孪生 |
+| 11 | [11_task_planning_behavior_trees.md](11_任务规划状态机与行为树.md) | 理解状态机、行为树、任务规划和失败恢复 |
+| 12 | [12_robot_safety_systems_engineering.md](12_机器人安全可靠性与系统工程.md) | 理解企业级机器人安全、可靠性、测试和系统工程 |
 
 ## 理论知识地图
 

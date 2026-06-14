@@ -1,0 +1,222 @@
+# 02. 刚体运动、坐标变换与 TF
+
+## 学习目标
+
+学完本章，你应该能：
+
+- 理解机器人为什么到处都是坐标系。
+- 正确区分位置、姿态、位姿和变换。
+- 看懂旋转矩阵、欧拉角、四元数、齐次变换。
+- 理解 ROS 2 TF 树为什么是机器人系统的骨架。
+- 能排查常见 TF 错误。
+
+## 1. 为什么坐标系是机器人学第一核心
+
+机器人系统里，每个硬件和算法都可能有自己的坐标系：
+
+- `map`：全局地图坐标系。
+- `odom`：局部连续里程计坐标系。
+- `base_link`：机器人底盘坐标系。
+- `laser_link`：激光雷达坐标系。
+- `camera_link`：相机坐标系。
+- `tool0`：机械臂末端坐标系。
+
+如果坐标系错了：
+
+- 雷达点云会飞到错误位置。
+- 相机识别到物体，但机械臂抓偏。
+- Nav2 会规划错误路径。
+- RViz 看起来一切都在抖动或旋转。
+
+## 2. 位置、姿态、位姿、变换
+
+| 概念 | 含义 |
+|---|---|
+| 位置 position | 一个点在哪里，通常是 `[x, y, z]` |
+| 姿态 orientation | 物体朝向哪里，通常用旋转矩阵、欧拉角或四元数 |
+| 位姿 pose | 位置 + 姿态 |
+| 变换 transform | 从一个坐标系到另一个坐标系的映射 |
+
+工程中常见说法：
+
+```text
+T_world_base
+```
+
+可以理解为：`base` 坐标系相对 `world` 坐标系的位姿，也可以用来把 `base` 坐标系下的点转换到 `world` 坐标系。
+
+## 3. 旋转表示
+
+### 3.1 旋转矩阵
+
+二维旋转矩阵：
+
+```text
+R(theta) = [[cos(theta), -sin(theta)],
+            [sin(theta),  cos(theta)]]
+```
+
+三维旋转矩阵是 3x3 矩阵。
+
+优点：
+
+- 适合直接计算。
+- 没有万向节锁。
+
+缺点：
+
+- 9 个数字表示 3 个自由度，存在冗余。
+- 数值计算后可能不再严格正交，需要归一化。
+
+### 3.2 欧拉角
+
+欧拉角通常表示 roll、pitch、yaw。
+
+优点：
+
+- 人类容易理解。
+- 调试时直观。
+
+缺点：
+
+- 存在万向节锁。
+- 不同系统可能采用不同旋转顺序。
+- 角度和弧度容易混用。
+
+### 3.3 四元数
+
+ROS 中姿态常用四元数：
+
+```text
+q = [x, y, z, w]
+```
+
+优点：
+
+- 适合插值。
+- 没有万向节锁。
+- 表示紧凑。
+
+缺点：
+
+- 不直观。
+- 必须保持单位长度。
+
+常见错误：
+
+- 忘记归一化四元数。
+- 把 `[w, x, y, z]` 和 `[x, y, z, w]` 顺序搞反。
+
+## 4. 齐次变换矩阵
+
+三维刚体变换通常写成 4x4：
+
+```text
+T = [[R, t],
+     [0, 1]]
+```
+
+其中：
+
+- `R` 是 3x3 旋转矩阵。
+- `t` 是 3x1 平移向量。
+
+点从局部坐标系变到世界坐标系：
+
+```text
+p_world = T_world_local * p_local
+```
+
+这里 `p_local` 通常写成齐次坐标：
+
+```text
+[x, y, z, 1]^T
+```
+
+## 5. 变换链
+
+机器人中很少只有一个变换，通常是一条链：
+
+```text
+map -> odom -> base_link -> camera_link -> object
+```
+
+如果物体在相机坐标系下的位置是 `p_camera`，想转到地图坐标系：
+
+```text
+p_map = T_map_odom * T_odom_base * T_base_camera * p_camera
+```
+
+注意顺序：从右往左应用。
+
+## 6. ROS 2 TF 树
+
+TF2 维护一棵随时间变化的坐标变换树。
+
+### 6.1 静态 TF
+
+静态 TF 适合硬件安装关系：
+
+- 雷达相对底盘的位置。
+- 相机相对机械臂末端的位置。
+- IMU 相对底盘的位置。
+
+这些关系通常不会随时间变化。
+
+### 6.2 动态 TF
+
+动态 TF 适合运动关系：
+
+- `odom -> base_link`
+- `map -> odom`
+- 机械臂各关节之间的变换
+
+这些关系随时间变化。
+
+### 6.3 `map`、`odom`、`base_link`
+
+移动机器人常见坐标关系：
+
+```text
+map -> odom -> base_link
+```
+
+含义：
+
+- `base_link` 是机器人本体。
+- `odom -> base_link` 由里程计提供，短期连续但长期漂移。
+- `map -> odom` 由定位系统提供，用来修正长期漂移。
+- `map -> base_link` 是机器人在全局地图中的位姿。
+
+## 7. 常见 TF 问题
+
+| 问题 | 可能原因 | 排查方式 |
+|---|---|---|
+| RViz 显示 No transform | TF 没发布、frame 名字不一致 | 检查 frame id 和 TF 树 |
+| TF extrapolation error | 时间戳不匹配、时钟不同步 | 检查 `/clock`、系统时间、消息 stamp |
+| 雷达点云方向反了 | 静态 TF 方向或旋转写错 | 在 RViz 看坐标轴 |
+| 机器人模型散架 | URDF joint origin 写错 | 检查 URDF 和 robot_state_publisher |
+| 导航时路径偏移 | `map/odom/base_link` 关系错误 | 检查定位输出和 odom |
+
+## 8. 学习练习
+
+1. 在纸上画出 `map -> odom -> base_link -> laser_link`。
+2. 用 ROS 2 发布一个 `base_link -> camera_link` 静态 TF。
+3. 在 RViz 中显示 TF，检查 X/Y/Z 轴方向。
+4. 故意把相机 yaw 旋转 90 度，观察点云或坐标轴变化。
+5. 用 Python 写两个 4x4 变换矩阵相乘，验证变换链。
+
+## 9. 最低掌握清单
+
+- 能区分“点在某坐标系中的坐标”和“坐标系之间的变换”。
+- 能解释 `map -> odom -> base_link`。
+- 能读懂四元数在 ROS 消息中的位置。
+- 能使用 RViz 检查 TF。
+- 能判断静态 TF 和动态 TF 分别由谁发布。
+
+## References and further reading
+
+- ROS 2 TF2 Tutorials: https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Tf2-Main.html
+- ROS 2 Concepts: https://docs.ros.org/en/jazzy/Concepts.html
+- Modern Robotics, Chapter 3: https://modernrobotics.northwestern.edu/
+- REP 105 Coordinate Frames for Mobile Platforms: https://www.ros.org/reps/rep-0105.html

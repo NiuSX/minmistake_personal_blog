@@ -2145,13 +2145,13 @@ chmod +x script.sh
 
 建议阅读：
 
-- GNU Bash Manual：https://www.gnu.org/software/bash/manual/
-- Bash Reference Manual：https://www.gnu.org/s/bash/manual/bash.html
-- POSIX Shell Command Language：https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
-- ShellCheck：https://www.shellcheck.net/
-- Advanced Bash-Scripting Guide：https://tldp.org/LDP/abs/html/
-- GNU Coreutils Manual：https://www.gnu.org/software/coreutils/manual/
-- explainshell：https://explainshell.com/
+- GNU Bash Manual：[https://www.gnu.org/software/bash/manual/](https://www.gnu.org/software/bash/manual/)
+- Bash Reference Manual：[https://www.gnu.org/s/bash/manual/bash.html](https://www.gnu.org/s/bash/manual/bash.html)
+- POSIX Shell Command Language：[https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html)
+- ShellCheck：[https://www.shellcheck.net/](https://www.shellcheck.net/)
+- Advanced Bash-Scripting Guide：[https://tldp.org/LDP/abs/html/](https://tldp.org/LDP/abs/html/)
+- GNU Coreutils Manual：[https://www.gnu.org/software/coreutils/manual/](https://www.gnu.org/software/coreutils/manual/)
+- explainshell：[https://explainshell.com/](https://explainshell.com/)
 
 ## 最后总结
 
@@ -2248,8 +2248,8 @@ done
 
 ## 45. 补充参考资料
 
-- GNU Bash Manual：https://www.gnu.org/software/bash/manual/
-- POSIX Shell Command Language：https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html
-- ShellCheck Wiki：https://www.shellcheck.net/wiki/Home
-- Google Shell Style Guide：https://google.github.io/styleguide/shellguide.html
-- GNU Coreutils Manual：https://www.gnu.org/software/coreutils/manual/
+- GNU Bash Manual：[https://www.gnu.org/software/bash/manual/](https://www.gnu.org/software/bash/manual/)
+- POSIX Shell Command Language：[https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html)
+- ShellCheck Wiki：[https://www.shellcheck.net/wiki/Home](https://www.shellcheck.net/wiki/Home)
+- Google Shell Style Guide：[https://google.github.io/styleguide/shellguide.html](https://google.github.io/styleguide/shellguide.html)
+- GNU Coreutils Manual：[https://www.gnu.org/software/coreutils/manual/](https://www.gnu.org/software/coreutils/manual/)

@@ -43,7 +43,7 @@ ASN.1 BER/DER 常使用 TLV 结构：
 
 ## 参考资料
 
-- ITU-T X.680 ASN.1: <https://www.itu.int/rec/T-REC-X.680>
-- ITU-T X.690 Encoding Rules: <https://www.itu.int/rec/T-REC-X.690>
-- RFC 5280 - X.509 PKI Certificate Profile: <https://www.rfc-editor.org/rfc/rfc5280.html>
+- ITU-T X.680 ASN.1: <[https://www.itu.int/rec/T-REC-X.680](https://www.itu.int/rec/T-REC-X.680)>
+- ITU-T X.690 Encoding Rules: <[https://www.itu.int/rec/T-REC-X.690](https://www.itu.int/rec/T-REC-X.690)>
+- RFC 5280 - X.509 PKI Certificate Profile: <[https://www.rfc-editor.org/rfc/rfc5280.html](https://www.rfc-editor.org/rfc/rfc5280.html)>
 

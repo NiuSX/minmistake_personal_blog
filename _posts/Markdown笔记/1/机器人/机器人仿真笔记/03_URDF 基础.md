@@ -371,6 +371,6 @@ ros2 run tf2_tools view_frames
 
 ## 参考资料
 
-- ROS 2 Jazzy URDF 教程：https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html
-- URDF XML 文档索引：https://wiki.ros.org/urdf/XML
+- ROS 2 Jazzy URDF 教程：[https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html)
+- URDF XML 文档索引：[https://wiki.ros.org/urdf/XML](https://wiki.ros.org/urdf/XML)
 

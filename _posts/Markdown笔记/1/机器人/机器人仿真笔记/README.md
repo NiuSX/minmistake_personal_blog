@@ -86,11 +86,11 @@ flowchart LR
 
 ## 参考入口
 
-- ROS 2 Jazzy URDF 教程：https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html
-- ROS 2 Xacro 教程：https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html
-- Gazebo Harmonic 文档：https://gazebosim.org/docs/harmonic/
-- Gazebo + ROS 安装建议：https://gazebosim.org/docs/harmonic/ros_installation/
-- SDFormat 规范：https://sdformat.org/spec/
-- gz_ros2_control Jazzy 文档：https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html
-- Gazebo Classic 页面：https://classic.gazebosim.org/
+- ROS 2 Jazzy URDF 教程：[https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/URDF/URDF-Main.html)
+- ROS 2 Xacro 教程：[https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html](https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html)
+- Gazebo Harmonic 文档：[https://gazebosim.org/docs/harmonic/](https://gazebosim.org/docs/harmonic/)
+- Gazebo + ROS 安装建议：[https://gazebosim.org/docs/harmonic/ros_installation/](https://gazebosim.org/docs/harmonic/ros_installation/)
+- SDFormat 规范：[https://sdformat.org/spec/](https://sdformat.org/spec/)
+- gz_ros2_control Jazzy 文档：[https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html](https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html)
+- Gazebo Classic 页面：[https://classic.gazebosim.org/](https://classic.gazebosim.org/)
 

@@ -2286,17 +2286,17 @@ button 已经有语义，不需要重复 role。
 
 建议优先阅读标准、MDN 和验证工具：
 
-- WHATWG HTML Living Standard：https://html.spec.whatwg.org/
-- WHATWG HTML for Web Developers：https://html.spec.whatwg.org/dev/
-- WHATWG HTML elements index：https://html.spec.whatwg.org/multipage/indices.html
-- MDN HTML Reference：https://developer.mozilla.org/en-US/docs/Web/HTML/Reference
-- MDN HTML elements reference：https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements
-- MDN HTML forms guide：https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms
-- MDN Accessibility：https://developer.mozilla.org/en-US/docs/Web/Accessibility
-- MDN Responsive images：https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/HTML_images/Responsive_images
-- MDN Script element：https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script
-- web.dev Learn HTML：https://web.dev/learn/html
-- W3C Markup Validator：https://validator.w3.org/
+- WHATWG HTML Living Standard：[https://html.spec.whatwg.org/](https://html.spec.whatwg.org/)
+- WHATWG HTML for Web Developers：[https://html.spec.whatwg.org/dev/](https://html.spec.whatwg.org/dev/)
+- WHATWG HTML elements index：[https://html.spec.whatwg.org/multipage/indices.html](https://html.spec.whatwg.org/multipage/indices.html)
+- MDN HTML Reference：[https://developer.mozilla.org/en-US/docs/Web/HTML/Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference)
+- MDN HTML elements reference：[https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements)
+- MDN HTML forms guide：[https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Forms)
+- MDN Accessibility：[https://developer.mozilla.org/en-US/docs/Web/Accessibility](https://developer.mozilla.org/en-US/docs/Web/Accessibility)
+- MDN Responsive images：[https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/HTML_images/Responsive_images](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/HTML_images/Responsive_images)
+- MDN Script element：[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script)
+- web.dev Learn HTML：[https://web.dev/learn/html](https://web.dev/learn/html)
+- W3C Markup Validator：[https://validator.w3.org/](https://validator.w3.org/)
 
 实践检索关键词：
 

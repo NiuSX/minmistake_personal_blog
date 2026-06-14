@@ -195,8 +195,8 @@ flowchart LR
 
 ## References and further reading
 
-- Probabilistic Robotics: https://probabilistic-robotics.org/
-- State Estimation for Robotics: https://github.com/utiasSTARS/state-estimation-for-robotics
-- SLAM Toolbox: https://github.com/SteveMacenski/slam_toolbox
-- Navigation2 Documentation: https://docs.nav2.org/
-- Open3D Registration Tutorial: https://www.open3d.org/docs/release/tutorial/pipelines/registration.html
+- Probabilistic Robotics: [https://probabilistic-robotics.org/](https://probabilistic-robotics.org/)
+- State Estimation for Robotics: [https://github.com/utiasSTARS/state-estimation-for-robotics](https://github.com/utiasSTARS/state-estimation-for-robotics)
+- SLAM Toolbox: [https://github.com/SteveMacenski/slam_toolbox](https://github.com/SteveMacenski/slam_toolbox)
+- Navigation2 Documentation: [https://docs.nav2.org/](https://docs.nav2.org/)
+- Open3D Registration Tutorial: [https://www.open3d.org/docs/release/tutorial/pipelines/registration.html](https://www.open3d.org/docs/release/tutorial/pipelines/registration.html)

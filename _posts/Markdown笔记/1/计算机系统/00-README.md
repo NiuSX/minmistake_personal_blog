@@ -95,19 +95,19 @@ flowchart TD
 ## 参考资料
 
 - CSAPP 官方课程资源  
-  https://csapp.cs.cmu.edu/
+  [https://csapp.cs.cmu.edu/](https://csapp.cs.cmu.edu/)
 
 - OSTEP 官方在线书  
-  https://pages.cs.wisc.edu/~remzi/OSTEP/
+  [https://pages.cs.wisc.edu/~remzi/OSTEP/](https://pages.cs.wisc.edu/~remzi/OSTEP/)
 
 - RISC-V International Specifications  
-  https://riscv.org/technical/specifications/
+  [https://riscv.org/technical/specifications/](https://riscv.org/technical/specifications/)
 
 - Linux man-pages project  
-  https://www.kernel.org/doc/man-pages/
+  [https://www.kernel.org/doc/man-pages/](https://www.kernel.org/doc/man-pages/)
 
 - IETF RFC 9293 - Transmission Control Protocol  
-  https://www.rfc-editor.org/rfc/rfc9293
+  [https://www.rfc-editor.org/rfc/rfc9293](https://www.rfc-editor.org/rfc/rfc9293)
 
 - IETF RFC 9110 - HTTP Semantics  
-  https://www.rfc-editor.org/rfc/rfc9110
+  [https://www.rfc-editor.org/rfc/rfc9110](https://www.rfc-editor.org/rfc/rfc9110)

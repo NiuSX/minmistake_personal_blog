@@ -303,7 +303,7 @@ auto names = users
 
 ## 参考资料
 
-- Reference: cppreference containers library，https://cppreference.com/w/cpp/container
-- Reference: cppreference algorithms library，https://cppreference.com/w/cpp/algorithm
-- Reference: cppreference ranges library，https://cppreference.com/w/cpp/ranges
-- Guideline: C++ Core Guidelines SL: Standard library，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-libraries
+- Reference: cppreference containers library，[https://cppreference.com/w/cpp/container](https://cppreference.com/w/cpp/container)
+- Reference: cppreference algorithms library，[https://cppreference.com/w/cpp/algorithm](https://cppreference.com/w/cpp/algorithm)
+- Reference: cppreference ranges library，[https://cppreference.com/w/cpp/ranges](https://cppreference.com/w/cpp/ranges)
+- Guideline: C++ Core Guidelines SL: Standard library，[https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-libraries](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-libraries)

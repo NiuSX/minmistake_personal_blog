@@ -69,12 +69,12 @@ flowchart TD
 
 - 周志华：《机器学习》，清华大学出版社。
 - 《南瓜书》：西瓜书公式推导补充资料。
-- Deep Learning Book：https://www.deeplearningbook.org/
-- Dive into Deep Learning：https://d2l.ai/
-- CS231n Convolutional Neural Networks for Visual Recognition：https://cs231n.github.io/
-- PyTorch Tutorials：https://pytorch.org/tutorials/
-- PyTorch Documentation：https://docs.pytorch.org/docs/stable/index.html
-- Attention Is All You Need：https://arxiv.org/abs/1706.03762
-- Adam: A Method for Stochastic Optimization：https://arxiv.org/abs/1412.6980
-- Batch Normalization：https://arxiv.org/abs/1502.03167
-- Dropout: A Simple Way to Prevent Neural Networks from Overfitting：https://jmlr.org/papers/v15/srivastava14a.html
+- Deep Learning Book：[https://www.deeplearningbook.org/](https://www.deeplearningbook.org/)
+- Dive into Deep Learning：[https://d2l.ai/](https://d2l.ai/)
+- CS231n Convolutional Neural Networks for Visual Recognition：[https://cs231n.github.io/](https://cs231n.github.io/)
+- PyTorch Tutorials：[https://pytorch.org/tutorials/](https://pytorch.org/tutorials/)
+- PyTorch Documentation：[https://docs.pytorch.org/docs/stable/index.html](https://docs.pytorch.org/docs/stable/index.html)
+- Attention Is All You Need：[https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)
+- Adam: A Method for Stochastic Optimization：[https://arxiv.org/abs/1412.6980](https://arxiv.org/abs/1412.6980)
+- Batch Normalization：[https://arxiv.org/abs/1502.03167](https://arxiv.org/abs/1502.03167)
+- Dropout: A Simple Way to Prevent Neural Networks from Overfitting：[https://jmlr.org/papers/v15/srivastava14a.html](https://jmlr.org/papers/v15/srivastava14a.html)

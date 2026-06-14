@@ -182,8 +182,8 @@ mqtt || tcp.port == 1883 || tcp.port == 8883
 
 ## 参考资料
 
-- Official - MQTT Version 5.0 OASIS Standard: <https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html>
-- Official - MQTT Version 3.1.1 OASIS Standard: <https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html>
-- Official - MQTT.org: <https://mqtt.org/>
-- Official - Eclipse Mosquitto documentation: <https://mosquitto.org/documentation/>
-- Community - EMQX MQTT guide: <https://www.emqx.com/en/mqtt-guide>
+- Official - MQTT Version 5.0 OASIS Standard: <[https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)>
+- Official - MQTT Version 3.1.1 OASIS Standard: <[https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html](https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html)>
+- Official - MQTT.org: <[https://mqtt.org/](https://mqtt.org/)>
+- Official - Eclipse Mosquitto documentation: <[https://mosquitto.org/documentation/](https://mosquitto.org/documentation/)>
+- Community - EMQX MQTT guide: <[https://www.emqx.com/en/mqtt-guide](https://www.emqx.com/en/mqtt-guide)>

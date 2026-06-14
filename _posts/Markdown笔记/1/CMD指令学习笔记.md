@@ -1491,20 +1491,20 @@ chcp
 
 官方资料：
 
-- Windows Commands Reference：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands
-- CMD：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/cmd
-- Command-Line Syntax Key：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/command-line-syntax-key
-- dir：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dir
-- robocopy：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy
-- findstr：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr
-- setx：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/setx
-- netstat：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat
-- taskkill：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill
-- sc：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-query
-- choice：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/choice
-- timeout：https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/timeout
-- Windows Terminal：https://learn.microsoft.com/windows/terminal/
-- PowerShell Documentation：https://learn.microsoft.com/powershell/
+- Windows Commands Reference：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands)
+- CMD：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/cmd](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/cmd)
+- Command-Line Syntax Key：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/command-line-syntax-key](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/command-line-syntax-key)
+- dir：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dir](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/dir)
+- robocopy：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/robocopy)
+- findstr：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/findstr)
+- setx：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/setx](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/setx)
+- netstat：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netstat)
+- taskkill：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/taskkill)
+- sc：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-query](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/sc-query)
+- choice：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/choice](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/choice)
+- timeout：[https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/timeout](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/timeout)
+- Windows Terminal：[https://learn.microsoft.com/windows/terminal/](https://learn.microsoft.com/windows/terminal/)
+- PowerShell Documentation：[https://learn.microsoft.com/powershell/](https://learn.microsoft.com/powershell/)
 
 中文实践检索关键词：
 

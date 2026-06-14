@@ -69,7 +69,7 @@ dig +trace example.com
 
 ## 参考资料
 
-- RFC 1034 - Domain Names Concepts and Facilities: <https://www.rfc-editor.org/rfc/rfc1034.html>
-- RFC 1035 - Domain Names Implementation and Specification: <https://www.rfc-editor.org/rfc/rfc1035.html>
-- RFC 8484 - DNS over HTTPS: <https://www.rfc-editor.org/rfc/rfc8484.html>
+- RFC 1034 - Domain Names Concepts and Facilities: <[https://www.rfc-editor.org/rfc/rfc1034.html](https://www.rfc-editor.org/rfc/rfc1034.html)>
+- RFC 1035 - Domain Names Implementation and Specification: <[https://www.rfc-editor.org/rfc/rfc1035.html](https://www.rfc-editor.org/rfc/rfc1035.html)>
+- RFC 8484 - DNS over HTTPS: <[https://www.rfc-editor.org/rfc/rfc8484.html](https://www.rfc-editor.org/rfc/rfc8484.html)>
 

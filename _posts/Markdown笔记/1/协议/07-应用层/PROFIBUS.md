@@ -57,6 +57,6 @@ PROFIBUS PA 常用 MBP 物理层，适合过程仪表、较低速率、长距离
 
 ## 参考资料
 
-- PROFIBUS & PROFINET International: <https://www.profibus.com/>
-- IEC 61158 overview: <https://webstore.iec.ch/>
+- PROFIBUS & PROFINET International: <[https://www.profibus.com/](https://www.profibus.com/)>
+- IEC 61158 overview: <[https://webstore.iec.ch/](https://webstore.iec.ch/)>
 

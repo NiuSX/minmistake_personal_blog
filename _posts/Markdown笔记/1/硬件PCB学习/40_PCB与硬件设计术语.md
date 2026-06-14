@@ -202,9 +202,9 @@
 
 ## 参考与延伸阅读
 
-- KiCad PCB Editor 文档：https://docs.kicad.org/8.0/en/pcbnew/pcbnew.html
-- JLCPCB PCB Capabilities：https://jlcpcb.com/capabilities/pcb-capabilities
-- IPC 标准入口：https://www.ipc.org/meet-your-standards
-- Analog Devices 混合信号 PCB 布局指南：https://www.analog.com/en/resources/analog-dialogue/articles/what-are-the-basic-guidelines-for-layout-design-of-mixed-signal-pcbs.html
-- TI PCB Design Guidelines For Reduced EMI：https://www.ti.com/lit/an/szza009/szza009.pdf
-- PCB 设计返回路径 / 回流路径实践说明：https://blog.csdn.net/weixin_45365488/article/details/134132810
+- KiCad PCB Editor 文档：[https://docs.kicad.org/8.0/en/pcbnew/pcbnew.html](https://docs.kicad.org/8.0/en/pcbnew/pcbnew.html)
+- JLCPCB PCB Capabilities：[https://jlcpcb.com/capabilities/pcb-capabilities](https://jlcpcb.com/capabilities/pcb-capabilities)
+- IPC 标准入口：[https://www.ipc.org/meet-your-standards](https://www.ipc.org/meet-your-standards)
+- Analog Devices 混合信号 PCB 布局指南：[https://www.analog.com/en/resources/analog-dialogue/articles/what-are-the-basic-guidelines-for-layout-design-of-mixed-signal-pcbs.html](https://www.analog.com/en/resources/analog-dialogue/articles/what-are-the-basic-guidelines-for-layout-design-of-mixed-signal-pcbs.html)
+- TI PCB Design Guidelines For Reduced EMI：[https://www.ti.com/lit/an/szza009/szza009.pdf](https://www.ti.com/lit/an/szza009/szza009.pdf)
+- PCB 设计返回路径 / 回流路径实践说明：[https://blog.csdn.net/weixin_45365488/article/details/134132810](https://blog.csdn.net/weixin_45365488/article/details/134132810)

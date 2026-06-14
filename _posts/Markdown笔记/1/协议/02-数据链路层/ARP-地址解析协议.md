@@ -65,5 +65,5 @@ arp.opcode == 2
 
 ## 参考资料
 
-- RFC 826 - Address Resolution Protocol: <https://www.rfc-editor.org/rfc/rfc826.html>
+- RFC 826 - Address Resolution Protocol: <[https://www.rfc-editor.org/rfc/rfc826.html](https://www.rfc-editor.org/rfc/rfc826.html)>
 

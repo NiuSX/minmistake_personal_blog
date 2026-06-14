@@ -75,8 +75,8 @@ curl --http3 https://example.com
 
 ## 参考资料
 
-- RFC 9110 - HTTP Semantics: <https://www.rfc-editor.org/rfc/rfc9110.html>
-- RFC 9112 - HTTP/1.1: <https://www.rfc-editor.org/rfc/rfc9112.html>
-- RFC 9113 - HTTP/2: <https://www.rfc-editor.org/rfc/rfc9113.html>
-- RFC 9114 - HTTP/3: <https://www.rfc-editor.org/rfc/rfc9114.html>
+- RFC 9110 - HTTP Semantics: <[https://www.rfc-editor.org/rfc/rfc9110.html](https://www.rfc-editor.org/rfc/rfc9110.html)>
+- RFC 9112 - HTTP/1.1: <[https://www.rfc-editor.org/rfc/rfc9112.html](https://www.rfc-editor.org/rfc/rfc9112.html)>
+- RFC 9113 - HTTP/2: <[https://www.rfc-editor.org/rfc/rfc9113.html](https://www.rfc-editor.org/rfc/rfc9113.html)>
+- RFC 9114 - HTTP/3: <[https://www.rfc-editor.org/rfc/rfc9114.html](https://www.rfc-editor.org/rfc/rfc9114.html)>
 

@@ -171,7 +171,7 @@ http.websocket || websocket || tcp.port == 80 || tcp.port == 443
 
 ## 参考资料
 
-- RFC 6455 - The WebSocket Protocol: <https://www.rfc-editor.org/rfc/rfc6455>
-- MDN - WebSocket API: <https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API>
-- MDN - Writing WebSocket servers: <https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers>
-- Nginx WebSocket proxying: <https://nginx.org/en/docs/http/websocket.html>
+- RFC 6455 - The WebSocket Protocol: <[https://www.rfc-editor.org/rfc/rfc6455](https://www.rfc-editor.org/rfc/rfc6455)>
+- MDN - WebSocket API: <[https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API)>
+- MDN - Writing WebSocket servers: <[https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers](https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers)>
+- Nginx WebSocket proxying: <[https://nginx.org/en/docs/http/websocket.html](https://nginx.org/en/docs/http/websocket.html)>

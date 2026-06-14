@@ -2536,20 +2536,20 @@ calc()
 
 官方资料：
 
-- W3C CSS Snapshot 2026：https://www.w3.org/TR/css-2026/
-- W3C CSS Current Work：https://www.w3.org/Style/CSS/current-work.en
-- CSS Working Group Drafts：https://drafts.csswg.org/
-- MDN CSS Reference：https://developer.mozilla.org/en-US/docs/Web/CSS/Reference
-- MDN CSS Cascade：https://developer.mozilla.org/docs/Web/CSS/CSS_cascade/Cascade
-- MDN Selectors：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors
-- MDN Flexbox：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout
-- MDN Grid：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout
-- MDN Container Queries：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries
-- MDN CSS Custom Properties：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables
-- MDN CSS Nesting：https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting
-- MDN Cascade Layers：https://developer.mozilla.org/en-US/docs/Web/CSS/@layer
-- web.dev Learn CSS：https://web.dev/learn/css
-- Can I use：https://caniuse.com/
+- W3C CSS Snapshot 2026：[https://www.w3.org/TR/css-2026/](https://www.w3.org/TR/css-2026/)
+- W3C CSS Current Work：[https://www.w3.org/Style/CSS/current-work.en](https://www.w3.org/Style/CSS/current-work.en)
+- CSS Working Group Drafts：[https://drafts.csswg.org/](https://drafts.csswg.org/)
+- MDN CSS Reference：[https://developer.mozilla.org/en-US/docs/Web/CSS/Reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference)
+- MDN CSS Cascade：[https://developer.mozilla.org/docs/Web/CSS/CSS_cascade/Cascade](https://developer.mozilla.org/docs/Web/CSS/CSS_cascade/Cascade)
+- MDN Selectors：[https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_selectors)
+- MDN Flexbox：[https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout)
+- MDN Grid：[https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout)
+- MDN Container Queries：[https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_containment/Container_queries)
+- MDN CSS Custom Properties：[https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_cascading_variables)
+- MDN CSS Nesting：[https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting)
+- MDN Cascade Layers：[https://developer.mozilla.org/en-US/docs/Web/CSS/@layer](https://developer.mozilla.org/en-US/docs/Web/CSS/@layer)
+- web.dev Learn CSS：[https://web.dev/learn/css](https://web.dev/learn/css)
+- Can I use：[https://caniuse.com/](https://caniuse.com/)
 
 实践检索关键词：
 

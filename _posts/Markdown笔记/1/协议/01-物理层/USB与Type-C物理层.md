@@ -330,13 +330,13 @@ PC USB Host
 
 ## 参考资料
 
-- Official - USB-IF Document Library: <https://www.usb.org/documents>
-- Official - USB-IF USB Type-C Cable and Connector Specification: <https://www.usb.org/usb-type-cr-cable-and-connector-specification>
-- Official - USB-IF USB Power Delivery / USB Charger: <https://www.usb.org/usb-charger-pd>
-- Official - USB-IF USB4: <https://www.usb.org/usb4>
-- Official - USB-IF USB 3.2: <https://www.usb.org/usb-32>
-- Official - Microsoft USB device descriptors: <https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-device-descriptors>
-- Official - Linux Kernel USB Host Side API: <https://docs.kernel.org/driver-api/usb/usb.html>
-- Community - CSDN Type-C CC 检测原理: <https://blog.csdn.net/myq889/article/details/117533161>
-- Community - 博客园 Type-C 协议 CC 检测原理: <https://www.cnblogs.com/seanhn/p/18345816>
-- Community - CSDN Type-C CC 引脚作用与 VCONN: <https://blog.csdn.net/weixin_43772512/article/details/123307773>
+- Official - USB-IF Document Library: <[https://www.usb.org/documents](https://www.usb.org/documents)>
+- Official - USB-IF USB Type-C Cable and Connector Specification: <[https://www.usb.org/usb-type-cr-cable-and-connector-specification](https://www.usb.org/usb-type-cr-cable-and-connector-specification)>
+- Official - USB-IF USB Power Delivery / USB Charger: <[https://www.usb.org/usb-charger-pd](https://www.usb.org/usb-charger-pd)>
+- Official - USB-IF USB4: <[https://www.usb.org/usb4](https://www.usb.org/usb4)>
+- Official - USB-IF USB 3.2: <[https://www.usb.org/usb-32](https://www.usb.org/usb-32)>
+- Official - Microsoft USB device descriptors: <[https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-device-descriptors](https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-device-descriptors)>
+- Official - Linux Kernel USB Host Side API: <[https://docs.kernel.org/driver-api/usb/usb.html](https://docs.kernel.org/driver-api/usb/usb.html)>
+- Community - CSDN Type-C CC 检测原理: <[https://blog.csdn.net/myq889/article/details/117533161](https://blog.csdn.net/myq889/article/details/117533161)>
+- Community - 博客园 Type-C 协议 CC 检测原理: <[https://www.cnblogs.com/seanhn/p/18345816](https://www.cnblogs.com/seanhn/p/18345816)>
+- Community - CSDN Type-C CC 引脚作用与 VCONN: <[https://blog.csdn.net/weixin_43772512/article/details/123307773](https://blog.csdn.net/weixin_43772512/article/details/123307773)>

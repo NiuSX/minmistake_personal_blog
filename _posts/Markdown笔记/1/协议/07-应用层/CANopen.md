@@ -71,6 +71,6 @@ CANopen NMT 常见状态：
 
 ## 参考资料
 
-- CAN in Automation CANopen overview: <https://www.can-cia.org/canopen/>
-- CiA CAN knowledge: <https://www.can-cia.org/can-knowledge/>
+- CAN in Automation CANopen overview: <[https://www.can-cia.org/canopen/](https://www.can-cia.org/canopen/)>
+- CiA CAN knowledge: <[https://www.can-cia.org/can-knowledge/](https://www.can-cia.org/can-knowledge/)>
 

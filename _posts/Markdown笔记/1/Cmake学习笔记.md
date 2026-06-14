@@ -3067,32 +3067,32 @@ cpack -G ZIP --config build/CPackConfig.cmake
 
 官方资料：
 
-- CMake Download：https://cmake.org/download/
-- CMake Reference Documentation：https://cmake.org/cmake/help/latest/
-- CMake Tutorial：https://cmake.org/cmake/help/latest/guide/tutorial/index.html
-- cmake(1)：https://cmake.org/cmake/help/latest/manual/cmake.1.html
-- ctest(1)：https://cmake.org/cmake/help/latest/manual/ctest.1.html
-- cpack(1)：https://cmake.org/cmake/help/latest/manual/cpack.1.html
-- cmake-buildsystem(7)：https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html
-- cmake-commands(7)：https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html
-- cmake-language(7)：https://cmake.org/cmake/help/latest/manual/cmake-language.7.html
-- cmake-packages(7)：https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html
-- cmake-presets(7)：https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
-- cmake-toolchains(7)：https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html
-- cmake-generator-expressions(7)：https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html
-- FetchContent：https://cmake.org/cmake/help/latest/module/FetchContent.html
-- GNUInstallDirs：https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html
-- CMakePackageConfigHelpers：https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html
-- CMake Release Notes：https://cmake.org/cmake/help/latest/release/index.html
+- CMake Download：[https://cmake.org/download/](https://cmake.org/download/)
+- CMake Reference Documentation：[https://cmake.org/cmake/help/latest/](https://cmake.org/cmake/help/latest/)
+- CMake Tutorial：[https://cmake.org/cmake/help/latest/guide/tutorial/index.html](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
+- cmake(1)：[https://cmake.org/cmake/help/latest/manual/cmake.1.html](https://cmake.org/cmake/help/latest/manual/cmake.1.html)
+- ctest(1)：[https://cmake.org/cmake/help/latest/manual/ctest.1.html](https://cmake.org/cmake/help/latest/manual/ctest.1.html)
+- cpack(1)：[https://cmake.org/cmake/help/latest/manual/cpack.1.html](https://cmake.org/cmake/help/latest/manual/cpack.1.html)
+- cmake-buildsystem(7)：[https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html](https://cmake.org/cmake/help/latest/manual/cmake-buildsystem.7.html)
+- cmake-commands(7)：[https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html](https://cmake.org/cmake/help/latest/manual/cmake-commands.7.html)
+- cmake-language(7)：[https://cmake.org/cmake/help/latest/manual/cmake-language.7.html](https://cmake.org/cmake/help/latest/manual/cmake-language.7.html)
+- cmake-packages(7)：[https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html](https://cmake.org/cmake/help/latest/manual/cmake-packages.7.html)
+- cmake-presets(7)：[https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html](https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html)
+- cmake-toolchains(7)：[https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html)
+- cmake-generator-expressions(7)：[https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html](https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html)
+- FetchContent：[https://cmake.org/cmake/help/latest/module/FetchContent.html](https://cmake.org/cmake/help/latest/module/FetchContent.html)
+- GNUInstallDirs：[https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html](https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html)
+- CMakePackageConfigHelpers：[https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html](https://cmake.org/cmake/help/latest/module/CMakePackageConfigHelpers.html)
+- CMake Release Notes：[https://cmake.org/cmake/help/latest/release/index.html](https://cmake.org/cmake/help/latest/release/index.html)
 
 实践参考：
 
-- Modern CMake：https://cliutils.gitlab.io/modern-cmake/
-- CGold CMake tutorial：https://cgold.readthedocs.io/en/latest/
-- vcpkg documentation：https://learn.microsoft.com/vcpkg/
-- Conan documentation：https://docs.conan.io/
-- Qt CMake manual：https://doc.qt.io/qt-6/cmake-manual.html
-- Android NDK CMake guide：https://developer.android.com/ndk/guides/cmake
+- Modern CMake：[https://cliutils.gitlab.io/modern-cmake/](https://cliutils.gitlab.io/modern-cmake/)
+- CGold CMake tutorial：[https://cgold.readthedocs.io/en/latest/](https://cgold.readthedocs.io/en/latest/)
+- vcpkg documentation：[https://learn.microsoft.com/vcpkg/](https://learn.microsoft.com/vcpkg/)
+- Conan documentation：[https://docs.conan.io/](https://docs.conan.io/)
+- Qt CMake manual：[https://doc.qt.io/qt-6/cmake-manual.html](https://doc.qt.io/qt-6/cmake-manual.html)
+- Android NDK CMake guide：[https://developer.android.com/ndk/guides/cmake](https://developer.android.com/ndk/guides/cmake)
 
 中文实践检索关键词：
 

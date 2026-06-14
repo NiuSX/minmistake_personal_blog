@@ -2253,17 +2253,17 @@ mvn -X package
 
 建议优先阅读 Apache Maven 官方文档：
 
-- Maven 官方网站：https://maven.apache.org/
-- Maven 下载页：https://maven.apache.org/download.cgi
-- Maven 安装说明：https://maven.apache.org/install.html
-- Maven 官方文档入口：https://maven.apache.org/guides/
-- POM Reference：https://maven.apache.org/pom.html
-- Introduction to the Build Lifecycle：https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-- Introduction to the Dependency Mechanism：https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html
-- Standard Directory Layout：https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html
-- Settings Reference：https://maven.apache.org/settings.html
-- Available Plugins：https://maven.apache.org/plugins/
-- Maven Releases History：https://maven.apache.org/docs/history
+- Maven 官方网站：[https://maven.apache.org/](https://maven.apache.org/)
+- Maven 下载页：[https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+- Maven 安装说明：[https://maven.apache.org/install.html](https://maven.apache.org/install.html)
+- Maven 官方文档入口：[https://maven.apache.org/guides/](https://maven.apache.org/guides/)
+- POM Reference：[https://maven.apache.org/pom.html](https://maven.apache.org/pom.html)
+- Introduction to the Build Lifecycle：[https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html)
+- Introduction to the Dependency Mechanism：[https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html)
+- Standard Directory Layout：[https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html](https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)
+- Settings Reference：[https://maven.apache.org/settings.html](https://maven.apache.org/settings.html)
+- Available Plugins：[https://maven.apache.org/plugins/](https://maven.apache.org/plugins/)
+- Maven Releases History：[https://maven.apache.org/docs/history](https://maven.apache.org/docs/history)
 
 ## 最后总结
 
@@ -2346,9 +2346,9 @@ root
 
 ## 47. 补充参考资料
 
-- Apache Maven Download：https://maven.apache.org/download.cgi
-- Maven POM Reference：https://maven.apache.org/pom.html
-- Maven Build Lifecycle：https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
-- Maven Dependency Mechanism：https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html
-- Maven Settings Reference：https://maven.apache.org/settings.html
-- Maven Wrapper：https://maven.apache.org/wrapper/
+- Apache Maven Download：[https://maven.apache.org/download.cgi](https://maven.apache.org/download.cgi)
+- Maven POM Reference：[https://maven.apache.org/pom.html](https://maven.apache.org/pom.html)
+- Maven Build Lifecycle：[https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html](https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html)
+- Maven Dependency Mechanism：[https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html](https://maven.apache.org/guides/introduction/introduction-to-dependency-mechanism.html)
+- Maven Settings Reference：[https://maven.apache.org/settings.html](https://maven.apache.org/settings.html)
+- Maven Wrapper：[https://maven.apache.org/wrapper/](https://maven.apache.org/wrapper/)

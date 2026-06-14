@@ -358,8 +358,8 @@ map -> odom -> base_footprint -> base_link
 
 ## 参考资料
 
-- ros2_control Jazzy 文档：https://control.ros.org/jazzy/
-- gz_ros2_control Jazzy 文档：https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html
-- diff_drive_controller 文档：https://control.ros.org/jazzy/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html
-- ros_gz 文档入口：https://gazebosim.org/docs/harmonic/ros2_overview/
+- ros2_control Jazzy 文档：[https://control.ros.org/jazzy/](https://control.ros.org/jazzy/)
+- gz_ros2_control Jazzy 文档：[https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html](https://control.ros.org/jazzy/doc/gz_ros2_control/doc/index.html)
+- diff_drive_controller 文档：[https://control.ros.org/jazzy/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html](https://control.ros.org/jazzy/doc/ros2_controllers/diff_drive_controller/doc/userdoc.html)
+- ros_gz 文档入口：[https://gazebosim.org/docs/harmonic/ros2_overview/](https://gazebosim.org/docs/harmonic/ros2_overview/)
 

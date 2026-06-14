@@ -292,7 +292,7 @@ private:
 
 ## 参考资料
 
-- Guideline: C++ Core Guidelines R: Resource management，https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-resource
-- Reference: cppreference `std::unique_ptr`，https://cppreference.com/w/cpp/memory/unique_ptr
-- Reference: cppreference `std::shared_ptr`，https://cppreference.com/w/cpp/memory/shared_ptr
-- Reference: cppreference move constructor，https://cppreference.com/w/cpp/language/move_constructor
+- Guideline: C++ Core Guidelines R: Resource management，[https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-resource](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#S-resource)
+- Reference: cppreference `std::unique_ptr`，[https://cppreference.com/w/cpp/memory/unique_ptr](https://cppreference.com/w/cpp/memory/unique_ptr)
+- Reference: cppreference `std::shared_ptr`，[https://cppreference.com/w/cpp/memory/shared_ptr](https://cppreference.com/w/cpp/memory/shared_ptr)
+- Reference: cppreference move constructor，[https://cppreference.com/w/cpp/language/move_constructor](https://cppreference.com/w/cpp/language/move_constructor)

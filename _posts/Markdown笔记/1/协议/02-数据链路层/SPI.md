@@ -55,6 +55,6 @@ SPI 有四种模式，由时钟极性 CPOL 和时钟相位 CPHA 决定：
 
 ## 参考资料
 
-- NXP SPI controller documentation examples: <https://www.nxp.com/>
-- Analog Devices SPI interface tutorial: <https://www.analog.com/en/resources/analog-dialogue/articles/introduction-to-spi-interface.html>
+- NXP SPI controller documentation examples: <[https://www.nxp.com/](https://www.nxp.com/)>
+- Analog Devices SPI interface tutorial: <[https://www.analog.com/en/resources/analog-dialogue/articles/introduction-to-spi-interface.html](https://www.analog.com/en/resources/analog-dialogue/articles/introduction-to-spi-interface.html)>
 

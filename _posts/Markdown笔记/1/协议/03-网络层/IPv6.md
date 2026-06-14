@@ -58,7 +58,7 @@ IPv6 地址通常写成十六进制冒号分隔形式：
 
 ## 参考资料
 
-- RFC 8200 - Internet Protocol, Version 6 Specification: <[https://www.rfc-editor.org/rfc/rfc8200.html](https://www.rfc-editor.org/rfc/rfc8200.html)>
-- RFC 4861 - Neighbor Discovery for IPv6: <[https://www.rfc-editor.org/rfc/rfc4861.html](https://www.rfc-editor.org/rfc/rfc4861.html)>
-- RFC 4862 - IPv6 Stateless Address Autoconfiguration: <[https://www.rfc-editor.org/rfc/rfc4862.html](https://www.rfc-editor.org/rfc/rfc4862.html)>
+- [RFC 8200 - Internet Protocol, Version 6 Specification](https://www.rfc-editor.org/rfc/rfc8200.html)
+- [RFC 4861 - Neighbor Discovery for IPv6](https://www.rfc-editor.org/rfc/rfc4861.html)
+- [RFC 4862 - IPv6 Stateless Address Autoconfiguration](https://www.rfc-editor.org/rfc/rfc4862.html)
 

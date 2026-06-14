@@ -305,6 +305,6 @@ def generate_launch_description():
 
 ## 参考资料
 
-- ROS 2 Xacro 教程：[https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html](https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html)
-- xacro 包文档：[https://docs.ros.org/en/rolling/p/xacro/](https://docs.ros.org/en/rolling/p/xacro/)
+- [ROS 2 Xacro 教程](https://docs.ros.org/en/rolling/Tutorials/Intermediate/URDF/Using-Xacro-to-Clean-Up-a-URDF-File.html)
+- [xacro 包文档](https://docs.ros.org/en/rolling/p/xacro/)
 

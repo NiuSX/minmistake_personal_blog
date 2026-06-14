@@ -1112,35 +1112,35 @@ Prompt 很重要，但远远不够。生产级 AI 应用还需要：
 
 ### 综合报告与治理
 
-- Stanford HAI AI Index：[https://hai.stanford.edu/ai-index](https://hai.stanford.edu/ai-index)
-- NIST AI Risk Management Framework：[https://www.nist.gov/itl/ai-risk-management-framework](https://www.nist.gov/itl/ai-risk-management-framework)
-- OECD AI Principles：[https://oecd.ai/en/ai-principles](https://oecd.ai/en/ai-principles)
+- [Stanford HAI AI Index](https://hai.stanford.edu/ai-index)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [OECD AI Principles](https://oecd.ai/en/ai-principles)
 
 ### 关键论文与研究线索
 
-- Attention Is All You Need：[https://arxiv.org/abs/1706.03762](https://arxiv.org/abs/1706.03762)
-- BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding：[https://arxiv.org/abs/1810.04805](https://arxiv.org/abs/1810.04805)
-- Language Models are Few-Shot Learners：[https://arxiv.org/abs/2005.14165](https://arxiv.org/abs/2005.14165)
-- Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks：[https://arxiv.org/abs/2005.11401](https://arxiv.org/abs/2005.11401)
-- Learning Transferable Visual Models From Natural Language Supervision：[https://arxiv.org/abs/2103.00020](https://arxiv.org/abs/2103.00020)
-- Training language models to follow instructions with human feedback：[https://arxiv.org/abs/2203.02155](https://arxiv.org/abs/2203.02155)
-- Chain-of-Thought Prompting Elicits Reasoning in Large Language Models：[https://arxiv.org/abs/2201.11903](https://arxiv.org/abs/2201.11903)
-- ReAct: Synergizing Reasoning and Acting in Language Models：[https://arxiv.org/abs/2210.03629](https://arxiv.org/abs/2210.03629)
-- GPT-4 Technical Report：[https://arxiv.org/abs/2303.08774](https://arxiv.org/abs/2303.08774)
-- Agentic Harness Engineering: Observability-Driven Automatic Evolution of Coding-Agent Harnesses：[https://arxiv.org/abs/2604.25850](https://arxiv.org/abs/2604.25850)
-- AI Harness Engineering: A Runtime Substrate for Foundation-Model Software Agents：[https://arxiv.org/abs/2605.13357](https://arxiv.org/abs/2605.13357)
+- [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+- [BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding](https://arxiv.org/abs/1810.04805)
+- [Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165)
+- [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)
+- [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/abs/2103.00020)
+- [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155)
+- [Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](https://arxiv.org/abs/2201.11903)
+- [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629)
+- [GPT-4 Technical Report](https://arxiv.org/abs/2303.08774)
+- [Agentic Harness Engineering: Observability-Driven Automatic Evolution of Coding-Agent Harnesses](https://arxiv.org/abs/2604.25850)
+- [AI Harness Engineering: A Runtime Substrate for Foundation-Model Software Agents](https://arxiv.org/abs/2605.13357)
 
 ### 平台、协议与 Agent 框架
 
-- OpenAI Platform 文档：[https://platform.openai.com/docs](https://platform.openai.com/docs)
-- OpenAI Agents SDK：[https://openai.github.io/openai-agents-python/](https://openai.github.io/openai-agents-python/)
-- The next evolution of the Agents SDK：[https://openai.com/index/the-next-evolution-of-the-agents-sdk/](https://openai.com/index/the-next-evolution-of-the-agents-sdk/)
-- Model Context Protocol 文档：[https://modelcontextprotocol.io/docs](https://modelcontextprotocol.io/docs)
-- LangChain 文档：[https://docs.langchain.com/](https://docs.langchain.com/)
-- LangGraph 文档：[https://langchain-ai.github.io/langgraph/](https://langchain-ai.github.io/langgraph/)
-- LlamaIndex 文档：[https://docs.llamaindex.ai/](https://docs.llamaindex.ai/)
-- Microsoft AutoGen：[https://microsoft.github.io/autogen/](https://microsoft.github.io/autogen/)
-- Google AI for Developers：[https://ai.google.dev/](https://ai.google.dev/)
+- [OpenAI Platform 文档](https://platform.openai.com/docs)
+- [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/)
+- [The next evolution of the Agents SDK](https://openai.com/index/the-next-evolution-of-the-agents-sdk/)
+- [Model Context Protocol 文档](https://modelcontextprotocol.io/docs)
+- [LangChain 文档](https://docs.langchain.com/)
+- [LangGraph 文档](https://langchain-ai.github.io/langgraph/)
+- [LlamaIndex 文档](https://docs.llamaindex.ai/)
+- [Microsoft AutoGen](https://microsoft.github.io/autogen/)
+- [Google AI for Developers](https://ai.google.dev/)
 
 ## 13. 快速复习表
 

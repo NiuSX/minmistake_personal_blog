@@ -2528,20 +2528,20 @@ uv format
 
 建议优先阅读 uv 官方文档：
 
-- uv 官方文档：[https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)
-- Installation：[https://docs.astral.sh/uv/getting-started/installation/](https://docs.astral.sh/uv/getting-started/installation/)
-- Features：[https://docs.astral.sh/uv/getting-started/features/](https://docs.astral.sh/uv/getting-started/features/)
-- CLI Reference：[https://docs.astral.sh/uv/reference/cli/](https://docs.astral.sh/uv/reference/cli/)
-- Working on projects：[https://docs.astral.sh/uv/guides/projects/](https://docs.astral.sh/uv/guides/projects/)
-- Locking and syncing：[https://docs.astral.sh/uv/concepts/projects/sync/](https://docs.astral.sh/uv/concepts/projects/sync/)
-- Project configuration：[https://docs.astral.sh/uv/concepts/projects/config/](https://docs.astral.sh/uv/concepts/projects/config/)
-- Python versions：[https://docs.astral.sh/uv/concepts/python-versions/](https://docs.astral.sh/uv/concepts/python-versions/)
-- Tools：[https://docs.astral.sh/uv/concepts/tools/](https://docs.astral.sh/uv/concepts/tools/)
-- Scripts：[https://docs.astral.sh/uv/guides/scripts/](https://docs.astral.sh/uv/guides/scripts/)
-- Workspaces：[https://docs.astral.sh/uv/concepts/projects/workspaces/](https://docs.astral.sh/uv/concepts/projects/workspaces/)
-- Publishing：[https://docs.astral.sh/uv/guides/package/](https://docs.astral.sh/uv/guides/package/)
-- Settings：[https://docs.astral.sh/uv/reference/settings/](https://docs.astral.sh/uv/reference/settings/)
-- GitHub Releases：[https://github.com/astral-sh/uv/releases](https://github.com/astral-sh/uv/releases)
+- [uv 官方文档](https://docs.astral.sh/uv/)
+- [Installation](https://docs.astral.sh/uv/getting-started/installation/)
+- [Features](https://docs.astral.sh/uv/getting-started/features/)
+- [CLI Reference](https://docs.astral.sh/uv/reference/cli/)
+- [Working on projects](https://docs.astral.sh/uv/guides/projects/)
+- [Locking and syncing](https://docs.astral.sh/uv/concepts/projects/sync/)
+- [Project configuration](https://docs.astral.sh/uv/concepts/projects/config/)
+- [Python versions](https://docs.astral.sh/uv/concepts/python-versions/)
+- [Tools](https://docs.astral.sh/uv/concepts/tools/)
+- [Scripts](https://docs.astral.sh/uv/guides/scripts/)
+- [Workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/)
+- [Publishing](https://docs.astral.sh/uv/guides/package/)
+- [Settings](https://docs.astral.sh/uv/reference/settings/)
+- [GitHub Releases](https://github.com/astral-sh/uv/releases)
 
 ## 最后总结
 
@@ -2619,9 +2619,9 @@ uv run ruff check .
 
 ## 43. 补充参考资料
 
-- uv Documentation：[https://docs.astral.sh/uv/](https://docs.astral.sh/uv/)
-- uv Project Guide：[https://docs.astral.sh/uv/guides/projects/](https://docs.astral.sh/uv/guides/projects/)
-- uv Locking and syncing：[https://docs.astral.sh/uv/concepts/projects/sync/](https://docs.astral.sh/uv/concepts/projects/sync/)
-- uv Tools：[https://docs.astral.sh/uv/concepts/tools/](https://docs.astral.sh/uv/concepts/tools/)
-- uv Scripts：[https://docs.astral.sh/uv/guides/scripts/](https://docs.astral.sh/uv/guides/scripts/)
-- uv GitHub Releases：[https://github.com/astral-sh/uv/releases](https://github.com/astral-sh/uv/releases)
+- [uv Documentation](https://docs.astral.sh/uv/)
+- [uv Project Guide](https://docs.astral.sh/uv/guides/projects/)
+- [uv Locking and syncing](https://docs.astral.sh/uv/concepts/projects/sync/)
+- [uv Tools](https://docs.astral.sh/uv/concepts/tools/)
+- [uv Scripts](https://docs.astral.sh/uv/guides/scripts/)
+- [uv GitHub Releases](https://github.com/astral-sh/uv/releases)

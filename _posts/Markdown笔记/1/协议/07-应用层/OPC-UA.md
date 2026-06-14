@@ -196,8 +196,8 @@ opcua || tcp.port == 4840
 
 ## 参考资料
 
-- Official - OPC Foundation OPC UA: <[https://opcfoundation.org/about/opc-technologies/opc-ua/](https://opcfoundation.org/about/opc-technologies/opc-ua/)>
-- Official - OPC UA Online Reference: <[https://reference.opcfoundation.org/](https://reference.opcfoundation.org/)>
-- Official - OPC UA Part 4 Services: <[https://reference.opcfoundation.org/Core/Part4/](https://reference.opcfoundation.org/Core/Part4/)>
-- Official - OPC UA Part 6 Mappings: <[https://reference.opcfoundation.org/Core/Part6/](https://reference.opcfoundation.org/Core/Part6/)>
-- Official - open62541 documentation: <[https://www.open62541.org/doc/](https://www.open62541.org/doc/)>
+- [Official - OPC Foundation OPC UA](https://opcfoundation.org/about/opc-technologies/opc-ua/)
+- [Official - OPC UA Online Reference](https://reference.opcfoundation.org/)
+- [Official - OPC UA Part 4 Services](https://reference.opcfoundation.org/Core/Part4/)
+- [Official - OPC UA Part 6 Mappings](https://reference.opcfoundation.org/Core/Part6/)
+- [Official - open62541 documentation](https://www.open62541.org/doc/)

@@ -120,7 +120,7 @@ Modbus RTU 请求：
 
 ## 参考资料
 
-- Modbus Application Protocol Specification: <[https://www.modbus.org/specs.php](https://www.modbus.org/specs.php)>
-- Modbus over Serial Line Specification and Implementation Guide: <[https://www.modbus.org/specs.php](https://www.modbus.org/specs.php)>
-- IANA Service Name and Port Number Registry: <[https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)>
+- [Modbus Application Protocol Specification](https://www.modbus.org/specs.php)
+- [Modbus over Serial Line Specification and Implementation Guide](https://www.modbus.org/specs.php)
+- [IANA Service Name and Port Number Registry](https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml)
 

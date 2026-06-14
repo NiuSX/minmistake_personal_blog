@@ -191,9 +191,9 @@ tracert example.com
 
 ## 参考资料
 
-- RFC 1918 - Address Allocation for Private Internets: <[https://www.rfc-editor.org/rfc/rfc1918](https://www.rfc-editor.org/rfc/rfc1918)>
-- RFC 3022 - Traditional IP Network Address Translator: <[https://www.rfc-editor.org/rfc/rfc3022](https://www.rfc-editor.org/rfc/rfc3022)>
-- RFC 4787 - NAT UDP Requirements: <[https://www.rfc-editor.org/rfc/rfc4787](https://www.rfc-editor.org/rfc/rfc4787)>
-- RFC 5382 - NAT TCP Requirements: <[https://www.rfc-editor.org/rfc/rfc5382](https://www.rfc-editor.org/rfc/rfc5382)>
-- RFC 6888 - Common Requirements for Carrier-Grade NATs: <[https://www.rfc-editor.org/rfc/rfc6888](https://www.rfc-editor.org/rfc/rfc6888)>
-- Linux Netfilter conntrack tools: <[https://conntrack-tools.netfilter.org/](https://conntrack-tools.netfilter.org/)>
+- [RFC 1918 - Address Allocation for Private Internets](https://www.rfc-editor.org/rfc/rfc1918)
+- [RFC 3022 - Traditional IP Network Address Translator](https://www.rfc-editor.org/rfc/rfc3022)
+- [RFC 4787 - NAT UDP Requirements](https://www.rfc-editor.org/rfc/rfc4787)
+- [RFC 5382 - NAT TCP Requirements](https://www.rfc-editor.org/rfc/rfc5382)
+- [RFC 6888 - Common Requirements for Carrier-Grade NATs](https://www.rfc-editor.org/rfc/rfc6888)
+- [Linux Netfilter conntrack tools](https://conntrack-tools.netfilter.org/)

@@ -148,8 +148,8 @@ C++ 的类型系统、`const`、`enum class`、模板、Concepts、`static_asser
 
 ## 参考资料
 
-- Official: ISO C++ 官网，[https://isocpp.org/](https://isocpp.org/)
-- Reference: cppreference，[https://cppreference.com/](https://cppreference.com/)
-- Guideline: C++ Core Guidelines，[https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
-- Official: CMake Tutorial，[https://cmake.org/cmake/help/latest/guide/tutorial/index.html](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
-- Tooling: Clang UndefinedBehaviorSanitizer，[https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)
+- [Official: ISO C++ 官网](https://isocpp.org/)
+- [Reference: cppreference](https://cppreference.com/)
+- [Guideline: C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines)
+- [Official: CMake Tutorial](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
+- [Tooling: Clang UndefinedBehaviorSanitizer](https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html)

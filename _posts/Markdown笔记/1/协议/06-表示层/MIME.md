@@ -44,8 +44,8 @@ multipart 使用 boundary 分隔多个部分。HTTP 表单上传文件时常用 
 
 ## 参考资料
 
-- RFC 2045 - MIME Part One: <[https://www.rfc-editor.org/rfc/rfc2045.html](https://www.rfc-editor.org/rfc/rfc2045.html)>
-- RFC 2046 - MIME Media Types: <[https://www.rfc-editor.org/rfc/rfc2046.html](https://www.rfc-editor.org/rfc/rfc2046.html)>
-- RFC 6838 - Media Type Registration: <[https://www.rfc-editor.org/rfc/rfc6838.html](https://www.rfc-editor.org/rfc/rfc6838.html)>
-- IANA Media Types: <[https://www.iana.org/assignments/media-types/media-types.xhtml](https://www.iana.org/assignments/media-types/media-types.xhtml)>
+- [RFC 2045 - MIME Part One](https://www.rfc-editor.org/rfc/rfc2045.html)
+- [RFC 2046 - MIME Media Types](https://www.rfc-editor.org/rfc/rfc2046.html)
+- [RFC 6838 - Media Type Registration](https://www.rfc-editor.org/rfc/rfc6838.html)
+- [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml)
 

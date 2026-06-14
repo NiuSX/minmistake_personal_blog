@@ -622,14 +622,14 @@ Material 3 的自适应设计很重要。手机布局拉伸到平板通常会显
 
 ## 22. 官方参考资料
 
-- Material Design 3 官方站：[https://m3.material.io/](https://m3.material.io/)
-- Material 3 Foundations：[https://m3.material.io/foundations](https://m3.material.io/foundations)
-- Material 3 Components：[https://m3.material.io/components](https://m3.material.io/components)
-- Android Compose Material 3 指南：[https://developer.android.com/develop/ui/compose/designsystems/material3](https://developer.android.com/develop/ui/compose/designsystems/material3)
-- Compose Material3 release notes：[https://developer.android.com/jetpack/androidx/releases/compose-material3](https://developer.android.com/jetpack/androidx/releases/compose-material3)
-- Material Theme Builder：[https://material-foundation.github.io/material-theme-builder/](https://material-foundation.github.io/material-theme-builder/)
-- Material Web：[https://github.com/material-components/material-web](https://github.com/material-components/material-web)
-- Material Components for Android：[https://github.com/material-components/material-components-android](https://github.com/material-components/material-components-android)
+- [Material Design 3 官方站](https://m3.material.io/)
+- [Material 3 Foundations](https://m3.material.io/foundations)
+- [Material 3 Components](https://m3.material.io/components)
+- [Android Compose Material 3 指南](https://developer.android.com/develop/ui/compose/designsystems/material3)
+- [Compose Material3 release notes](https://developer.android.com/jetpack/androidx/releases/compose-material3)
+- [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)
+- [Material Web](https://github.com/material-components/material-web)
+- [Material Components for Android](https://github.com/material-components/material-components-android)
 
 ## 23. 2026-06 深化补充：从“会用组件”到“会做设计系统”
 
@@ -684,8 +684,8 @@ Design tokens
 
 ## 24. 补充参考资料
 
-- Material Design 3 Color system：[https://m3.material.io/styles/color/system/overview](https://m3.material.io/styles/color/system/overview)
-- Material Design 3 Adaptive layout：[https://m3.material.io/foundations/layout/applying-layout/window-size-classes](https://m3.material.io/foundations/layout/applying-layout/window-size-classes)
-- Android Developers - Material Design 3 in Compose：[https://developer.android.com/develop/ui/compose/designsystems/material3](https://developer.android.com/develop/ui/compose/designsystems/material3)
-- Compose Material3 release notes：[https://developer.android.com/jetpack/androidx/releases/compose-material3](https://developer.android.com/jetpack/androidx/releases/compose-material3)
-- Material Theme Builder：[https://material-foundation.github.io/material-theme-builder/](https://material-foundation.github.io/material-theme-builder/)
+- [Material Design 3 Color system](https://m3.material.io/styles/color/system/overview)
+- [Material Design 3 Adaptive layout](https://m3.material.io/foundations/layout/applying-layout/window-size-classes)
+- [Android Developers - Material Design 3 in Compose](https://developer.android.com/develop/ui/compose/designsystems/material3)
+- [Compose Material3 release notes](https://developer.android.com/jetpack/androidx/releases/compose-material3)
+- [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)

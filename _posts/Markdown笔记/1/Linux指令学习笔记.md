@@ -1512,17 +1512,17 @@ du -h --max-depth=1 /var | sort -h
 
 ## 26. 参考资料与扩展阅读
 
-- GNU Coreutils Manual：[https://www.gnu.org/software/coreutils/manual/coreutils.html](https://www.gnu.org/software/coreutils/manual/coreutils.html)
-- GNU Bash Manual：[https://www.gnu.org/software/bash/manual/](https://www.gnu.org/software/bash/manual/)
-- Linux man-pages：[https://man7.org/linux/man-pages/](https://man7.org/linux/man-pages/)
-- systemd Manual：[https://www.freedesktop.org/software/systemd/man/latest/](https://www.freedesktop.org/software/systemd/man/latest/)
-- systemd journalctl：[https://www.freedesktop.org/software/systemd/man/latest/journalctl.html](https://www.freedesktop.org/software/systemd/man/latest/journalctl.html)
-- util-linux project：[https://github.com/util-linux/util-linux](https://github.com/util-linux/util-linux)
-- iproute2 man pages：[https://man7.org/linux/man-pages/man8/ip.8.html](https://man7.org/linux/man-pages/man8/ip.8.html)
-- Debian Administrator's Handbook：[https://www.debian.org/doc/manuals/debian-handbook/](https://www.debian.org/doc/manuals/debian-handbook/)
-- Ubuntu Server documentation：[https://documentation.ubuntu.com/server/](https://documentation.ubuntu.com/server/)
-- Red Hat Enterprise Linux docs：[https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/)
-- Arch Wiki：[https://wiki.archlinux.org/](https://wiki.archlinux.org/)
+- [GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/coreutils.html)
+- [GNU Bash Manual](https://www.gnu.org/software/bash/manual/)
+- [Linux man-pages](https://man7.org/linux/man-pages/)
+- [systemd Manual](https://www.freedesktop.org/software/systemd/man/latest/)
+- [systemd journalctl](https://www.freedesktop.org/software/systemd/man/latest/journalctl.html)
+- [util-linux project](https://github.com/util-linux/util-linux)
+- [iproute2 man pages](https://man7.org/linux/man-pages/man8/ip.8.html)
+- [Debian Administrator's Handbook](https://www.debian.org/doc/manuals/debian-handbook/)
+- [Ubuntu Server documentation](https://documentation.ubuntu.com/server/)
+- [Red Hat Enterprise Linux docs](https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/)
+- [Arch Wiki](https://wiki.archlinux.org/)
 
 实践检索关键词：
 

@@ -2118,15 +2118,15 @@ ros2 bag play bag_dir
 
 官方资料优先：
 
-- ROS 官方文档：[https://docs.ros.org/](https://docs.ros.org/)
-- ROS 2 发行版列表：[https://docs.ros.org/en/jazzy/Releases.html](https://docs.ros.org/en/jazzy/Releases.html)
-- ROS 2 基础概念：[https://docs.ros.org/en/rolling/Concepts/Basic.html](https://docs.ros.org/en/rolling/Concepts/Basic.html)
-- ROS 2 Getting Started：[https://www.ros.org/blog/getting-started](https://www.ros.org/blog/getting-started)
-- colcon 教程：[https://docs.ros.org/en/rolling/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html](https://docs.ros.org/en/rolling/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html)
-- ROS 2 Launch 教程：[https://docs.ros.org/en/rolling/Tutorials/Intermediate/Launch/Launch-Main.html](https://docs.ros.org/en/rolling/Tutorials/Intermediate/Launch/Launch-Main.html)
-- Nav2 文档：[https://docs.nav2.org/](https://docs.nav2.org/)
-- MoveIt 2 文档：[https://moveit.picknik.ai/](https://moveit.picknik.ai/)
-- ros2_control 文档：[https://control.ros.org/](https://control.ros.org/)
+- [ROS 官方文档](https://docs.ros.org/)
+- [ROS 2 发行版列表](https://docs.ros.org/en/jazzy/Releases.html)
+- [ROS 2 基础概念](https://docs.ros.org/en/rolling/Concepts/Basic.html)
+- [ROS 2 Getting Started](https://www.ros.org/blog/getting-started)
+- [colcon 教程](https://docs.ros.org/en/rolling/Tutorials/Beginner-Client-Libraries/Colcon-Tutorial.html)
+- [ROS 2 Launch 教程](https://docs.ros.org/en/rolling/Tutorials/Intermediate/Launch/Launch-Main.html)
+- [Nav2 文档](https://docs.nav2.org/)
+- [MoveIt 2 文档](https://moveit.picknik.ai/)
+- [ros2_control 文档](https://control.ros.org/)
 
 ## 最后总结
 
@@ -2213,9 +2213,9 @@ robot_ws/src
 
 ## 47. 补充参考资料
 
-- ROS 2 Documentation：[https://docs.ros.org/](https://docs.ros.org/)
-- ROS 2 Jazzy Documentation：[https://docs.ros.org/en/jazzy/](https://docs.ros.org/en/jazzy/)
-- ROS 2 Basic Concepts：[https://docs.ros.org/en/jazzy/Concepts/Basic.html](https://docs.ros.org/en/jazzy/Concepts/Basic.html)
-- ROS 2 QoS：[https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Quality-of-Service-Settings.html](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Quality-of-Service-Settings.html)
-- ROS 2 Launch Tutorials：[https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-Main.html](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-Main.html)
-- colcon Documentation：[https://colcon.readthedocs.io/](https://colcon.readthedocs.io/)
+- [ROS 2 Documentation](https://docs.ros.org/)
+- [ROS 2 Jazzy Documentation](https://docs.ros.org/en/jazzy/)
+- [ROS 2 Basic Concepts](https://docs.ros.org/en/jazzy/Concepts/Basic.html)
+- [ROS 2 QoS](https://docs.ros.org/en/jazzy/Concepts/Intermediate/About-Quality-of-Service-Settings.html)
+- [ROS 2 Launch Tutorials](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Launch-Main.html)
+- [colcon Documentation](https://colcon.readthedocs.io/)

@@ -67,13 +67,13 @@ flowchart TD
 
 ## References and further reading
 
-- Modern Robotics: [https://modernrobotics.northwestern.edu/](https://modernrobotics.northwestern.edu/)
-- ROS 2 Documentation: [https://docs.ros.org/en/jazzy/](https://docs.ros.org/en/jazzy/)
-- ROS 2 TF2 Tutorials: [https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Tf2-Main.html](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Tf2-Main.html)
-- Probabilistic Robotics: [https://probabilistic-robotics.org/](https://probabilistic-robotics.org/)
-- State Estimation for Robotics: [https://github.com/utiasSTARS/state-estimation-for-robotics](https://github.com/utiasSTARS/state-estimation-for-robotics)
-- Planning Algorithms: [https://lavalle.pl/planning/](https://lavalle.pl/planning/)
-- Navigation2 Documentation: [https://docs.nav2.org/](https://docs.nav2.org/)
-- MoveIt 2 Documentation: [https://moveit.picknik.ai/main/index.html](https://moveit.picknik.ai/main/index.html)
-- OpenCV Camera Calibration: [https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html](https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html)
-- Open3D Registration Tutorial: [https://www.open3d.org/docs/release/tutorial/pipelines/registration.html](https://www.open3d.org/docs/release/tutorial/pipelines/registration.html)
+- [Modern Robotics](https://modernrobotics.northwestern.edu/)
+- [ROS 2 Documentation](https://docs.ros.org/en/jazzy/)
+- [ROS 2 TF2 Tutorials](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Tf2/Tf2-Main.html)
+- [Probabilistic Robotics](https://probabilistic-robotics.org/)
+- [State Estimation for Robotics](https://github.com/utiasSTARS/state-estimation-for-robotics)
+- [Planning Algorithms](https://lavalle.pl/planning/)
+- [Navigation2 Documentation](https://docs.nav2.org/)
+- [MoveIt 2 Documentation](https://moveit.picknik.ai/main/index.html)
+- [OpenCV Camera Calibration](https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html)
+- [Open3D Registration Tutorial](https://www.open3d.org/docs/release/tutorial/pipelines/registration.html)

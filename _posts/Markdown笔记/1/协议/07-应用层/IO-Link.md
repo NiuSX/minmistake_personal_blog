@@ -48,6 +48,6 @@ IO-Link 不是现场总线替代品，而是传感器/执行器到 IO-Link Maste
 
 ## 参考资料
 
-- IO-Link Community: <[https://io-link.com/](https://io-link.com/)>
-- IEC 61131-9 overview: <[https://webstore.iec.ch/](https://webstore.iec.ch/)>
+- [IO-Link Community](https://io-link.com/)
+- [IEC 61131-9 overview](https://webstore.iec.ch/)
 

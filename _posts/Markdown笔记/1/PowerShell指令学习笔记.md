@@ -1176,14 +1176,14 @@ Export-Csv
 
 ## 33. 推荐参考资料
 
-- PowerShell Documentation：[https://learn.microsoft.com/en-us/powershell/](https://learn.microsoft.com/en-us/powershell/)
-- PowerShell 7.5 Reference：[https://learn.microsoft.com/en-us/powershell/module/?view=powershell-7.5](https://learn.microsoft.com/en-us/powershell/module/?view=powershell-7.5)
-- about_Core_Commands：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_core_commands](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_core_commands)
-- about_Pipelines：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines)
-- about_Objects：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_objects](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_objects)
-- about_Execution_Policies：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies)
-- Get-ChildItem：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-childitem](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-childitem)
-- Select-String：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/select-string](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/select-string)
+- [PowerShell Documentation](https://learn.microsoft.com/en-us/powershell/)
+- [PowerShell 7.5 Reference](https://learn.microsoft.com/en-us/powershell/module/?view=powershell-7.5)
+- [about_Core_Commands](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_core_commands)
+- [about_Pipelines](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines)
+- [about_Objects](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_objects)
+- [about_Execution_Policies](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies)
+- [Get-ChildItem](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/get-childitem)
+- [Select-String](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/select-string)
 
 ## 最后总结
 
@@ -1275,8 +1275,8 @@ catch {
 
 ## 35. 补充参考资料
 
-- Microsoft Learn - What is PowerShell：[https://learn.microsoft.com/en-us/powershell/scripting/overview](https://learn.microsoft.com/en-us/powershell/scripting/overview)
-- about_Pipelines：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines)
-- about_Functions_Advanced：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced)
-- about_CommonParameters：[https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_commonparameters](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_commonparameters)
-- PowerShell GitHub Releases：[https://github.com/PowerShell/PowerShell/releases](https://github.com/PowerShell/PowerShell/releases)
+- [Microsoft Learn - What is PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/overview)
+- [about_Pipelines](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_pipelines)
+- [about_Functions_Advanced](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_functions_advanced)
+- [about_CommonParameters](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_commonparameters)
+- [PowerShell GitHub Releases](https://github.com/PowerShell/PowerShell/releases)

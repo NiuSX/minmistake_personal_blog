@@ -368,12 +368,12 @@ Type-C 和 USB 枚举经常同时发生，但它们解决的问题不同：
 
 ## 参考资料
 
-- Official - USB-IF Document Library: <[https://www.usb.org/documents](https://www.usb.org/documents)>
-- Official - USB-IF USB 2.0 Specification: <[https://www.usb.org/document-library/usb-20-specification](https://www.usb.org/document-library/usb-20-specification)>
-- Official - USB-IF USB 3.2: <[https://www.usb.org/usb-32](https://www.usb.org/usb-32)>
-- Official - USB-IF USB4: <[https://www.usb.org/usb4](https://www.usb.org/usb4)>
-- Official - Microsoft USB device descriptors: <[https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-device-descriptors](https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-device-descriptors)>
-- Official - Linux Kernel USB Host Side API: <[https://docs.kernel.org/driver-api/usb/usb.html](https://docs.kernel.org/driver-api/usb/usb.html)>
-- Community - CSDN USB 枚举过程: <[https://blog.csdn.net/MyArrow/article/details/8270029](https://blog.csdn.net/MyArrow/article/details/8270029)>
-- Community - openvela USB 描述符: <[https://openvela.csdn.net/69c3bb080a2f6a37c59a43cf.html](https://openvela.csdn.net/69c3bb080a2f6a37c59a43cf.html)>
-- Community - openvela USB 设备枚举过程解析: <[https://openvela.csdn.net/69c3baf954b52172bc643594.html](https://openvela.csdn.net/69c3baf954b52172bc643594.html)>
+- [Official - USB-IF Document Library](https://www.usb.org/documents)
+- [Official - USB-IF USB 2.0 Specification](https://www.usb.org/document-library/usb-20-specification)
+- [Official - USB-IF USB 3.2](https://www.usb.org/usb-32)
+- [Official - USB-IF USB4](https://www.usb.org/usb4)
+- [Official - Microsoft USB device descriptors](https://learn.microsoft.com/en-us/windows-hardware/drivers/usbcon/usb-device-descriptors)
+- [Official - Linux Kernel USB Host Side API](https://docs.kernel.org/driver-api/usb/usb.html)
+- [Community - CSDN USB 枚举过程](https://blog.csdn.net/MyArrow/article/details/8270029)
+- [Community - openvela USB 描述符](https://openvela.csdn.net/69c3bb080a2f6a37c59a43cf.html)
+- [Community - openvela USB 设备枚举过程解析](https://openvela.csdn.net/69c3baf954b52172bc643594.html)

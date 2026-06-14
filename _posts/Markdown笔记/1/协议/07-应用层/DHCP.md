@@ -52,6 +52,6 @@ DHCP 广播不能跨路由器。跨网段集中部署 DHCP 时，需要 DHCP Rel
 
 ## 参考资料
 
-- RFC 2131 - Dynamic Host Configuration Protocol: <[https://www.rfc-editor.org/rfc/rfc2131.html](https://www.rfc-editor.org/rfc/rfc2131.html)>
-- RFC 2132 - DHCP Options: <[https://www.rfc-editor.org/rfc/rfc2132.html](https://www.rfc-editor.org/rfc/rfc2132.html)>
+- [RFC 2131 - Dynamic Host Configuration Protocol](https://www.rfc-editor.org/rfc/rfc2131.html)
+- [RFC 2132 - DHCP Options](https://www.rfc-editor.org/rfc/rfc2132.html)
 

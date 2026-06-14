@@ -59,7 +59,7 @@ openssl s_client -connect example.com:443 -servername example.com
 
 ## 参考资料
 
-- RFC 8446 - TLS 1.3: <[https://www.rfc-editor.org/rfc/rfc8446.html](https://www.rfc-editor.org/rfc/rfc8446.html)>
-- RFC 6066 - TLS Extensions, including SNI: <[https://www.rfc-editor.org/rfc/rfc6066.html](https://www.rfc-editor.org/rfc/rfc6066.html)>
-- RFC 7301 - ALPN: <[https://www.rfc-editor.org/rfc/rfc7301.html](https://www.rfc-editor.org/rfc/rfc7301.html)>
+- [RFC 8446 - TLS 1.3](https://www.rfc-editor.org/rfc/rfc8446.html)
+- [RFC 6066 - TLS Extensions, including SNI](https://www.rfc-editor.org/rfc/rfc6066.html)
+- [RFC 7301 - ALPN](https://www.rfc-editor.org/rfc/rfc7301.html)
 

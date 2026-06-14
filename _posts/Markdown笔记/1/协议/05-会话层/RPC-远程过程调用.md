@@ -53,7 +53,7 @@ sequenceDiagram
 
 ## 参考资料
 
-- RFC 5531 - RPC: Remote Procedure Call Protocol Specification Version 2: <[https://www.rfc-editor.org/rfc/rfc5531.html](https://www.rfc-editor.org/rfc/rfc5531.html)>
-- gRPC Documentation: <[https://grpc.io/docs/](https://grpc.io/docs/)>
-- JSON-RPC 2.0 Specification: <[https://www.jsonrpc.org/specification](https://www.jsonrpc.org/specification)>
+- [RFC 5531 - RPC: Remote Procedure Call Protocol Specification Version 2](https://www.rfc-editor.org/rfc/rfc5531.html)
+- [gRPC Documentation](https://grpc.io/docs/)
+- [JSON-RPC 2.0 Specification](https://www.jsonrpc.org/specification)
 

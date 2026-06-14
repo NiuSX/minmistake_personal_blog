@@ -37,6 +37,6 @@ ICMP（Internet Control Message Protocol）是 IP 的控制与错误报告协议
 
 ## 参考资料
 
-- RFC 792 - Internet Control Message Protocol: <[https://www.rfc-editor.org/rfc/rfc792.html](https://www.rfc-editor.org/rfc/rfc792.html)>
-- RFC 4443 - ICMPv6: <[https://www.rfc-editor.org/rfc/rfc4443.html](https://www.rfc-editor.org/rfc/rfc4443.html)>
+- [RFC 792 - Internet Control Message Protocol](https://www.rfc-editor.org/rfc/rfc792.html)
+- [RFC 4443 - ICMPv6](https://www.rfc-editor.org/rfc/rfc4443.html)
 

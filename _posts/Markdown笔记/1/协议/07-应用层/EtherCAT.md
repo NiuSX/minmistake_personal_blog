@@ -53,7 +53,7 @@ EtherCAT 使用标准以太网物理层，但通信机制不同于普通 TCP/IP 
 
 ## 参考资料
 
-- EtherCAT Technology Group: <[https://www.ethercat.org/](https://www.ethercat.org/)>
-- Beckhoff EtherCAT technology overview: <[https://www.beckhoff.com/en-en/products/i-o/ethercat/](https://www.beckhoff.com/en-en/products/i-o/ethercat/)>
-- IEC 61158 / IEC 61784 overview: <[https://webstore.iec.ch/](https://webstore.iec.ch/)>
+- [EtherCAT Technology Group](https://www.ethercat.org/)
+- [Beckhoff EtherCAT technology overview](https://www.beckhoff.com/en-en/products/i-o/ethercat/)
+- [IEC 61158 / IEC 61784 overview](https://webstore.iec.ch/)
 

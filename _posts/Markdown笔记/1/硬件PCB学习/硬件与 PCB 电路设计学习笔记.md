@@ -2657,15 +2657,15 @@ KiCad 是开源 EDA 软件，适合学习和实际项目。
 
 ### 官方和规范资料
 
-- KiCad 官方文档：[https://docs.kicad.org/](https://docs.kicad.org/)
-- KiCad 入门文档：[https://docs.kicad.org/master/en/getting_started_in_kicad/getting_started_in_kicad.html](https://docs.kicad.org/master/en/getting_started_in_kicad/getting_started_in_kicad.html)
-- KiCad 官方介绍：[https://www.kicad.org/about/kicad/](https://www.kicad.org/about/kicad/)
-- IPC 标准入口：[https://www.ipc.org/meet-your-standards](https://www.ipc.org/meet-your-standards)
-- IPC Design for Manufacturing 页面：[https://www.ipc.org/design-manufacturing-confirmed-ipc-standards](https://www.ipc.org/design-manufacturing-confirmed-ipc-standards)
-- TI 电源 PCB Layout 指南视频：[https://www.ti.com/video/6245175641001](https://www.ti.com/video/6245175641001)
-- TI Practical PCB Design Rules 示例资料：[https://www.ti.com/lit/an/slaae45/slaae45.pdf](https://www.ti.com/lit/an/slaae45/slaae45.pdf)
-- ST STM32 硬件入门应用笔记示例：[https://www.st.com/resource/en/application_note/an6274-getting-started-with-stm32c5-mcu-hardware-development-stmicroelectronics.pdf](https://www.st.com/resource/en/application_note/an6274-getting-started-with-stm32c5-mcu-hardware-development-stmicroelectronics.pdf)
-- Analog Devices 混合信号 PCB 指南：[https://www.analog.com/en/resources/analog-dialogue/articles/what-are-the-basic-guidelines-for-layout-design-of-mixed-signal-pcbs.html](https://www.analog.com/en/resources/analog-dialogue/articles/what-are-the-basic-guidelines-for-layout-design-of-mixed-signal-pcbs.html)
+- [KiCad 官方文档](https://docs.kicad.org/)
+- [KiCad 入门文档](https://docs.kicad.org/master/en/getting_started_in_kicad/getting_started_in_kicad.html)
+- [KiCad 官方介绍](https://www.kicad.org/about/kicad/)
+- [IPC 标准入口](https://www.ipc.org/meet-your-standards)
+- [IPC Design for Manufacturing 页面](https://www.ipc.org/design-manufacturing-confirmed-ipc-standards)
+- [TI 电源 PCB Layout 指南视频](https://www.ti.com/video/6245175641001)
+- [TI Practical PCB Design Rules 示例资料](https://www.ti.com/lit/an/slaae45/slaae45.pdf)
+- [ST STM32 硬件入门应用笔记示例](https://www.st.com/resource/en/application_note/an6274-getting-started-with-stm32c5-mcu-hardware-development-stmicroelectronics.pdf)
+- [Analog Devices 混合信号 PCB 指南](https://www.analog.com/en/resources/analog-dialogue/articles/what-are-the-basic-guidelines-for-layout-design-of-mixed-signal-pcbs.html)
 
 ### 推荐学习顺序
 

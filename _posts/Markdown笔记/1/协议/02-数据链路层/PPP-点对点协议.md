@@ -40,6 +40,6 @@ PPPoE 是 PPP over Ethernet，把 PPP 封装在以太网中，常用于家庭宽
 
 ## 参考资料
 
-- RFC 1661 - The Point-to-Point Protocol: <[https://www.rfc-editor.org/rfc/rfc1661.html](https://www.rfc-editor.org/rfc/rfc1661.html)>
-- RFC 2516 - PPP over Ethernet: <[https://www.rfc-editor.org/rfc/rfc2516.html](https://www.rfc-editor.org/rfc/rfc2516.html)>
+- [RFC 1661 - The Point-to-Point Protocol](https://www.rfc-editor.org/rfc/rfc1661.html)
+- [RFC 2516 - PPP over Ethernet](https://www.rfc-editor.org/rfc/rfc2516.html)
 

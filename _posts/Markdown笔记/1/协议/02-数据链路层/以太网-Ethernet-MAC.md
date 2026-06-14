@@ -58,6 +58,6 @@ eth.type == 0x0806
 
 ## 参考资料
 
-- IEEE 802.3 Ethernet Working Group: <[https://www.ieee802.org/3/](https://www.ieee802.org/3/)>
-- IANA EtherType Numbers: <[https://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml](https://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml)>
+- [IEEE 802.3 Ethernet Working Group](https://www.ieee802.org/3/)
+- [IANA EtherType Numbers](https://www.iana.org/assignments/ieee-802-numbers/ieee-802-numbers.xhtml)
 

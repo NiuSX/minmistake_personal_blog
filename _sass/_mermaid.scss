@@ -1,0 +1,14 @@
+.page__content .mermaid {
+  margin: 1.5em 0;
+  padding: 1em;
+  overflow-x: auto;
+  text-align: center;
+  background: $code-background-color;
+  border-radius: $border-radius;
+}
+
+.page__content .mermaid svg {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+}

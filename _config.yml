@@ -221,6 +221,9 @@ sass:
   sass_dir: _sass
   style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
 
+after_footer_scripts:
+  - /assets/js/mermaid-init.js
+
 # 输出设置
 # 定义网站生成后的链接格式
 permalink: /:title/

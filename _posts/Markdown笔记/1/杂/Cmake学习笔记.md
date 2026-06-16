@@ -2085,9 +2085,9 @@ target_sources(core PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/generated.hpp)
 
 ```cmake
 add_custom_target(format
-  COMMAND clang-format -i ${PROJECT_SOURCE_DIR}/src/*.cpp
-  WORKING_DIRECTORY ../../..
-  VERBATIM
+        COMMAND clang-format -i ${PROJECT_SOURCE_DIR}/src/*.cpp
+        WORKING_DIRECTORY ../../../..
+        VERBATIM
 )
 ```
 

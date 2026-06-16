@@ -2253,3 +2253,72 @@ done
 - [ShellCheck Wiki](https://www.shellcheck.net/wiki/Home)
 - [Google Shell Style Guide](https://google.github.io/styleguide/shellguide.html)
 - [GNU Coreutils Manual](https://www.gnu.org/software/coreutils/manual/)
+
+## 2026-06 深化整理：Shell 的工程化学习框架
+
+Last researched: 2026-06-16
+
+### 1. 学习定位
+
+Shell 这类知识不适合只按“概念清单”记忆，更适合按可交付能力组织。本文后续复习时，应围绕这条主线展开：Bash 语法、管道、重定向、变量展开、函数、脚本健壮性、文本处理和自动化。如果只会照抄命令、配置或示例，而不能解释输入、输出、边界、失败模式和验证方法，知识在真实项目里会很快失效。
+
+一份万字级笔记要承担三个作用：第一，建立准确概念，避免把相似术语混在一起；第二，形成可执行流程，知道从零搭建、调试和交付的顺序；第三，沉淀排错经验，遇到异常时能按证据定位，而不是凭感觉改配置。学习时建议把每个小节都对应到“是什么、为什么、怎么做、什么时候不用、出了问题怎么查”五个问题。
+
+### 2. 核心模块
+
+- Shell 擅长把命令组合成自动化流程
+- 引用规则决定变量是否安全
+- 管道和重定向决定数据流
+- 退出码决定脚本控制流
+- set 选项能提高脚本失败可见性
+
+这些模块之间不是孤立关系。通常先有需求和约束，再选择架构或工具；工具落地后会产生配置、接口、状态和制品；运行阶段再通过日志、指标、测试和回滚机制验证结果。真正掌握本主题，意味着能从一次失败现象反推到是哪一层出了问题。
+
+```mermaid
+flowchart LR
+  A[目标与约束] --> B[核心概念]
+  B --> C[工程实现]
+  C --> D[测试与验证]
+  D --> E[上线或交付]
+  E --> F[日志、指标、反馈]
+  F --> B
+```
+
+Figure: 通用学习与工程闭环，结合官方文档、标准资料和社区实践重新整理。
+
+### 3. 实践路线
+
+建议按四轮学习。第一轮只跑通最小例子，不追求复杂度；第二轮补齐关键概念，明确每个配置项和命令的作用；第三轮做故障注入，主动制造常见错误并记录现象；第四轮整理成项目模板，把目录结构、命名规范、检查清单和参考链接固化下来。
+
+对技术笔记而言，最小例子必须可重复。命令类主题要记录操作系统、Shell、权限、工作目录和返回码；框架类主题要记录版本、依赖、构建命令、目录结构和运行入口；工程设计类主题要记录标准依据、图纸、点表、验收项和变更记录。没有环境信息的示例，后续很难判断是知识错误、版本差异还是本机配置问题。
+
+### 4. 常见错误
+
+- 变量未加引号
+- for 循环按空格切文件名
+- 忽略 pipefail
+- 临时文件不安全
+- 脚本依赖交互输入
+
+排查时先收集事实：版本、配置、输入、输出、日志、错误码、时间点、复现步骤。不要一开始就改多个参数。一次只改一个变量，并记录改动前后的现象。对于涉及安全、权限、部署、数据库、电气或工业控制的主题，要优先查官方文档和标准，社区文章只能作为实践参考，不能作为唯一依据。
+
+### 5. 笔记维护建议
+
+后续更新这篇文档时，建议保留 `Last researched` 日期，并把新增内容放到“版本差异”“实践坑”“调试清单”“参考资料”中。对于快速变化的工具链，例如 Android、Gradle、Docker、CI/CD、Redis、uv、Qt 和前端标准，至少在重新实践前核对一次官方文档。对于工业、电气、PLC、RBAC 这类涉及安全、权限或标准的内容，应明确标准编号、适用地区、适用版本和项目约束。
+
+## References and further reading
+
+- [Official] [GNU Bash Manual](https://www.gnu.org/software/bash/manual/)
+- [Official] [bash(1) Linux manual page](https://man7.org/linux/man-pages/man1/bash.1.html)
+- [Community] [ShellCheck wiki](https://www.shellcheck.net/wiki/)
+- [Official] [MDN Web Docs](https://developer.mozilla.org/)
+- [Official] [Microsoft Learn](https://learn.microsoft.com/)
+- [Official] [Docker Docs](https://docs.docker.com/)
+- [Official] [GitHub Actions documentation](https://docs.github.com/actions)
+- [Official] [GitLab CI/CD documentation](https://docs.gitlab.com/ci/)
+- [Official] [CMake Documentation](https://cmake.org/cmake/help/latest/)
+- [Official] [Gradle User Manual](https://docs.gradle.org/)
+- [Official] [Apache Maven Guides](https://maven.apache.org/guides/)
+- [Official] [Redis Documentation](https://redis.io/docs/latest/)
+- [Official] [Qt Documentation](https://doc.qt.io/qt-6/)
+- [Course] [MIT 6.006 Introduction to Algorithms](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/)

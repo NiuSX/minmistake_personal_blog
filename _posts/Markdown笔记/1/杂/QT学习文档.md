@@ -957,7 +957,7 @@ QIcon saveIcon(":/icons/save.png");
 
 ```cmake
 qt_add_resources(app "app_resources"
-        PREFIX "../2"
+        PREFIX "../../2"
         FILES
         icons/save.png
         icons/open.png

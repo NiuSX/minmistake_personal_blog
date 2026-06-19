@@ -257,8 +257,8 @@
 }
 
 body.layout--default {
-  // 仅对 default 布局使用浅灰背景，避免影响文章页正文阅读体验。
-  background: #f7f9fb;
+  // 首页跟随全站浅绿背景。
+  background: $background-color;
 }
 
 .masthead {

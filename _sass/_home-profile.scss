@@ -139,6 +139,9 @@
 }
 
 .home-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   color: #1f6f8b;
   font-size: 0.84rem;
   font-weight: 700;

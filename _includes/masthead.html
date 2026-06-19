@@ -14,12 +14,42 @@
         </a>
         <ul class="visible-links">
           {%- for link in site.data.navigation.main -%}
-            <li class="masthead__menu-item">
-              <a
-                href="{{ link.url | relative_url }}"
-                {% if link.description %} title="{{ link.description }}"{% endif %}
-                {% if link.target %} target="{{ link.target }}"{% endif %}
-              >{{ link.title }}</a>
+            <li class="masthead__menu-item{% if link.children or link.taxonomy %} masthead__menu-item--has-children{% endif %}">
+              {%- if link.children or link.taxonomy -%}
+                <button class="masthead__menu-toggle" type="button" aria-haspopup="true">
+                  {{ link.title }}
+                </button>
+                <ul class="masthead__submenu">
+                  <li>
+                    <a href="{{ link.url | relative_url }}">全部笔记</a>
+                  </li>
+                  {%- if link.taxonomy == "categories" -%}
+                    {%- assign nav_categories = site.categories | sort -%}
+                    {%- for category in nav_categories -%}
+                      {%- assign category_name = category[0] -%}
+                      <li>
+                        <a href="{{ category_name | slugify | prepend: '#' | prepend: site.category_archive.path | relative_url }}">{{ category_name }}</a>
+                      </li>
+                    {%- endfor -%}
+                  {%- else -%}
+                    {%- for child in link.children -%}
+                      <li>
+                        <a
+                          href="{{ child.url | relative_url }}"
+                          {% if child.description %} title="{{ child.description }}"{% endif %}
+                          {% if child.target %} target="{{ child.target }}"{% endif %}
+                        >{{ child.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </ul>
+              {%- else -%}
+                <a
+                  href="{{ link.url | relative_url }}"
+                  {% if link.description %} title="{{ link.description }}"{% endif %}
+                  {% if link.target %} target="{{ link.target }}"{% endif %}
+                >{{ link.title }}</a>
+              {%- endif -%}
             </li>
           {%- endfor -%}
         </ul>

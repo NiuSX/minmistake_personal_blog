@@ -28,19 +28,6 @@ layout: default
       {%- when "lunr" -%}
         <input type="search" id="search" name="q" class="search-input" placeholder="{{ site.data.ui-text[locale].search_placeholder_text | default: 'Enter your search term...' }}" />
         <div id="results" class="results"></div>
-        <script>
-          document.addEventListener("DOMContentLoaded", function() {
-            window.setTimeout(function() {
-              var query = new URLSearchParams(window.location.search).get("q");
-              var searchInput = document.querySelector(".layout--search .archive > input#search");
-
-              if (query && searchInput) {
-                searchInput.value = query;
-                searchInput.dispatchEvent(new Event("keyup", { bubbles: true }));
-              }
-            }, 0);
-          });
-        </script>
       {%- when "google" -%}
         <form onsubmit="return googleCustomSearchExecute();" id="cse-search-box-form-id">
         <input type="text" id="cse-search-input-box-id" class="search-input" placeholder="{{ site.data.ui-text[locale].search_placeholder_text | default: 'Enter your search term...' }}" />

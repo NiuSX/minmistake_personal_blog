@@ -23,6 +23,8 @@ var idx = lunr(function () {
 });
 
 $(document).ready(function() {
+  var $searchInput = $('.layout--search .archive > input#search').first();
+
   $('input#search').on('keyup', function () {
     var resultdiv = $('#results');
     var query = $(this).val().toLowerCase();
@@ -70,4 +72,12 @@ $(document).ready(function() {
       resultdiv.append(searchitem);
     }
   });
+
+  if ($searchInput.length) {
+    var query = new URLSearchParams(window.location.search).get("q");
+
+    if (query) {
+      $searchInput.val(query).trigger('keyup');
+    }
+  }
 });

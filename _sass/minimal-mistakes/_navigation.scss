@@ -176,7 +176,7 @@
   -ms-flex-align: center;
   align-items: center;
   min-height: $nav-height;
-  background: $background-color;
+  background: #fff;
 
   a {
     display: block;
@@ -318,7 +318,7 @@
 
     li {
       border-inline: 1px solid $border-color;
-      background: $background-color;
+      background: #fff;
 
       &:first-child {
         border-top: 1px solid $border-color;
@@ -353,6 +353,76 @@
     }
   }
 
+  .masthead-search {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    margin-inline-start: 0.5rem;
+    border: 1px solid $border-color;
+    border-radius: $border-radius;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  .masthead-search__input {
+    margin: 0;
+    padding: 0.35rem 0.6rem;
+    width: 12rem;
+    max-width: 24vw;
+    height: $nav-toggle-height;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+    color: $text-color;
+    font-size: $type-size-6;
+    line-height: 1;
+
+    &:focus {
+      outline: 2px solid rgba($primary-color, 0.25);
+      outline-offset: -2px;
+    }
+  }
+
+  .masthead-search__button {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0 0.65rem;
+    height: $nav-toggle-height;
+    border: 0;
+    border-inline-start: 1px solid $border-color;
+    color: $primary-color;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: $masthead-link-color-hover;
+      background: $navicon-link-color-hover;
+    }
+  }
+
+  @include breakpoint(max-width $small) {
+    .masthead-search__input {
+      width: 7rem;
+      max-width: 32vw;
+    }
+  }
+
   .hidden-links {
     position: absolute;
     top: 100%;
@@ -361,7 +431,7 @@
     padding: 5px;
     border: 1px solid $border-color;
     border-radius: $border-radius;
-    background: $background-color;
+    background: #fff;
     -webkit-box-shadow: 0 2px 4px 0 rgba(#000, 0.16),
       0 2px 10px 0 rgba(#000, 0.12);
     box-shadow: 0 2px 4px 0 rgba(#000, 0.16), 0 2px 10px 0 rgba(#000, 0.12);
@@ -402,7 +472,7 @@
       width: 0;
       border-style: solid;
       border-width: 0 10px 10px;
-      border-color: $background-color transparent;
+      border-color: #fff transparent;
       display: block;
       z-index: 1;
     }

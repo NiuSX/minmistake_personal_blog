@@ -54,10 +54,22 @@
           {%- endfor -%}
         </ul>
         {% if site.search == true %}
-        <button class="search__toggle" type="button">
-          <span class="visually-hidden">{{ site.data.ui-text[locale].search_label | default: "Toggle search" }}</span>
-          <i class="fas fa-search"></i>
-        </button>
+        <form class="masthead-search" action="{{ '/search/' | relative_url }}" method="get" role="search">
+          <label class="visually-hidden" for="masthead-search-input">
+            {{ site.data.ui-text[locale].search_label | default: "Search" }}
+          </label>
+          <input
+            id="masthead-search-input"
+            class="masthead-search__input"
+            type="search"
+            name="q"
+            placeholder="{{ site.data.ui-text[locale].search_placeholder_text | default: 'Search...' }}"
+          >
+          <button class="masthead-search__button" type="submit">
+            <span class="visually-hidden">{{ site.data.ui-text[locale].search_label | default: "Search" }}</span>
+            <i class="fas fa-search" aria-hidden="true"></i>
+          </button>
+        </form>
         {% endif %}
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[locale].menu_label | default: "Toggle menu" }}</span>

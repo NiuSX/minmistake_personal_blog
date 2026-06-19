@@ -85,15 +85,15 @@
 }
 
 .home-button--primary {
-  color: #fff;
-  border-color: #1f6f8b;
-  background: #1f6f8b;
+  color: #155871;
+  border-color: rgba(49, 112, 143, 0.28);
+  background: #dff3ec;
 }
 
 .home-button--primary:hover {
-  color: #fff;
-  border-color: #155871;
-  background: #155871;
+  color: #13495f;
+  border-color: rgba(49, 112, 143, 0.42);
+  background: #d1eee4;
 }
 
 .home-card {
@@ -262,7 +262,7 @@ body.layout--default {
 }
 
 .masthead {
-  background: rgba(255, 255, 255, 0.92);
+  background: #fff;
   backdrop-filter: blur(10px);
 }
 

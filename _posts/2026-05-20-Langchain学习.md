@@ -4,7 +4,7 @@ date: 2026-05-20
 categories:
   - AI
   - Agent
-excerpt: ""
+excerpt: "LangChain 学习笔记，整理模型接口、提示词、输出解析、链式调用、记忆和工具集成。"
 ---
 
 # 1.介绍

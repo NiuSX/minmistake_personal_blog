@@ -3,7 +3,7 @@ title: "RestFulAPI"
 date: 2026-3-18
 categories: 
     - 架构
-excerpt: ""
+excerpt: "RESTful API 学习笔记，整理接口设计原则、HTTP 方法、状态码、资源建模和常见规范。"
 ---
 
 # 介绍

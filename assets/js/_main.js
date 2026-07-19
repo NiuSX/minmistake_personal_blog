@@ -44,6 +44,80 @@ $(document).ready(function () {
     durationMax: 500,
   });
 
+  // Add collapsible controls to nested table of contents sections.
+  (function () {
+    var tocNav = document.querySelector("nav.toc");
+    if (!tocNav) return;
+
+    var tocMenu = tocNav.querySelector(".toc__menu");
+    if (!tocMenu) return;
+
+    var sections = [];
+    tocMenu.querySelectorAll("li").forEach(function (item, index) {
+      var link = null;
+      var submenu = null;
+
+      Array.prototype.forEach.call(item.children, function (child) {
+        var tagName = child.tagName.toLowerCase();
+        if (tagName === "a" && !link) link = child;
+        if (tagName === "ul" && !submenu) submenu = child;
+      });
+
+      if (!link || !submenu) return;
+
+      var submenuId = "toc-submenu-" + index;
+      var toggle = document.createElement("button");
+      var icon;
+      var label;
+
+      submenu.id = submenuId;
+      toggle.type = "button";
+      toggle.className = "toc__toggle";
+      toggle.setAttribute("aria-controls", submenuId);
+      toggle.innerHTML = '<i class="fas fa-chevron-down" aria-hidden="true"></i><span class="sr-only"></span>';
+      icon = toggle.querySelector("i");
+      label = toggle.querySelector(".sr-only");
+      link.insertAdjacentElement("afterend", toggle);
+
+      var setExpanded = function (expanded) {
+        submenu.hidden = !expanded;
+        toggle.setAttribute("aria-expanded", expanded ? "true" : "false");
+        toggle.setAttribute("aria-label", expanded ? "Collapse section" : "Expand section");
+        toggle.title = expanded ? "Collapse section" : "Expand section";
+        label.textContent = expanded ? "Collapse section" : "Expand section";
+        icon.classList.toggle("fa-chevron-down", expanded);
+        icon.classList.toggle("fa-chevron-right", !expanded);
+      };
+
+      setExpanded(true);
+      toggle.addEventListener("click", function () {
+        setExpanded(submenu.hidden);
+      });
+      sections.push({ item: item, setExpanded: setExpanded });
+    });
+
+    tocNav.querySelectorAll("[data-toc-action]").forEach(function (control) {
+      control.addEventListener("click", function () {
+        var expanded = control.getAttribute("data-toc-action") === "expand";
+        sections.forEach(function (section) {
+          section.setExpanded(expanded);
+        });
+      });
+    });
+
+    // Keep the active heading visible when scroll spy enters a collapsed section.
+    document.addEventListener("gumshoeActivate", function (event) {
+      var item = event.target.closest("li");
+      while (item && tocMenu.contains(item)) {
+        var section = sections.find(function (candidate) {
+          return candidate.item === item;
+        });
+        if (section) section.setExpanded(true);
+        item = item.parentElement.closest("li");
+      }
+    });
+  })();
+
   // Gumshoe scroll spy init
   if ($("nav.toc").length > 0) {
     var spy = new Gumshoe("nav.toc a", {

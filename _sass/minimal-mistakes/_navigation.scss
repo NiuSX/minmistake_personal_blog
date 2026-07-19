@@ -714,6 +714,71 @@
     border-start-end-radius: $border-radius;
   }
 
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    background: $primary-color;
+    border-start-start-radius: $border-radius;
+    border-start-end-radius: $border-radius;
+
+    .nav__title {
+      flex: 1;
+      background: transparent;
+    }
+  }
+
+  &__controls {
+    display: flex;
+    gap: 0.15rem;
+    padding: 0.25rem 0.5rem 0.25rem 0;
+  }
+
+  &__control,
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    color: inherit;
+    background: transparent;
+    border: 0;
+    border-radius: $border-radius;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: $text-color;
+      background: rgba(255, 255, 255, 0.85);
+    }
+  }
+
+  &__menu {
+    li {
+      position: relative;
+    }
+
+    li > a {
+      padding-inline-end: 2.75rem;
+    }
+  }
+
+  &__toggle {
+    position: absolute;
+    inset-inline-end: 0.35rem;
+    top: 0.15rem;
+    color: $muted-text-color;
+
+    &:hover,
+    &:focus {
+      color: $text-color;
+      background: $border-color;
+    }
+  }
+
   // Scrollspy marks toc items as .active when they are in focus
   .active a {
     @include yiq-contrasted($active-color);

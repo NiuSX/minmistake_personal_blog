@@ -714,28 +714,6 @@
     border-start-end-radius: $border-radius;
   }
 
-  &__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    color: #fff;
-    background: $primary-color;
-    border-start-start-radius: $border-radius;
-    border-start-end-radius: $border-radius;
-
-    .nav__title {
-      flex: 1;
-      background: transparent;
-    }
-  }
-
-  &__controls {
-    display: flex;
-    gap: 0.15rem;
-    padding: 0.25rem 0.5rem 0.25rem 0;
-  }
-
-  &__control,
   &__toggle {
     display: inline-flex;
     align-items: center;
@@ -761,21 +739,30 @@
       position: relative;
     }
 
-    li > a {
-      padding-inline-end: 2.75rem;
+    .toc__item {
+      display: flex;
+      align-items: stretch;
+    }
+
+    .toc__item > a {
+      flex: 1;
+      min-width: 0;
     }
   }
 
   &__toggle {
-    position: absolute;
-    inset-inline-end: 0.35rem;
-    top: 0.15rem;
+    flex: 0 0 1.1rem;
+    width: 1.1rem;
+    height: auto;
+    min-height: 1.5rem;
+    margin: 0.15rem 0 0.15rem 0.35rem;
+    font-size: 0.8em;
     color: $muted-text-color;
 
     &:hover,
     &:focus {
       color: $text-color;
-      background: $border-color;
+      background: transparent;
     }
   }
 

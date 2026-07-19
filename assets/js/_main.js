@@ -67,6 +67,7 @@ $(document).ready(function () {
 
       var submenuId = "toc-submenu-" + index;
       var toggle = document.createElement("button");
+      var itemContent = document.createElement("div");
       var icon;
       var label;
 
@@ -74,10 +75,13 @@ $(document).ready(function () {
       toggle.type = "button";
       toggle.className = "toc__toggle";
       toggle.setAttribute("aria-controls", submenuId);
-      toggle.innerHTML = '<i class="fas fa-chevron-down" aria-hidden="true"></i><span class="sr-only"></span>';
+      toggle.innerHTML = '<i class="fas fa-caret-right" aria-hidden="true"></i><span class="sr-only"></span>';
       icon = toggle.querySelector("i");
       label = toggle.querySelector(".sr-only");
-      link.insertAdjacentElement("afterend", toggle);
+      itemContent.className = "toc__item";
+      item.insertBefore(itemContent, link);
+      itemContent.append(toggle);
+      itemContent.append(link);
 
       var setExpanded = function (expanded) {
         submenu.hidden = !expanded;
@@ -85,37 +89,17 @@ $(document).ready(function () {
         toggle.setAttribute("aria-label", expanded ? "Collapse section" : "Expand section");
         toggle.title = expanded ? "Collapse section" : "Expand section";
         label.textContent = expanded ? "Collapse section" : "Expand section";
-        icon.classList.toggle("fa-chevron-down", expanded);
-        icon.classList.toggle("fa-chevron-right", !expanded);
+        icon.classList.toggle("fa-caret-down", expanded);
+        icon.classList.toggle("fa-caret-right", !expanded);
       };
 
-      setExpanded(true);
+      setExpanded(false);
       toggle.addEventListener("click", function () {
         setExpanded(submenu.hidden);
       });
       sections.push({ item: item, setExpanded: setExpanded });
     });
 
-    tocNav.querySelectorAll("[data-toc-action]").forEach(function (control) {
-      control.addEventListener("click", function () {
-        var expanded = control.getAttribute("data-toc-action") === "expand";
-        sections.forEach(function (section) {
-          section.setExpanded(expanded);
-        });
-      });
-    });
-
-    // Keep the active heading visible when scroll spy enters a collapsed section.
-    document.addEventListener("gumshoeActivate", function (event) {
-      var item = event.target.closest("li");
-      while (item && tocMenu.contains(item)) {
-        var section = sections.find(function (candidate) {
-          return candidate.item === item;
-        });
-        if (section) section.setExpanded(true);
-        item = item.parentElement.closest("li");
-      }
-    });
   })();
 
   // Gumshoe scroll spy init

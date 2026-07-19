@@ -140,3 +140,28 @@
     font-size: 1.25rem;
   }
 }
+@media (min-width: 1024px) {
+  #main {
+    padding-inline-start: 0;
+  }
+
+  .page {
+    width: calc(100% - 180px);
+    padding-inline-end: 180px;
+  }
+
+  .sidebar {
+    width: calc(180px - 1em);
+  }
+}
+
+@media (min-width: 1280px) {
+  .page {
+    width: calc(100% - 240px);
+    padding-inline-end: 240px;
+  }
+
+  .sidebar {
+    width: calc(240px - 1em);
+  }
+}

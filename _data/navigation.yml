@@ -1,9 +1,6 @@
-# 顶部主导航配置。Minimal Mistakes 会读取 main 列表生成页眉菜单。
 main:
   - title: "首页"
     url: /
-  - title: "关于"
-    url: /about/
   - title: "归档"
     url: /year-archive/
   - title: "分类"
@@ -12,5 +9,5 @@ main:
   - title: "标签"
     url: /tags/
     taxonomy: tags
-  - title: "搜索"
-    url: /search/
+  - title: "关于"
+    url: /about/

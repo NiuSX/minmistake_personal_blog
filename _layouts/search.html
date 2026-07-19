@@ -26,11 +26,12 @@ layout: default
     {%- assign search_provider = site.search_provider | default: "lunr" -%}
     {%- case search_provider -%}
       {%- when "lunr" -%}
-        <input type="search" id="search" name="q" class="search-input" placeholder="{{ site.data.ui-text[locale].search_placeholder_text | default: 'Enter your search term...' }}" />
+        <input type="search" id="search" name="q" class="search-input" placeholder="{{ site.data.ui-text[locale].search_placeholder_text | default: '输入搜索关键词...' }}" />
         <div id="results" class="results"></div>
+        <noscript><p class="empty-state">搜索功能需要启用 JavaScript；你也可以先浏览文章归档。</p></noscript>
       {%- when "google" -%}
         <form onsubmit="return googleCustomSearchExecute();" id="cse-search-box-form-id">
-        <input type="text" id="cse-search-input-box-id" class="search-input" placeholder="{{ site.data.ui-text[locale].search_placeholder_text | default: 'Enter your search term...' }}" />
+        <input type="text" id="cse-search-input-box-id" class="search-input" placeholder="{{ site.data.ui-text[locale].search_placeholder_text | default: '输入搜索关键词...' }}" />
         </form>
         <div id="results" class="results">
           <gcse:searchresults-only></gcse:searchresults-only>

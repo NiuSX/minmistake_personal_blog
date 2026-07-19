@@ -6,6 +6,11 @@ main:
     url: /about/
   - title: "归档"
     url: /year-archive/
-  - title: "笔记"
+  - title: "分类"
     url: /categories/
     taxonomy: categories
+  - title: "标签"
+    url: /tags/
+    taxonomy: tags
+  - title: "搜索"
+    url: /search/

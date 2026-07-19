@@ -5,4 +5,4 @@ layout: archive
 
 {{ content }}
 
-{% include posts-taxonomy.html locale=locale taxonomies=site.tags %}
+{% if site.tags.size == 0 %}<p class="empty-state">暂时还没有可展示的标签。</p>{% else %}{% include posts-taxonomy.html locale=locale taxonomies=site.tags %}{% endif %}

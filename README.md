@@ -31,3 +31,14 @@ bundle exec jekyll build
 4. 新增 secret：`BLOG_DEPLOY_TOKEN`，值填入上面创建的 token。
 
 之后只需要提交并推送源码仓库，工作流会自动发布到 `https://NiuSX.github.io/blog/`。
+## 文章写作
+
+新增文章请参考 [`docs/POST_TEMPLATE.md`](docs/POST_TEMPLATE.md)。文章放在 `_posts/`，提交符合约定的 Markdown 文件后，Jekyll 会自动更新首页、归档、分类、标签和搜索入口。
+
+发布前建议执行：
+
+```bash
+bundle exec jekyll build --trace --baseurl "/blog"
+```
+
+构建产物 `_site/` 只用于发布和验证，不要手动编辑或提交。

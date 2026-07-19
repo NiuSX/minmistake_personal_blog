@@ -6,6 +6,8 @@
   {% endif %}
 {% endfor %}
 
+{% if items_max == 0 %}<p class="empty-state">暂时没有可展示的内容。</p>{% endif %}
+
 <ul class="taxonomy__index">
   {% for i in (1..items_max) reversed %}
     {% for item in include.taxonomies %}
@@ -31,7 +33,7 @@
             {% include archive-single.html locale=locale type=entries_layout %}
           {% endfor %}
         </div>
-        <a href="#page-title" class="back-to-top">{{ site.data.ui-text[locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
+        <a href="#page-title" class="back-to-top">{{ site.data.ui-text[locale].back_to_top | default: '返回顶部' }} &uarr;</a>
       </section>
     {% endif %}
   {% endfor %}

@@ -18,6 +18,7 @@ layout: archive
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% assign postsByYear = site.posts | where_exp: "item", "item.hidden != true" | group_by_exp: 'post', 'post.date | date: "%Y"' %}
+{% if postsByYear.size == 0 %}<p class="empty-state">暂时还没有可展示的文章。</p>{% endif %}
 {% for year in postsByYear %}
   <section id="{{ year.name }}" class="taxonomy__section">
     <h2 class="archive__subtitle">{{ year.name }}</h2>
@@ -26,6 +27,6 @@ layout: archive
         {% include archive-single.html locale=locale type=entries_layout %}
       {% endfor %}
     </div>
-    <a href="#page-title" class="back-to-top">{{ site.data.ui-text[locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
+    <a href="#page-title" class="back-to-top">{{ site.data.ui-text[locale].back_to_top | default: '返回顶部' }} &uarr;</a>
   </section>
 {% endfor %}

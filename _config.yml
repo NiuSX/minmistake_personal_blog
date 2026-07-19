@@ -81,8 +81,8 @@ atom_feed:
 
 # 搜索功能配置
 search                   : true # true, false (default)
-search_full_content      : # true, false (default)
-search_provider          : # lunr (default), algolia, google
+search_full_content      : true
+search_provider          : "lunr"
 lunr:
   search_within_pages    : # true, false (default)
 algolia:
@@ -188,6 +188,9 @@ exclude:
   - README
   - tmp
   - /docs # ignore Minimal Mistakes /docs
+  - .specify
+  - specs
+  - AGENTS.md
   - /test # ignore Minimal Mistakes /test
 keep_files:
   - .git
@@ -322,7 +325,8 @@ defaults:
       layout: single   #single home archivve splash search
       author_profile: true
       read_time: false
-      comments: true
+      show_date: true
+      comments: false
       share: false
       related: true
       toc: true

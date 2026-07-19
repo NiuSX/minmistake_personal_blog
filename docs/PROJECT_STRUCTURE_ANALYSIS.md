@@ -13,7 +13,7 @@
 3. Liquid 模板把页面、文章、导航、作者信息、归档、搜索等组合成 HTML。
 4. Sass 被编译为 `assets/css/main.css`。
 5. GitHub Actions 执行构建，把 `_site/` 推送到发布分支或同步到 `NiuSX.github.io/blog/`。
-6. GitHub Pages 从 `gh-pages` 分支发布静态网站。
+6. GitHub Pages 从 `NiuSX/NiuSX.github.io` 仓库的 `main` 分支发布静态网站，博客内容位于 `blog/` 目录。
 
 ## 2. 根目录文件
 
@@ -105,7 +105,7 @@
 
 | 路径 | 作用 |
 | --- | --- |
-| `assets/css/main.scss` | Sass 编译入口。先导入主题皮肤，再导入主题主体样式，最后导入项目自定义首页样式。已添加中文注释。 |
+| `assets/css/main.scss` | Sass 编译入口。先导入主题皮肤，再导入主题主体样式，最后导入项目自定义首页样式和 `_sass/_blog-overrides.scss`，用于统一博客阅读样式。已添加中文注释。 |
 | `_sass/_home-profile.scss` | 当前项目自定义首页样式，控制首页首屏、个人信息卡片、近期关注、最新文章列表和响应式布局。已添加中文注释。 |
 | `_sass/minimal-mistakes.scss` | Minimal Mistakes 主题 Sass 主入口。 |
 | `_sass/minimal-mistakes/*.scss` | 主题基础样式模块，例如正文、按钮、表格、导航、页脚、搜索、侧边栏、语法高亮等。 |
@@ -199,3 +199,5 @@
 - 站点标题、作者信息、头像、社交链接优先改 `_config.yml`。
 - 不要手动编辑 `_site/`，它是构建产物。
 - 不要把业务改动写进第三方插件或压缩 JS，后续升级和排查会更困难。
+
+文章写作约定统一记录在 docs/POST_TEMPLATE.md，新增文章应只修改 _posts/ 下的 Markdown 文件。
